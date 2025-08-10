@@ -2,8 +2,9 @@
 -- Este archivo contiene datos iniciales para la plataforma EMMA
 
 -- Crear usuario administrador por defecto
+-- IMPORTANTE: El hash debe ser generado en el servidor con la contraseña real
 INSERT OR IGNORE INTO users (id, username, email, password_hash, role, created_at) VALUES 
-(1, 'admin', 'admin@emma.pe', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', datetime('now'));
+(1, 'admin', 'admin@emma.pe', 'REPLACE_WITH_REAL_HASH', 'admin', datetime('now'));
 
 -- Datos de ejemplo para posiciones de trabajo
 INSERT OR IGNORE INTO job_positions (
