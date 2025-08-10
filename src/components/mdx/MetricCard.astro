@@ -1,0 +1,51 @@
+---
+export interface Props {
+  metric: string;
+  description: string;
+  target: string;
+  frequency: string;
+  priority?: 'critical' | 'high' | 'medium' | 'low';
+  icon: string;
+}
+
+const { metric, description, target, frequency, priority = 'medium', icon } = Astro.props;
+
+const priorityStyles = {
+  critical: 'bg-red-600 text-white',
+  high: 'bg-orange-600 text-white',
+  medium: 'bg-gray-600 text-white',
+  low: 'bg-gray-400 text-white'
+};
+
+const priorityText = {
+  critical: 'Crítico',
+  high: 'Alto',
+  medium: 'Medio',
+  low: 'Bajo'
+};
+---
+
+<div class="bg-white border border-gray-200 p-4 my-3">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+    <div class="md:col-span-2 flex items-center gap-3">
+      <span class="text-lg text-gray-600">{icon}</span>
+      <div>
+        <h4 class="font-medium text-gray-800 text-sm">{metric}</h4>
+        <p class="text-gray-600 text-xs mt-1">{description}</p>
+      </div>
+    </div>
+    
+    <div class="text-center">
+      <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">{frequency}</div>
+      <div class="font-semibold text-lg bg-gray-700 text-white px-3 py-1 inline-block">
+        {target}
+      </div>
+    </div>
+    
+    <div class="text-center">
+      <span class={`${priorityStyles[priority]} px-2 py-1 text-xs font-medium uppercase tracking-wide`}>
+        {priorityText[priority]}
+      </span>
+    </div>
+  </div>
+</div>

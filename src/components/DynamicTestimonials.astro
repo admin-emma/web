@@ -1,0 +1,223 @@
+---
+import type { TestimonialData } from '../types/testimonial.ts';
+import { testimonialsQueries } from '../lib/database.js';
+
+// Obtener testimonios dinámicamente desde la base de datos
+let testimonials: any[] = [];
+try {
+  testimonials = testimonialsQueries.getAll.all() as TestimonialData[];
+} catch (error) {
+  console.error('Error loading testimonials:', error);
+  // Testimonios de fallback si no hay datos en la base de datos
+  testimonials = [
+    {
+      id: 1,
+      name: 'María González',
+      position: 'Directora de RRHH',
+      company: 'TechCorp',
+      content: 'EMMA ha transformado completamente nuestra gestión de talento. La automatización de procesos nos ha permitido enfocarnos en lo que realmente importa: nuestro equipo.',
+      rating: 5,
+      is_active: true,
+      is_featured: true,
+      created_at: '2025-01-15',
+      updated_at: '2025-01-15'
+    },
+    {
+      id: 2,
+      name: 'Carlos Ruiz',
+      position: 'CEO',
+      company: 'InnovateLab',
+      content: 'La analítica de EMMA nos proporciona insights valiosos sobre nuestro equipo. Hemos mejorado significativamente nuestros procesos de reclutamiento y retención.',
+      rating: 5,
+      is_active: true,
+      is_featured: false,
+      created_at: '2025-02-01',
+      updated_at: '2025-02-01'
+    },
+    {
+      id: 3,
+      name: 'Ana López',
+      position: 'Gerente de Operaciones',
+      company: 'GlobalServices',
+      content: 'La implementación fue muy sencilla y el soporte técnico excepcional. EMMA se adaptó perfectamente a nuestras necesidades específicas.',
+      rating: 4,
+      is_active: true,
+      is_featured: false,
+      created_at: '2025-02-10',
+      updated_at: '2025-02-10'
+    }
+  ];
+}
+
+const initialTestimonials = testimonials.slice(0, 6);
+
+// Calcular estadísticas dinámicas
+const avgRating = testimonials.length > 0 
+  ? (testimonials.reduce((sum: number, t: any) => sum + t.rating, 0) / testimonials.length).toFixed(1)
+  : '0.0';
+
+const industries = new Set(testimonials.map((t: any) => t.industry).filter(Boolean)).size;
+const satisfactionRate = testimonials.length > 0 
+  ? Math.round((testimonials.filter((t: any) => t.rating >= 4).length / testimonials.length) * 100)
+  : 0;
+---
+
+<section class="py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Header Section -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+        <i class="fas fa-users mr-2"></i>
+        +{testimonials.length} empresas confían en EMMA
+      </div>
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        Lo que Dicen Nuestros <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">Clientes</span>
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        Descubre cómo EMMA está transformando la gestión de recursos humanos en empresas de todos los tamaños
+      </p>
+    </div>
+
+    <!-- Testimonials Grid -->
+    <div id="testimonials-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+      {initialTestimonials.map((testimonial: any) => (
+        <div class="testimonial-card bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 border border-gray-100 relative group translate-y-4 opacity-0">
+          {testimonial.is_featured && (
+            <div class="absolute -top-3 -right-3">
+              <div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                <i class="fas fa-star mr-1"></i>
+                Destacado
+              </div>
+            </div>
+          )}
+          
+          <div class="flex items-start justify-between mb-6">
+            <div class="flex items-center space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                {testimonial.name.charAt(0)}
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 text-lg">{testimonial.name}</h3>
+                {testimonial.position && <p class="text-gray-600 text-sm">{testimonial.position}</p>}
+                {testimonial.company && <p class="text-gray-500 text-xs">{testimonial.company}</p>}
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-1">
+              {Array.from({ length: 5 }, (_, i) => (
+                <i class={`fas fa-star ${
+                  i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'
+                }`}></i>
+              ))}
+            </div>
+          </div>
+
+          <blockquote class="text-gray-700 text-base leading-relaxed mb-6 italic relative">
+            <span class="absolute -top-2 -left-2 text-4xl text-blue-200/50 font-serif">"</span>
+            {testimonial.content}
+          </blockquote>
+
+          <div class="flex items-center justify-between text-sm text-gray-500">
+            <span class="flex items-center">
+              <i class="fas fa-calendar mr-2"></i>
+              {new Date(testimonial.created_at).toLocaleDateString('es-ES')}
+            </span>
+            {testimonial.is_active && (
+              <span class="flex items-center text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                <i class="fas fa-check-circle mr-1"></i>
+                Verificado
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Load More Button -->
+    {testimonials.length > 6 && (
+      <div class="text-center">
+        <button 
+          id="load-more-button"
+          class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+        >
+          <i class="fas fa-plus mr-2"></i>
+          Cargar más testimonios
+        </button>
+      </div>
+    )}
+
+    <!-- Stats Section -->
+    <div class="mt-20 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl p-12 text-white">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="group">
+          <div class="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform">
+            {testimonials.length}+
+          </div>
+          <div class="text-blue-100 text-sm uppercase tracking-wide">
+            Empresas Activas
+          </div>
+        </div>
+        
+        <div class="group">
+          <div class="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform">
+            {avgRating}/5
+          </div>
+          <div class="text-blue-100 text-sm uppercase tracking-wide">
+            Calificación Promedio
+          </div>
+        </div>
+        
+        <div class="group">
+          <div class="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform">
+            {industries || 15}+
+          </div>
+          <div class="text-blue-100 text-sm uppercase tracking-wide">
+            Industrias Diferentes
+          </div>
+        </div>
+        
+        <div class="group">
+          <div class="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform">
+            {satisfactionRate}%
+          </div>
+          <div class="text-blue-100 text-sm uppercase tracking-wide">
+            Satisfacción Cliente
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Simple animations for testimonials
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.testimonial-card');
+    
+    // Intersection Observer for animations
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry, index) {
+        if (entry.isIntersecting) {
+          setTimeout(function() {
+            entry.target.classList.remove('opacity-0', 'translate-y-4');
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+          }, index * 150);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Observe all cards
+    cards.forEach(function(card) {
+      observer.observe(card);
+    });
+
+    // Load more button functionality
+    const loadMoreButton = document.querySelector('#load-more-button');
+    if (loadMoreButton) {
+      loadMoreButton.addEventListener('click', function() {
+        // Simple alert for now - can be enhanced later
+        alert('Funcionalidad de cargar más testimonios - pendiente de implementar');
+      });
+    }
+  });
+</script>

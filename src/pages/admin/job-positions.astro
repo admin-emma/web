@@ -1,0 +1,321 @@
+---
+import AdminSidebarLayout from '../../layouts/AdminSidebarLayout.astro';
+---
+
+<AdminSidebarLayout title="Gestión de Posiciones">
+  <div id="jobPositionsApp" class="p-8">
+    <!-- Alert Messages -->
+    <div id="alertContainer" class="mb-6"></div>
+    
+    <!-- Page Header -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Gestión de Posiciones</h1>
+          <p class="text-gray-600 mt-1">Administra las posiciones laborales disponibles</p>
+        </div>
+        <button id="addPositionBtn" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+          <i class="fas fa-plus mr-2"></i>Agregar Posición
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+      <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <i class="fas fa-briefcase text-2xl text-green-600"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Total Posiciones</dt>
+                <dd id="totalPositions" class="text-lg font-medium text-gray-900">0</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <i class="fas fa-eye text-2xl text-blue-600"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Activas</dt>
+                <dd id="activePositions" class="text-lg font-medium text-gray-900">0</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <i class="fas fa-star text-2xl text-yellow-600"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Destacadas</dt>
+                <dd id="featuredPositions" class="text-lg font-medium text-gray-900">0</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <i class="fas fa-users text-2xl text-purple-600"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Aplicaciones</dt>
+                <dd id="totalApplications" class="text-lg font-medium text-gray-900">0</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="bg-white rounded-lg shadow-sm">
+      <!-- Filters Header -->
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div class="flex items-center space-x-4">
+            <div>
+              <label for="filterStatus" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+              <select id="filterStatus" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500">
+                <option value="">Todos</option>
+                <option value="active">Activas</option>
+                <option value="inactive">Inactivas</option>
+              </select>
+            </div>
+            <div>
+              <label for="filterDepartment" class="block text-sm font-medium text-gray-700 mb-1">Departamento</label>
+              <select id="filterDepartment" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500">
+                <option value="">Todos</option>
+                <option value="Desarrollo">Desarrollo</option>
+                <option value="Diseño">Diseño</option>
+                <option value="Marketing">Marketing</option>
+                <option value="RRHH">RRHH</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="Buscar posiciones..." 
+              class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            />
+            <button id="clearFilters" class="text-gray-500 hover:text-gray-700 px-3 py-2" title="Limpiar filtros">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <!-- Lista de Posiciones -->
+      <div class="p-6">
+        <div id="positionsContainer" class="space-y-4">
+          <!-- Se llena dinámicamente -->
+        </div>
+        
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-12">
+          <i class="fas fa-briefcase text-gray-300 text-6xl mb-4"></i>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No hay posiciones</h3>
+          <p class="text-gray-500 mb-4">Comienza agregando tu primera posición laboral</p>
+          <button class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors" onclick="document.getElementById('addPositionBtn').click()">
+            <i class="fas fa-plus mr-2"></i>Agregar Posición
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Agregar/Editar Posición -->
+    <div id="positionModal" class="fixed inset-0 bg-slate-950/70 hidden items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+          <h2 id="modalTitle" class="text-xl font-bold text-gray-900">Agregar Posición</h2>
+          <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+
+        <form id="positionForm" class="space-y-6">
+          <input type="hidden" id="positionId" />
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Título de la Posición *
+              </label>
+              <input type="text" id="title" required 
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" 
+                placeholder="ej: Desarrollador React Native"
+              />
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Departamento *
+              </label>
+              <select id="department" required 
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <option value="">Seleccionar departamento</option>
+                <option value="Desarrollo">Desarrollo</option>
+                <option value="Diseño">Diseño</option>
+                <option value="Marketing">Marketing</option>
+                <option value="RRHH">RRHH</option>
+                <option value="Ventas">Ventas</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Descripción *
+            </label>
+            <textarea id="description" required rows="4"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" 
+              placeholder="Descripción detallada de la posición..."
+            ></textarea>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Ubicación
+              </label>
+              <input type="text" id="location" 
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" 
+                placeholder="ej: Remoto desde Perú"
+                value="Remoto desde Perú"
+              />
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Tipo de Empleo
+              </label>
+              <select id="employmentType" 
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <option value="Tiempo completo">Tiempo completo</option>
+                <option value="Medio tiempo">Medio tiempo</option>
+                <option value="Contrato">Contrato</option>
+                <option value="Freelance">Freelance</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Experiencia Mínima (años)
+              </label>
+              <input type="number" id="experienceMin" min="0" 
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" 
+                placeholder="0"
+              />
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Salario Mínimo (S/ PEN)
+              </label>
+              <input type="number" id="salaryMin" min="0" 
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" 
+                placeholder="3000"
+              />
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Salario Máximo (S/ PEN)
+              </label>
+              <input type="number" id="salaryMax" min="0" 
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" 
+                placeholder="5000"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Requisitos Técnicos
+            </label>
+            <div id="requirementsContainer" class="space-y-2">
+              <div class="flex gap-2">
+                <input type="text" class="requirement-input flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" 
+                  placeholder="ej: React Native"
+                />
+                <button type="button" class="remove-requirement px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <button type="button" id="addRequirement" class="mt-2 text-cyan-600 hover:text-cyan-700 text-sm">
+              <i class="fas fa-plus mr-1"></i>Agregar requisito
+            </button>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Responsabilidades
+            </label>
+            <div id="responsibilitiesContainer" class="space-y-2">
+              <div class="flex gap-2">
+                <input type="text" class="responsibility-input flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" 
+                  placeholder="ej: Desarrollar aplicaciones móviles"
+                />
+                <button type="button" class="remove-responsibility px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <button type="button" id="addResponsibility" class="mt-2 text-cyan-600 hover:text-cyan-700 text-sm">
+              <i class="fas fa-plus mr-1"></i>Agregar responsabilidad
+            </button>
+          </div>
+
+          <div class="flex gap-6">
+            <label class="flex items-center">
+              <input type="checkbox" id="isActive" class="mr-2" />
+              <span class="text-sm font-medium text-gray-700">Posición Activa</span>
+            </label>
+            
+            <label class="flex items-center">
+              <input type="checkbox" id="isFeatured" class="mr-2" />
+              <span class="text-sm font-medium text-gray-700">Posición Destacada</span>
+            </label>
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-gray-200">
+            <button type="button" id="cancelBtn" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+              Cancelar
+            </button>
+            <button type="submit" id="saveBtn" class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700">
+              <span id="saveText">Guardar</span>
+              <i id="saveSpinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</AdminSidebarLayout>
+
+<script src="/src/scripts/admin/job-positions.ts"></script>

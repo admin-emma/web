@@ -1,0 +1,330 @@
+---
+import AdminSidebarLayout from '../../layouts/AdminSidebarLayout.astro';
+import { testimonialsQueries } from '../../lib/database.js';
+
+// TypeScript interfaces
+interface Testimonial {
+  id: number;
+  name: string;
+  position: string;
+  company?: string;
+  content: string;
+  avatar_url?: string;
+  rating: number;
+  is_active: number;
+  is_featured: number;
+  created_at: string;
+  updated_at: string;
+}
+
+let message = '';
+let error = '';
+
+const testimonials = testimonialsQueries.getAll.all() as Testimonial[];
+---
+
+<AdminSidebarLayout title="Gestión de Testimonios">
+  <div class="p-8">
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 pb-4 border-b border-gray-200">
+      <div class="mb-4 lg:mb-0">
+        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">Testimonios</h1>
+        <p class="text-gray-600">Gestiona los testimonios de clientes y empleados</p>
+      </div>
+      <button 
+        class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl" 
+        onclick="openTestimonialModal()"
+      >
+        <i class="fas fa-plus"></i>
+        Agregar Testimonio
+      </button>
+    </div>
+
+    <!-- Alerts -->
+    {message && (
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+        <i class="fas fa-check-circle"></i>
+        <span>{message}</span>
+      </div>
+    )}
+
+    {error && (
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>{error}</span>
+      </div>
+    )}
+
+    <!-- Testimonials Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+      {testimonials.map((testimonial) => (
+        <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden" data-id={testimonial.id}>
+          <!-- Header -->
+          <div class="p-6 border-b border-gray-100">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-4">
+                {testimonial.avatar_url ? (
+                  <img src={testimonial.avatar_url} alt={testimonial.name} class="w-12 h-12 rounded-full object-cover border-2 border-gray-200" />
+                ) : (
+                  <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white">
+                    <i class="fas fa-user text-lg"></i>
+                  </div>
+                )}
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-gray-800 truncate">{testimonial.name}</h3>
+                  <p class="text-sm text-gray-600 truncate">{testimonial.position}</p>
+                  {testimonial.company && <p class="text-xs text-gray-500 truncate">{testimonial.company}</p>}
+                </div>
+              </div>
+              
+              <div class="flex flex-col gap-2">
+                {testimonial.is_featured && (
+                  <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                    <i class="fas fa-star text-xs"></i>
+                    Destacado
+                  </span>
+                )}
+                <span class={`px-2 py-1 rounded-full text-xs font-medium ${
+                  testimonial.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                }`}>
+                  {testimonial.is_active ? 'Activo' : 'Inactivo'}
+                </span>
+              </div>
+            </div>
+            
+            <!-- Rating -->
+            <div class="flex items-center gap-2 mb-3">
+              <div class="flex">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <i class={`fas fa-star text-sm ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
+                ))}
+              </div>
+              <span class="text-sm text-gray-500">({testimonial.rating}/5)</span>
+            </div>
+          </div>
+          
+          <!-- Content -->
+          <div class="p-6">
+            <p class="text-gray-700 text-sm leading-relaxed line-clamp-4">{testimonial.content}</p>
+          </div>
+          
+          <!-- Actions -->
+          <div class="p-4 bg-gray-50 border-t border-gray-100">
+            <div class="flex flex-wrap gap-2 justify-center">
+              <button 
+                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1"
+                onclick={`editTestimonial(${testimonial.id})`}
+              >
+                <i class="fas fa-edit text-xs"></i>
+                Editar
+              </button>
+              <button 
+                class={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                  testimonial.is_featured 
+                    ? 'bg-yellow-100 hover:bg-yellow-200 text-yellow-700' 
+                    : 'bg-blue-100 hover:bg-blue-200 text-blue-700'
+                }`}
+                onclick={`toggleTestimonialFeatured(${testimonial.id}, ${testimonial.is_featured})`}
+              >
+                <i class={`fas ${testimonial.is_featured ? 'fa-star-half-alt' : 'fa-star'} text-xs`}></i>
+                {testimonial.is_featured ? 'Quitar' : 'Destacar'}
+              </button>
+              <button 
+                class={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                  testimonial.is_active 
+                    ? 'bg-yellow-100 hover:bg-yellow-200 text-yellow-700' 
+                    : 'bg-green-100 hover:bg-green-200 text-green-700'
+                }`}
+                onclick={`toggleTestimonialStatus(${testimonial.id}, ${testimonial.is_active})`}
+              >
+                <i class={`fas ${testimonial.is_active ? 'fa-eye-slash' : 'fa-eye'} text-xs`}></i>
+                {testimonial.is_active ? 'Desactivar' : 'Activar'}
+              </button>
+              <button 
+                class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1"
+                onclick={`deleteTestimonial(${testimonial.id})`}
+              >
+                <i class="fas fa-trash text-xs"></i>
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Empty State -->
+    {testimonials.length === 0 && (
+      <div class="text-center py-16 px-8">
+        <i class="fas fa-comments text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">No hay testimonios configurados</h3>
+        <p class="text-gray-500 mb-8">Comienza agregando el primer testimonio de tus clientes</p>
+        <button 
+          class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center gap-2 mx-auto shadow-lg hover:shadow-xl"
+          onclick="openTestimonialModal()"
+        >
+          <i class="fas fa-plus"></i>
+          Agregar Primer Testimonio
+        </button>
+      </div>
+    )}
+  </div>
+
+  <!-- Modal -->
+  <div id="testimonialModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-6 border-b border-gray-200">
+        <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Agregar Testimonio</h3>
+        <button 
+          class="text-gray-400 hover:text-gray-600 transition-colors p-1"
+          onclick="closeTestimonialModal()"
+        >
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <!-- Modal Form -->
+      <form id="testimonialForm" action="/api/testimonials" method="POST" class="p-6 space-y-6">
+        <input type="hidden" id="testimonialId" name="testimonialId">
+        <input type="hidden" name="action" value="create">
+        
+        <!-- Name and Position -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Nombre *</label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              required 
+              maxlength="100"
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="Nombre completo"
+            >
+          </div>
+          
+          <div>
+            <label for="position" class="block text-sm font-semibold text-gray-700 mb-2">Cargo *</label>
+            <input 
+              type="text" 
+              id="position" 
+              name="position" 
+              required 
+              maxlength="100"
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="Cargo o posición"
+            >
+          </div>
+        </div>
+        
+        <!-- Company -->
+        <div>
+          <label for="company" class="block text-sm font-semibold text-gray-700 mb-2">Empresa</label>
+          <input 
+            type="text" 
+            id="company" 
+            name="company" 
+            maxlength="100"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            placeholder="Nombre de la empresa (opcional)"
+          >
+        </div>
+        
+        <!-- Content -->
+        <div>
+          <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">Testimonio *</label>
+          <textarea 
+            id="content" 
+            name="content" 
+            required 
+            rows="4" 
+            maxlength="1000"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+            placeholder="Comparte la experiencia del cliente..."
+          ></textarea>
+          <p class="text-xs text-gray-500 mt-1">Máximo 1000 caracteres</p>
+        </div>
+        
+        <!-- Avatar and Rating -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="avatar_url" class="block text-sm font-semibold text-gray-700 mb-2">Avatar (URL)</label>
+            <input 
+              type="url" 
+              id="avatar_url" 
+              name="avatar_url"
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="https://ejemplo.com/foto.jpg"
+            >
+            <p class="text-xs text-gray-500 mt-1">URL de la foto del testimonial</p>
+          </div>
+          
+          <div>
+            <label for="rating" class="block text-sm font-semibold text-gray-700 mb-2">Calificación *</label>
+            <select 
+              id="rating" 
+              name="rating" 
+              required
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+              <option value="">Selecciona una calificación</option>
+              <option value="5">5 estrellas - Excelente</option>
+              <option value="4">4 estrellas - Muy bueno</option>
+              <option value="3">3 estrellas - Bueno</option>
+              <option value="2">2 estrellas - Regular</option>
+              <option value="1">1 estrella - Malo</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Status Checkboxes -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="flex items-center gap-3">
+            <input 
+              type="checkbox" 
+              id="is_active" 
+              name="is_active" 
+              value="1" 
+              checked
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+            >
+            <label for="is_active" class="text-sm font-medium text-gray-700">Testimonio activo</label>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <input 
+              type="checkbox" 
+              id="is_featured" 
+              name="is_featured" 
+              value="1"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+            >
+            <label for="is_featured" class="text-sm font-medium text-gray-700">Testimonio destacado</label>
+          </div>
+        </div>
+        
+        <!-- Modal Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
+          <button 
+            type="button" 
+            class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors"
+            onclick="closeTestimonialModal()"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+          >
+            <i class="fas fa-save"></i>
+            Guardar Testimonio
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script Import -->
+  <script src="/src/scripts/admin/testimonials.ts"></script>
+</AdminSidebarLayout>

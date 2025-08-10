@@ -1,0 +1,60 @@
+---
+export interface Props {
+  type?: 'info' | 'tip' | 'warning' | 'success' | 'error';
+  title?: string;
+}
+
+const { type = 'info', title } = Astro.props;
+
+const typeStyles = {
+  info: {
+    bg: 'bg-gray-50',
+    border: 'border-l-slate-500',
+    icon: 'ℹ️',
+    titleColor: 'text-slate-700',
+    textColor: 'text-gray-700'
+  },
+  tip: {
+    bg: 'bg-gray-50',
+    border: 'border-l-slate-600',
+    icon: '💡',
+    titleColor: 'text-slate-700',
+    textColor: 'text-gray-700'
+  },
+  warning: {
+    bg: 'bg-orange-50',
+    border: 'border-l-orange-500',
+    icon: '⚠️',
+    titleColor: 'text-orange-700',
+    textColor: 'text-orange-700'
+  },
+  success: {
+    bg: 'bg-green-50',
+    border: 'border-l-green-600',
+    icon: '✓',
+    titleColor: 'text-green-700',
+    textColor: 'text-green-700'
+  },
+  error: {
+    bg: 'bg-red-50',
+    border: 'border-l-red-500',
+    icon: '✗',
+    titleColor: 'text-red-700',
+    textColor: 'text-red-700'
+  }
+};
+
+const style = typeStyles[type];
+---
+
+<div class={`${style.bg} ${style.border} border-l-4 p-5 my-6`}>
+  {title && (
+    <div class={`flex items-center gap-2 ${style.titleColor} font-semibold mb-3`}>
+      <span class="text-sm">{style.icon}</span>
+      <span>{title}</span>
+    </div>
+  )}
+  <div class={`${style.textColor} prose prose-sm max-w-none`}>
+    <slot />
+  </div>
+</div>

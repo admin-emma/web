@@ -9,10 +9,23 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.3",
+    "@astrojs/node": "^9.4.0",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.4.2",
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
     "astro": "^5.12.8",
-    "sharp": "^0.34.2"
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^12.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "sharp": "^0.34.2",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.9.2"
   }
 }

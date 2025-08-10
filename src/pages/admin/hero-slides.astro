@@ -1,0 +1,393 @@
+---
+import AdminSidebarLayout from '../../layouts/AdminSidebarLayout.astro';
+import { heroSlidesQueries } from '../../lib/database.js';
+
+// Definir la interfaz para el tipado
+interface HeroSlide {
+  id: number;
+  title: string;
+  subtitle?: string;
+  description: string;
+  background_image?: string;
+  button_text?: string;
+  button_link?: string;
+  visual_type: string;
+  sort_order: number;
+  is_active: number;
+  created_at: string;
+  updated_at: string;
+}
+
+let message = '';
+let error = '';
+
+const slides = heroSlidesQueries.getAll.all() as HeroSlide[];
+---
+
+<AdminSidebarLayout title="Gestión de Hero Slides">
+  <div class="p-8">
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 pb-4 border-b border-gray-200">
+      <div class="mb-4 lg:mb-0">
+        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">Hero Slides</h1>
+        <p class="text-gray-600">Gestiona las diapositivas del hero principal de la página de inicio</p>
+      </div>
+      <button 
+        class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl" 
+        onclick="openSlideModal()"
+      >
+        <i class="fas fa-plus"></i>
+        Agregar Slide
+      </button>
+    </div>
+
+    <!-- Alerts -->
+    {message && (
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+        <i class="fas fa-check-circle"></i>
+        <span>{message}</span>
+      </div>
+    )}
+
+    {error && (
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>{error}</span>
+      </div>
+    )}
+
+    <!-- Slides Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+      {slides.map((slide) => (
+        <div 
+          class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1" 
+          data-slide-id={slide.id}
+          data-visual-type={slide.visual_type}
+          data-sort-order={slide.sort_order}
+          data-is-active={slide.is_active ? '1' : '0'}
+        >
+          <!-- Preview -->
+          <div class="relative h-48 overflow-hidden">
+            {slide.background_image ? (
+              <img src={slide.background_image} alt={slide.title} class="w-full h-full object-cover slide-image" />
+            ) : (
+              <div class="w-full h-full bg-gradient-to-br from-blue-500 to-cyan-600 flex flex-col items-center justify-center text-white relative">
+                <div class="absolute inset-0 bg-pattern opacity-10"></div>
+                <i class="fas fa-image text-4xl mb-2 opacity-70 relative z-10"></i>
+                <span class="text-sm opacity-80 relative z-10">Sin imagen</span>
+              </div>
+            )}
+            <div class="absolute inset-0 bg-black/40"></div>
+            <div class="absolute bottom-4 left-4 right-4 text-white">
+              <h3 class="font-semibold text-lg mb-1 line-clamp-2 slide-title">{slide.title}</h3>
+              {slide.subtitle && <p class="text-sm opacity-90 mb-2 line-clamp-1 slide-subtitle">{slide.subtitle}</p>}
+              <p class="text-xs opacity-80 line-clamp-2 slide-description">{slide.description.slice(0, 100)}...</p>
+            </div>
+            <div class="hidden slide-button-text">{slide.button_text}</div>
+            <a href={slide.button_link} class="hidden slide-button-link">{slide.button_link}</a>
+          </div>
+          
+          <!-- Info -->
+          <div class="p-4">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-sm text-gray-500 font-medium">Orden: {slide.sort_order}</span>
+              <span class={`px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wide ${
+                slide.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+              }`}>
+                {slide.is_active ? 'Activo' : 'Inactivo'}
+              </span>
+            </div>
+            
+            <!-- Actions -->
+            <div class="flex flex-wrap gap-2 justify-center">
+              <button 
+                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1"
+                onclick={`editSlide(${slide.id})`}
+              >
+                <i class="fas fa-edit text-xs"></i>
+                Editar
+              </button>
+              <button 
+                class={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                  slide.is_active 
+                    ? 'bg-yellow-100 hover:bg-yellow-200 text-yellow-700' 
+                    : 'bg-green-100 hover:bg-green-200 text-green-700'
+                }`}
+                onclick={`toggleSlideStatus(${slide.id}, ${slide.is_active})`}
+              >
+                <i class={`fas ${slide.is_active ? 'fa-eye-slash' : 'fa-eye'} text-xs`}></i>
+                {slide.is_active ? 'Desactivar' : 'Activar'}
+              </button>
+              <button 
+                class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1"
+                onclick={`deleteSlide(${slide.id}, '${slide.title.replace(/'/g, "\\'")}')`}
+              >
+                <i class="fas fa-trash text-xs"></i>
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Empty State -->
+    {slides.length === 0 && (
+      <div class="text-center py-16 px-8">
+        <i class="fas fa-images text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">No hay slides configurados</h3>
+        <p class="text-gray-500 mb-8">Comienza agregando tu primer slide para el hero principal</p>
+        <button 
+          class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center gap-2 mx-auto shadow-lg hover:shadow-xl"
+          onclick="openSlideModal()"
+        >
+          <i class="fas fa-plus"></i>
+          Agregar Primer Slide
+        </button>
+      </div>
+    )}
+  </div>
+
+  <!-- Modal -->
+  <div id="slideModal" class="fixed inset-0 bg-black/70 z-50 items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-6 border-b border-gray-200">
+        <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Agregar Slide</h3>
+        <button 
+          class="text-gray-400 hover:text-gray-600 transition-colors p-1"
+          onclick="closeSlideModal()"
+        >
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <!-- Modal Form -->
+      <form id="slideForm" action="/api/hero-slides" method="POST" class="p-6 space-y-6">
+        <input type="hidden" id="slideId" name="slideId">
+        <input type="hidden" name="action" value="create">
+        
+        <!-- Title -->
+        <div>
+          <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">Título *</label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            required 
+            maxlength="200"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            placeholder="Título del slide"
+          >
+        </div>
+        
+        <!-- Subtitle -->
+        <div>
+          <label for="subtitle" class="block text-sm font-semibold text-gray-700 mb-2">Subtítulo</label>
+          <input 
+            type="text" 
+            id="subtitle" 
+            name="subtitle" 
+            maxlength="200"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            placeholder="Subtítulo opcional"
+          >
+        </div>
+        
+        <!-- Description -->
+        <div>
+          <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">Descripción *</label>
+          <textarea 
+            id="description" 
+            name="description" 
+            required 
+            rows="3" 
+            maxlength="500"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+            placeholder="Descripción del contenido del slide"
+          ></textarea>
+        </div>
+        
+        <!-- Background Image -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Imagen de Fondo</label>
+          
+          <!-- Tabs para elegir método -->
+          <div class="border-b border-gray-200 mb-4">
+            <nav class="flex space-x-4">
+              <button
+                type="button"
+                onclick="switchImageMode('local')"
+                class="image-mode-tab active py-2 px-3 border-b-2 border-blue-500 font-medium text-sm text-blue-600"
+                id="localTab"
+              >
+                Imágenes Locales
+              </button>
+              <button
+                type="button"
+                onclick="switchImageMode('url')"
+                class="image-mode-tab py-2 px-3 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700"
+                id="urlTab"
+              >
+                URL Externa
+              </button>
+            </nav>
+          </div>
+
+          <!-- Panel de imágenes locales -->
+          <div id="localImagePanel" class="image-panel">
+            <div class="grid grid-cols-3 md:grid-cols-4 gap-3 mb-4" id="imagesGrid">
+              <!-- Se llenará con JavaScript -->
+            </div>
+            <button
+              type="button"
+              onclick="loadImages()"
+              class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 mb-2"
+            >
+              <i class="fas fa-refresh mr-1"></i>
+              Cargar Imágenes
+            </button>
+          </div>
+
+          <!-- Panel de URL externa -->
+          <div id="urlImagePanel" class="image-panel hidden">
+            <input 
+              type="url" 
+              id="external_url" 
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="https://ejemplo.com/imagen.jpg"
+              onchange="setImageFromUrl(this.value)"
+            >
+            <p class="text-xs text-gray-500 mt-1">Ingresa la URL completa de la imagen</p>
+          </div>
+
+          <!-- Campo oculto para el formulario -->
+          <input type="hidden" id="background_image" name="background_image" />
+          
+          <!-- Vista previa de la imagen seleccionada -->
+          <div id="imagePreview" class="mt-4 hidden">
+            <p class="text-sm font-medium text-gray-700 mb-2">Vista previa:</p>
+            <div class="relative inline-block">
+              <img id="previewImg" src="" alt="Vista previa" class="max-w-xs max-h-32 object-cover rounded-lg border border-gray-300">
+              <button
+                type="button"
+                onclick="clearImage()"
+                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+          
+          <p class="text-xs text-gray-500 mt-1">Selecciona una imagen de fondo para el slide</p>
+        </div>
+        
+        <!-- Button Text and Link -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="button_text" class="block text-sm font-semibold text-gray-700 mb-2">Texto del Botón</label>
+            <input 
+              type="text" 
+              id="button_text" 
+              name="button_text" 
+              maxlength="50"
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="Saber más"
+            >
+          </div>
+          
+          <div>
+            <label for="button_link" class="block text-sm font-semibold text-gray-700 mb-2">Enlace del Botón</label>
+            <input 
+              type="url" 
+              id="button_link" 
+              name="button_link"
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="/contact"
+            >
+          </div>
+        </div>
+        
+        <!-- Visual Type and Sort Order -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="visual_type" class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Visualización</label>
+            <select 
+              id="visual_type" 
+              name="visual_type"
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+              <option value="dashboard">Dashboard - Métricas y KPIs</option>
+              <option value="analytics">Analytics - Gráficos y datos</option>
+              <option value="team">Team - Equipo y colaboración</option>
+              <option value="growth">Growth - Crecimiento y logros</option>
+              <option value="innovation">Innovation - Tecnología e innovación</option>
+            </select>
+            <p class="text-xs text-gray-500 mt-1">Selecciona el tipo de visualización para la parte derecha</p>
+          </div>
+          
+          <div>
+            <label for="sort_order" class="block text-sm font-semibold text-gray-700 mb-2">Orden</label>
+            <input 
+              type="number" 
+              id="sort_order" 
+              name="sort_order" 
+              min="1" 
+              value="1"
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+            <p class="text-xs text-gray-500 mt-1">Orden de aparición del slide</p>
+          </div>
+        </div>
+        
+        <!-- Active Status -->
+        <div class="flex items-center gap-3 pt-2">
+          <input 
+            type="checkbox" 
+            id="is_active" 
+            name="is_active" 
+            value="1" 
+            checked
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+          >
+          <label for="is_active" class="text-sm font-medium text-gray-700">Slide activo</label>
+        </div>
+        
+        <!-- Modal Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
+          <button 
+            type="button" 
+            class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors"
+            onclick="closeSlideModal()"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+          >
+            <i class="fas fa-save"></i>
+            Guardar Slide
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .bg-pattern {
+      background-image: 
+        radial-gradient(circle at 20px 20px, rgba(255,255,255,0.3) 1px, transparent 1px),
+        radial-gradient(circle at 40px 40px, rgba(255,255,255,0.2) 1px, transparent 1px);
+      background-size: 40px 40px, 60px 60px;
+    }
+    
+    #slideModal.show {
+      display: flex !important;
+    }
+  </style>
+
+  <script>
+    import '../../scripts/admin/hero-slides.ts';
+  </script>
+</AdminSidebarLayout>

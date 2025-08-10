@@ -1,0 +1,31 @@
+# Archivos de log
+logs/
+*.log
+
+# Archivos de configuración local
+.env
+.env.local
+.env.production
+
+# Certificados SSL (se generarán en el servidor)
+ssl/
+*.pem
+*.key
+
+# Archivos de base de datos (comentar si quieres incluir la BD)
+# database.sqlite
+
+# Archivos subidos por usuarios
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Archivos de Docker
+.dockerignore
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db

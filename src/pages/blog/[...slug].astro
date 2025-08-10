@@ -1,20 +1,56 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import { markdownToHtml } from '../../lib/markdown.js';
+import "../../styles/global.css";
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+export const prerender = false;
+
+// Obtener el blog desde la base de datos usando el slug
+const { slug } = Astro.params;
+let post: {
+  data: {
+    title: string;
+    description: string;
+    pubDate: Date;
+    updatedDate?: Date;
+    heroImage: string;
+    tags: string[];
+  };
+  content: string;
+  slug: string;
+} | null = null;
+
+if (slug) {
+  try {
+    const response = await fetch(`${Astro.url.origin}/api/blog?slug=${slug}`);
+    if (response.ok) {
+      const blogData = await response.json();
+      if (blogData) {
+        post = {
+          data: {
+            title: blogData.title,
+            description: blogData.description,
+            pubDate: new Date(blogData.pub_date),
+            updatedDate: blogData.updated_date ? new Date(blogData.updated_date) : undefined,
+            heroImage: blogData.hero_image,
+            tags: blogData.tags ? blogData.tags.split(',').map((tag: string) => tag.trim()) : []
+          },
+          content: markdownToHtml(blogData.content), // Convertir Markdown a HTML
+          slug: blogData.slug
+        };
+      }
+    }
+  } catch (error) {
+    console.error('Error cargando blog:', error);
+  }
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
-const { Content } = await render(post);
+// Si no se encuentra el blog, mostrar 404
+if (!post) {
+  return Astro.redirect('/404');
+}
 ---
 
 <BlogPost {...post.data}>
-	<Content />
+  <div set:html={post.content}></div>
 </BlogPost>

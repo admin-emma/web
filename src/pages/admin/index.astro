@@ -1,0 +1,68 @@
+---
+import BasedLayout from '../../layouts/BasedLayout.astro';
+import "../../styles/global.css";
+---
+
+<BasedLayout title="Admin - Login">
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
+      <div class="text-center">
+        <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+          Panel de Administración
+        </h2>
+        <p class="mt-2 text-sm text-gray-600">
+          Ingresa tus credenciales para acceder
+        </p>
+      </div>
+      
+      <form id="loginForm" class="mt-8 space-y-6">
+        <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"></div>
+        
+        <div class="space-y-4">
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700">
+              Usuario
+            </label>
+            <input 
+              id="username" 
+              name="username" 
+              type="text" 
+              required 
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="admin"
+            />
+          </div>
+          
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">
+              Contraseña
+            </label>
+            <input 
+              id="password" 
+              name="password" 
+              type="password" 
+              required 
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="••••••••"
+            />
+          </div>
+        </div>
+
+        <div>
+          <button 
+            type="submit" 
+            id="loginButton"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          >
+            <span id="loginText">Iniciar Sesión</span>
+            <div id="loginSpinner" class="hidden animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</BasedLayout>
+
+<script>
+  import '/src/scripts/admin/index.ts';
+</script>

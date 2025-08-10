@@ -1,0 +1,486 @@
+---
+import BasedLayout from '../layouts/BasedLayout.astro';
+import "../styles/global.css";
+import { jobPositionQueries } from '../lib/database.js';
+
+// Obtener solo posiciones activas y destacadas de la base de datos
+const activePositions = jobPositionQueries.getActive.all().map((position: any) => ({
+  ...position,
+  requirements: position.requirements ? JSON.parse(position.requirements) : [],
+  responsibilities: position.responsibilities ? JSON.parse(position.responsibilities) : []
+}));
+
+const featuredPositions = activePositions.filter((p: any) => p.is_featured);
+---
+
+<BasedLayout title="Carreras - EMMA" description="Únete al equipo de EMMA. Descubre oportunidades profesionales en el área de recursos humanos y tecnología.">
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-[#035AA6] via-[#07598C] to-[#11B4D9] text-white py-20 px-4">
+      <div class="container mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+          Únete al equipo <span class="text-[#11B4D9]">EMMA</span>
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-4xl mx-auto text-white/90">
+          Construye el futuro de los recursos humanos con nosotros. 
+          Actualmente tenemos posiciones disponibles para desarrolladores especializados en tecnologías móviles.
+        </p>
+        <div class="flex justify-center items-center space-x-6 text-sm">
+          <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+            <i class="fas fa-map-marker-alt mr-2 text-[#11B4D9]"></i>
+            <span>Lima, Perú</span>
+          </div>
+          <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+            <i class="fas fa-users mr-2 text-[#11B4D9]"></i>
+            <span>Trabajo remoto/híbrido</span>
+          </div>
+          <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+            <i class="fas fa-rocket mr-2 text-[#11B4D9]"></i>
+            <span>Crecimiento profesional</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-16">
+
+    <!-- Posiciones Disponibles (Dinámicas) -->
+    {featuredPositions.length > 0 ? (
+      <div class="mb-16">
+        <div class="text-center mb-12">
+          <span class="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium bg-gradient-to-r from-[#038C7F] to-[#11B4D9] text-white mb-6 shadow-lg">
+            <i class="fas fa-check-circle mr-2"></i>
+            {featuredPositions.length === 1 ? 'Posición Disponible' : 'Posiciones Disponibles'}
+          </span>
+          <h2 class="text-4xl font-bold text-[#0D0D0D] mb-6">
+            Únete a nuestro equipo
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+            Descubre las oportunidades disponibles y forma parte de la transformación digital de RRHH en Perú.
+          </p>
+        </div>
+
+        <div class="space-y-8 max-w-6xl mx-auto">
+          {featuredPositions.map((position: any) => (
+            <div class="relative overflow-hidden bg-gradient-to-br from-[#035AA6] via-[#07598C] to-[#11B4D9] rounded-3xl p-1 shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-[1.02] group">
+              <!-- Patrón de diseño de fondo -->
+              <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"></div>
+                <div class="absolute top-20 right-10 w-24 h-24 bg-white/50 rounded-full"></div>
+                <div class="absolute bottom-10 left-20 w-16 h-16 bg-white/30 rounded-full"></div>
+                <div class="absolute bottom-0 right-0 w-40 h-40 bg-white/20 rounded-full translate-x-16 translate-y-16"></div>
+                <!-- Líneas decorativas -->
+                <div class="absolute top-1/4 left-0 right-0 h-px bg-white/20 transform rotate-12"></div>
+                <div class="absolute top-3/4 left-0 right-0 h-px bg-white/15 transform -rotate-12"></div>
+              </div>
+              
+              <!-- Contenido principal -->
+              <div class="relative bg-white rounded-3xl p-8 m-0.5 backdrop-blur-sm">
+                <div class="text-center mb-8">
+                  <!-- Badge de posición destacada -->
+                  <div class="inline-flex items-center bg-gradient-to-r from-[#11B4D9] to-[#038C7F] text-white px-6 py-2 rounded-full text-sm font-bold mb-6 shadow-lg">
+                    <i class="fas fa-star mr-2 animate-pulse"></i>
+                    Posición Destacada
+                  </div>
+                  
+                  <h3 class="text-4xl font-bold bg-gradient-to-r from-[#035AA6] to-[#11B4D9] bg-clip-text text-transparent mb-4">
+                    <i class="fas fa-briefcase text-[#035AA6] mr-3"></i>
+                    {position.title}
+                  </h3>
+                  
+                  <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    {position.description}
+                  </p>
+                  
+                  <!-- Etiquetas mejoradas con gradientes -->
+                  <div class="flex flex-wrap justify-center gap-4 text-sm">
+                    <span class="bg-gradient-to-r from-[#035AA6]/10 to-[#11B4D9]/10 backdrop-blur-sm px-6 py-3 rounded-full border-2 border-[#11B4D9]/20 text-[#07598C] font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                      <i class="fas fa-building mr-2 text-[#035AA6]"></i>{position.department}
+                    </span>
+                    <span class="bg-gradient-to-r from-[#11B4D9]/10 to-[#038C7F]/10 backdrop-blur-sm px-6 py-3 rounded-full border-2 border-[#038C7F]/20 text-[#07598C] font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                      <i class="fas fa-map-marker-alt mr-2 text-[#038C7F]"></i>{position.location}
+                    </span>
+                    <span class="bg-gradient-to-r from-[#038C7F]/10 to-[#11B4D9]/10 backdrop-blur-sm px-6 py-3 rounded-full border-2 border-[#11B4D9]/20 text-[#07598C] font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                      <i class="fas fa-clock mr-2 text-[#035AA6]"></i>{position.employment_type}
+                    </span>
+                    {position.experience_min > 0 && (
+                      <span class="bg-gradient-to-r from-[#07598C]/10 to-[#035AA6]/10 backdrop-blur-sm px-6 py-3 rounded-full border-2 border-[#035AA6]/20 text-[#07598C] font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-user-graduate mr-2 text-[#07598C]"></i>{position.experience_min}+ años exp.
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                  {position.requirements.length > 0 && (
+                    <div class="bg-gradient-to-br from-[#11B4D9]/5 to-[#038C7F]/5 rounded-2xl p-8 shadow-lg border-2 border-[#11B4D9]/20 hover:border-[#035AA6]/30 transition-all duration-300">
+                      <h4 class="font-bold text-[#0D0D0D] mb-6 flex items-center text-lg">
+                        <div class="w-10 h-10 bg-gradient-to-br from-[#035AA6] to-[#11B4D9] rounded-xl flex items-center justify-center mr-3">
+                          <i class="fas fa-code text-white"></i>
+                        </div>
+                        Tecnologías requeridas
+                      </h4>
+                      <ul class="space-y-3 text-sm text-gray-600">
+                        {position.requirements.map((req: string) => (
+                          <li class="flex items-center bg-white/50 rounded-lg p-3 border border-[#11B4D9]/10">
+                            <div class="w-6 h-6 bg-gradient-to-br from-[#038C7F] to-[#11B4D9] rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                              <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <span class="font-medium">{req}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {position.responsibilities.length > 0 && (
+                    <div class="bg-gradient-to-br from-[#038C7F]/5 to-[#11B4D9]/5 rounded-2xl p-8 shadow-lg border-2 border-[#038C7F]/20 hover:border-[#035AA6]/30 transition-all duration-300">
+                      <h4 class="font-bold text-[#0D0D0D] mb-6 flex items-center text-lg">
+                        <div class="w-10 h-10 bg-gradient-to-br from-[#038C7F] to-[#11B4D9] rounded-xl flex items-center justify-center mr-3">
+                          <i class="fas fa-star text-white"></i>
+                        </div>
+                        Responsabilidades
+                      </h4>
+                      <ul class="space-y-3 text-sm text-gray-600">
+                        {position.responsibilities.slice(0, 6).map((resp: string) => (
+                          <li class="flex items-center bg-white/50 rounded-lg p-3 border border-[#038C7F]/10">
+                            <div class="w-6 h-6 bg-gradient-to-br from-[#035AA6] to-[#038C7F] rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                              <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <span class="font-medium">{resp}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+
+                {(position.salary_min && position.salary_max) && (
+                  <div class="bg-gradient-to-r from-[#11B4D9]/10 via-[#038C7F]/10 to-[#035AA6]/10 rounded-2xl p-6 border-2 border-[#11B4D9]/30 shadow-lg">
+                    <p class="text-[#07598C] font-bold flex items-center justify-center text-lg">
+                      <div class="w-10 h-10 bg-gradient-to-br from-[#038C7F] to-[#11B4D9] rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-money-bill-wave text-white"></i>
+                      </div>
+                      Rango salarial: S/ {position.salary_min.toLocaleString()} - S/ {position.salary_max.toLocaleString()} PEN
+                      <span class="text-sm font-normal text-gray-600 ml-2">(negociable según experiencia)</span>
+                    </p>
+                  </div>
+                )}
+
+                <!-- Botón de aplicación mejorado -->
+                <div class="text-center mt-8">
+                  <a href="#careerForm" class="inline-flex items-center bg-gradient-to-r from-[#035AA6] to-[#11B4D9] text-white font-bold py-4 px-8 rounded-2xl hover:from-[#07598C] hover:to-[#038C7F] transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 group">
+                    <i class="fas fa-send mr-3 group-hover:translate-x-1 transition-transform"></i>
+                    Aplicar a esta posición
+                    <i class="fas fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
+                  </a>
+                </div>
+
+                <!-- Campo oculto para el ID de la posición -->
+                <input type="hidden" class="position-id" value={position.id} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <div class="mb-16 text-center">
+        <div class="bg-gradient-to-br from-[#11B4D9]/10 to-[#038C7F]/5 rounded-3xl p-8 max-w-2xl mx-auto border border-[#11B4D9]/20 shadow-lg">
+          <i class="fas fa-clock text-[#07598C] text-4xl mb-4"></i>
+          <h2 class="text-2xl font-bold text-[#0D0D0D] mb-4">
+            No hay posiciones disponibles actualmente
+          </h2>
+          <p class="text-gray-600">
+            Estamos en proceso de evaluación de nuevas vacantes. Envíanos tu CV para futuras oportunidades.
+          </p>
+        </div>
+      </div>
+    )}
+
+    <!-- Contenido Principal -->
+    <div class="grid lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
+      <!-- Información de la empresa -->
+      <div class="space-y-8">
+        <!-- Por qué trabajar en EMMA -->
+        <div class="bg-gradient-to-br from-[#035AA6]/5 via-[#11B4D9]/5 to-[#038C7F]/5 rounded-3xl p-8 shadow-xl border border-[#11B4D9]/20">
+          <h2 class="text-3xl font-bold text-[#0D0D0D] mb-6">
+            <i class="fas fa-users text-[#035AA6] mr-3"></i>
+            ¿Por qué trabajar en EMMA?
+          </h2>
+          <div class="space-y-6">
+            <div class="flex items-start">
+              <div class="w-14 h-14 bg-gradient-to-br from-[#038C7F] to-[#11B4D9] rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                <i class="fas fa-rocket text-white text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-[#0D0D0D] mb-2">Innovación constante</h3>
+                <p class="text-gray-600 text-sm">Trabajamos con las últimas tecnologías para transformar RRHH</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-14 h-14 bg-gradient-to-br from-[#035AA6] to-[#07598C] rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                <i class="fas fa-graduation-cap text-white text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-[#0D0D0D] mb-2">Crecimiento profesional</h3>
+                <p class="text-gray-600 text-sm">Planes de carrera claros y formación continua</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-14 h-14 bg-gradient-to-br from-[#07598C] to-[#11B4D9] rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                <i class="fas fa-heart text-white text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-[#0D0D0D] mb-2">Ambiente colaborativo</h3>
+                <p class="text-gray-600 text-sm">Cultura de trabajo en equipo y respeto mutuo</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="w-14 h-14 bg-gradient-to-br from-[#11B4D9] to-[#038C7F] rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                <i class="fas fa-balance-scale text-white text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-[#0D0D0D] mb-2">Work-life balance</h3>
+                <p class="text-gray-600 text-sm">Flexibilidad horaria y trabajo remoto</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nuestro enfoque de trabajo -->
+        <div class="bg-white rounded-3xl shadow-xl border-2 border-[#11B4D9]/20 p-8">
+          <h3 class="text-2xl font-bold text-[#0D0D0D] mb-6">
+            <i class="fas fa-code text-[#035AA6] mr-3"></i>
+            Nuestro Enfoque de Desarrollo
+          </h3>
+          <div class="space-y-6 text-sm">
+            <div class="flex items-start">
+              <i class="fas fa-mobile-alt text-[#038C7F] mr-3 mt-1 text-xl"></i>
+              <div>
+                <p class="font-medium text-[#0D0D0D] text-base">Mobile First</p>
+                <p class="text-gray-600">Priorizamos el desarrollo de aplicaciones móviles nativas</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <i class="fas fa-users-cog text-[#035AA6] mr-3 mt-1 text-xl"></i>
+              <div>
+                <p class="font-medium text-[#0D0D0D] text-base">Trabajo en Equipo</p>
+                <p class="text-gray-600">Colaboración estrecha entre desarrolladores y diseñadores</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <i class="fas fa-chart-line text-[#07598C] mr-3 mt-1 text-xl"></i>
+              <div>
+                <p class="font-medium text-[#0D0D0D] text-base">Crecimiento Continuo</p>
+                <p class="text-gray-600">Aprendizaje constante de nuevas tecnologías móviles</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de aplicación -->
+      <div class="bg-white rounded-3xl shadow-2xl border-2 border-[#11B4D9]/20 p-8">
+        <h2 class="text-3xl font-bold text-[#0D0D0D] mb-3">
+          <i class="fas fa-briefcase text-[#035AA6] mr-3"></i>
+          Aplica ahora
+        </h2>
+        <p class="text-gray-600 mb-8 text-lg">
+          Envíanos tu información y nos contactaremos contigo para conocer más sobre tu perfil.
+        </p>
+        
+        <form id="careerForm" class="space-y-6">
+          <div id="messageAlert" class="hidden p-4 rounded-lg mb-4"></div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="nombre">
+                <i class="fas fa-user text-[#035AA6] mr-2"></i>Nombre completo
+              </label>
+              <input 
+                type="text" 
+                id="nombre" 
+                name="nombre" 
+                class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#035AA6] focus:border-[#035AA6] transition-all duration-300" 
+                placeholder="Tu nombre completo"
+                required 
+              />
+            </div>
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="email">
+                <i class="fas fa-envelope text-[#035AA6] mr-2"></i>Email
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#035AA6] focus:border-[#035AA6] transition-all duration-300" 
+                placeholder="tu@email.com"
+                required 
+              />
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="telefono">
+                <i class="fas fa-phone text-[#035AA6] mr-2"></i>Teléfono
+              </label>
+              <input 
+                type="tel" 
+                id="telefono" 
+                name="telefono" 
+                class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#035AA6] focus:border-[#035AA6] transition-all duration-300" 
+                placeholder="+51 987 654 321"
+              />
+            </div>
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="posicion">
+                <i class="fas fa-briefcase text-[#035AA6] mr-2"></i>Posición de interés
+              </label>
+              <select 
+                id="posicion" 
+                name="posicion" 
+                class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#035AA6] focus:border-[#035AA6] transition-all duration-300"
+                required
+              >
+                <option value="">Selecciona una posición</option>
+                {activePositions.map((position: any) => (
+                  <option value={position.id}>{position.title}</option>
+                ))}
+                <option value="other">Otra posición (especificar en mensaje)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="experiencia">
+                <i class="fas fa-star text-[#035AA6] mr-2"></i>Años de experiencia
+              </label>
+              <select 
+                id="experiencia" 
+                name="experiencia" 
+                class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#035AA6] focus:border-[#035AA6] transition-all duration-300"
+              >
+                <option value="">Selecciona tu experiencia</option>
+                <option value="0-1">Sin experiencia / Menos de 1 año</option>
+                <option value="1-3">1-3 años</option>
+                <option value="3-5">3-5 años</option>
+                <option value="5-8">5-8 años</option>
+                <option value="8+">Más de 8 años</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="salario">
+                <i class="fas fa-money-bill-wave text-[#035AA6] mr-2"></i>Expectativa salarial
+              </label>
+              <select 
+                id="salario" 
+                name="salario" 
+                class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#035AA6] focus:border-[#035AA6] transition-all duration-300"
+              >
+                <option value="">Selecciona un rango</option>
+                <option value="2500-3500">S/ 2,500 - S/ 3,500</option>
+                <option value="3500-4500">S/ 3,500 - S/ 4,500</option>
+                <option value="4500-5500">S/ 4,500 - S/ 5,500</option>
+                <option value="5500-7000">S/ 5,500 - S/ 7,000</option>
+                <option value="7000+">S/ 7,000+</option>
+                <option value="negociable">A negociar</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Subir CV -->
+          <div>
+            <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="cv">
+              <i class="fas fa-file-upload text-[#035AA6] mr-2"></i>Curriculum Vitae *
+            </label>
+            <div class="relative border-2 border-dashed border-[#11B4D9]/40 rounded-xl p-6 hover:border-[#035AA6] transition-colors bg-gradient-to-br from-[#11B4D9]/5 to-[#038C7F]/5">
+              <input 
+                type="file" 
+                id="cv" 
+                name="cv" 
+                accept=".pdf,.doc,.docx"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                required
+              />
+              <div class="text-center" id="cvDisplay">
+                <div id="cvPlaceholder" class="text-gray-500">
+                  <i class="fas fa-cloud-upload-alt text-4xl mb-3 text-[#07598C]"></i>
+                  <p class="font-medium text-[#0D0D0D]">Arrastra tu CV aquí o haz clic para seleccionar</p>
+                  <p class="text-sm mt-1">PDF, DOC o DOCX - Máximo 5MB</p>
+                </div>
+                <div id="cvSuccess" class="hidden text-[#038C7F]">
+                  <div class="flex items-center justify-center">
+                    <i class="fas fa-check-circle text-3xl mr-3"></i>
+                    <div>
+                      <p class="font-medium" id="cvFileName"></p>
+                      <p class="text-sm">CV cargado correctamente</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="cvError" class="hidden text-red-600 text-sm mt-2">
+              <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span id="cvErrorText"></span>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="carta">
+              <i class="fas fa-comment text-[#035AA6] mr-2"></i>Carta de presentación
+            </label>
+            <textarea 
+              id="carta" 
+              name="carta" 
+              rows="5" 
+              class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#035AA6] focus:border-[#035AA6] transition-all duration-300" 
+              placeholder="Cuéntanos sobre ti, tu experiencia y por qué te interesa trabajar en EMMA..."
+              required
+            ></textarea>
+          </div>
+          
+          <button 
+            type="submit" 
+            id="submitBtn"
+            class="w-full bg-gradient-to-r from-[#035AA6] to-[#11B4D9] text-white font-bold py-4 px-6 rounded-xl hover:from-[#07598C] hover:to-[#038C7F] transition-all duration-300 flex items-center justify-center group shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+          >
+            <span id="submitText">
+              <i class="fas fa-send mr-2 group-hover:translate-x-1 transition-transform"></i>
+              Enviar aplicación
+            </span>
+            <span id="submitSpinner" class="hidden">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Enviando...
+            </span>
+          </button>
+        </form>
+        
+        <div class="mt-8 p-6 bg-gradient-to-r from-[#11B4D9]/10 to-[#038C7F]/10 rounded-xl border border-[#11B4D9]/30">
+          <div class="flex items-start">
+            <i class="fas fa-shield-alt text-[#035AA6] mt-1 mr-3 text-xl"></i>
+            <div>
+              <p class="text-[#0D0D0D] font-medium text-sm">Política de privacidad</p>
+              <p class="text-gray-600 text-xs mt-1">
+                Tu información será tratada de forma confidencial y solo será utilizada para el proceso de selección.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</BasedLayout>
+
+<!-- Include the careers page script -->
+<script src="/src/scripts/components/careers-page.js" is:inline></script>

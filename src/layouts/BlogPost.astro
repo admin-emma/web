@@ -1,86 +1,332 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import type { CollectionEntry } from 'astro:content'
+import BasedLayout from './BasedLayout.astro'
+import FormattedDate from '../components/FormattedDate.astro'
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data']
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.props as Props & { tags?: string[] }
+
+const shareUrl = Astro.url?.href || ''
+const shareText = encodeURIComponent(title)
+const shareEncodedUrl = encodeURIComponent(shareUrl)
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+<BasedLayout title={title} description={description}>
+  <!-- Reading Progress Bar -->
+  <div class="fixed top-0 left-0 right-0 z-50">
+    <div id="reading-progress" class="h-1 bg-[#035AA6] transition-all duration-300" style="width: 0%"></div>
+  </div>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+  <!-- ARTICLE WRAPPER -->
+  <article class="bg-gray-50">
+    <!-- HERO with light treatment -->
+    {heroImage && (
+      <header class="relative overflow-hidden bg-gradient-to-br from-[#035AA6] via-[#07598C] to-[#11B4D9]">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+          <nav class="mb-6 flex items-center gap-2 text-sm text-white/80">
+            <a href="/" class="hover:text-white transition-colors">Inicio</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-white/50">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <a href="/blog" class="hover:text-white transition-colors">Blog RRHH</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-white/50">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-white font-medium">Artículo</span>
+          </nav>
+
+          <div class="grid items-start gap-12 lg:grid-cols-12">
+            <div class="lg:col-span-7">
+              <div class="space-y-6">
+                <div>
+                  <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl leading-tight">
+                    {title}
+                  </h1>
+                  {description && (
+                    <p class="mt-6 text-xl text-white/90 leading-relaxed">{description}</p>
+                  )}
+                </div>
+
+                <div class="flex flex-wrap items-center gap-4 pt-4 border-t border-white/20">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-[#038C7F] rounded-full flex items-center justify-center">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-white">
+                        <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 8a6 6 0 1 0-12 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-white">Equipo EMMA</p>
+                      <p class="text-sm text-white/70">Especialistas en RRHH</p>
+                    </div>
+                  </div>
+                  
+                  <div class="h-6 w-px bg-white/30"></div>
+                  
+                  <div class="flex items-center gap-2 text-sm text-white/80">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 12h10M12 7v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <FormattedDate date={pubDate} />
+                  </div>
+                  
+                  <div class="h-6 w-px bg-white/30"></div>
+                  
+                  <div class="flex items-center gap-2 text-sm text-white/80">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2v10l7-7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="reading-time">5 min de lectura</span>
+                  </div>
+                  
+                  {updatedDate && (
+                    <>
+                      <div class="h-6 w-px bg-white/30"></div>
+                      <div class="flex items-center gap-2 text-sm text-white/80">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <path d="M4 12a8 8 0 1 0 8-8v3m0 5-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Actualizado: <FormattedDate date={updatedDate} /></span>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {Array.isArray(tags) && tags.length > 0 && (
+                  <div class="flex flex-wrap gap-2 pt-2">
+                    {tags.slice(0,4).map((t) => (
+                      <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-white/20 text-white text-sm font-medium rounded-full ring-1 ring-white/30 backdrop-blur-sm">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                          <path d="M7 8h10M7 12h10M7 16h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div class="lg:col-span-5">
+              <div class="relative overflow-hidden rounded-2xl shadow-xl ring-1 ring-white/20">
+                <div class="aspect-[16/10] w-full overflow-hidden">
+                  <img
+                    width={1200}
+                    height={750}
+                    src={typeof heroImage === 'string' ? heroImage : heroImage.src}
+                    alt={title}
+                    class="h-full w-full object-cover"
+                    loading="eager"
+                  />
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    )}
+
+    <!-- LIGHT HEADER when no hero -->
+    {!heroImage && (
+      <header class="bg-gradient-to-br from-[#035AA6] via-[#07598C] to-[#11B4D9]">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <nav class="mb-6 flex items-center gap-2 text-sm text-white/80">
+            <a href="/" class="hover:text-white transition-colors">Inicio</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-white/50">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <a href="/blog" class="hover:text-white transition-colors">Blog RRHH</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-white/50">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-white font-medium">Artículo</span>
+          </nav>
+          
+          <div class="max-w-4xl">
+            <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl leading-tight">{title}</h1>
+            {description && <p class="mt-6 text-xl text-white/90 leading-relaxed">{description}</p>}
+            
+            <div class="mt-8 flex flex-wrap items-center gap-4 pt-4 border-t border-white/20">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-[#038C7F] rounded-full flex items-center justify-center">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-white">
+                    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 8a6 6 0 1 0-12 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-white">Equipo EMMA</p>
+                  <p class="text-sm text-white/70">Especialistas en RRHH</p>
+                </div>
+              </div>
+              
+              <div class="h-6 w-px bg-white/30"></div>
+              
+              <div class="flex items-center gap-2 text-sm text-white/80">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M7 12h10M12 7v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <FormattedDate date={pubDate} />
+              </div>
+
+              <div class="h-6 w-px bg-white/30"></div>
+              
+              <div class="flex items-center gap-2 text-sm text-white/80">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2v10l7-7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="reading-time">5 min de lectura</span>
+              </div>
+              
+              {updatedDate && (
+                <>
+                  <div class="h-6 w-px bg-white/30"></div>
+                  <div class="flex items-center gap-2 text-sm text-white/80">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 12a8 8 0 1 0 8-8v3m0 5-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Actualizado: <FormattedDate date={updatedDate} /></span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+    )}
+
+    <!-- CONTENT -->
+    <section class="relative bg-white">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid gap-16 lg:grid-cols-12">
+          <div class="lg:col-span-8">
+            <div id="blog-content" class="prose prose-lg prose-gray max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-[#035AA6] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-[#11B4D9] prose-blockquote:bg-[#11B4D9]/5 prose-blockquote:text-[#035AA6] prose-code:text-[#035AA6] prose-code:bg-gray-100">
+              <slot />
+            </div>
+
+            <!-- Share + Back -->
+            <div class="mt-16 rounded-2xl border border-gray-200 bg-gradient-to-r from-gray-50 to-white p-8 shadow-sm">
+              <div class="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
+                <div class="space-y-2">
+                  <h3 class="text-lg font-bold text-gray-900">Compartir artículo</h3>
+                  <p class="text-gray-600">Si te fue útil, compártelo con tu equipo.</p>
+                </div>
+                <div class="flex gap-3">
+                  <button data-share="linkedin" class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-gray-200 hover:bg-blue-50 hover:ring-blue-300 transition-all duration-200" aria-label="Compartir en LinkedIn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" class="text-blue-600"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5Zm.02 6H2v11h3V9.5ZM21 20.5h-3v-5.6c0-1.34-.03-3.06-1.87-3.06-1.88 0-2.17 1.46-2.17 2.96v5.7h-3v-11h2.88v1.5h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.6v6.46Z"/></svg>
+                  </button>
+                  <button data-share="twitter" class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-gray-200 hover:bg-sky-50 hover:ring-sky-300 transition-all duration-200" aria-label="Compartir en X/Twitter">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" class="text-sky-600"><path d="M17.1 3H20l-6.9 7.9L21.5 21H15l-5.1-6.2L4 21H1.1l7.8-8.9L2 3h6l4.6 5.7L17.1 3Z"/></svg>
+                  </button>
+                  <button data-share="facebook" class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-gray-200 hover:bg-green-50 hover:ring-green-300 transition-all duration-200" aria-label="Compartir en Facebook">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" class="text-blue-600"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </button>
+                  <button data-share="copy" class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-gray-200 hover:bg-gray-50 hover:ring-gray-300 transition-all duration-200" aria-label="Copiar enlace">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" class="text-gray-600"><path d="M9 9V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="3" y="9" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-8 pt-6 border-t border-gray-200">
+                <a href="/blog" class="inline-flex items-center gap-3 text-sm font-semibold text-[#035AA6] hover:text-[#07598C] hover:gap-4 transition-all duration-200">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Volver al blog
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIDE PANEL (optional quick meta) -->
+          <aside class="lg:col-span-4">
+            <div class="sticky top-8 space-y-6">
+              <!-- Table of Contents -->
+              <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Contenido del artículo</h3>
+                <div id="table-of-contents" class="space-y-2">
+                  <!-- Generated by JavaScript -->
+                </div>
+              </div>
+
+              <!-- Article Summary -->
+              <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Resumen del artículo</h3>
+                <div class="space-y-4 text-sm">
+                  <div class="flex items-start gap-3">
+                    <div class="w-2 h-2 bg-[#035AA6] rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <p class="font-medium text-gray-700">Fecha de publicación</p>
+                      <p class="text-gray-500"><FormattedDate date={pubDate} /></p>
+                    </div>
+                  </div>
+                  {updatedDate && (
+                    <div class="flex items-start gap-3">
+                      <div class="w-2 h-2 bg-[#11B4D9] rounded-full mt-2 flex-shrink-0"></div>
+                      <div>
+                        <p class="font-medium text-gray-700">Última actualización</p>
+                        <p class="text-gray-500"><FormattedDate date={updatedDate} /></p>
+                      </div>
+                    </div>
+                  )}
+                  <div class="flex items-start gap-3">
+                    <div class="w-2 h-2 bg-[#038C7F] rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <p class="font-medium text-gray-700">Tiempo de lectura</p>
+                      <p class="text-gray-500"><span id="reading-time-sidebar">5 min aprox.</span></p>
+                    </div>
+                  </div>
+                </div>
+                
+                {Array.isArray(tags) && tags.length > 0 && (
+                  <div class="mt-6 pt-4 border-t border-gray-100">
+                    <p class="text-sm font-medium text-gray-700 mb-3">Temas relacionados</p>
+                    <div class="flex flex-wrap gap-2">
+                      {tags.map((t) => (
+                        <a href={`/blog?tag=${encodeURIComponent(t)}`} class="inline-flex items-center gap-1 px-3 py-1.5 bg-[#11B4D9]/10 text-[#035AA6] text-xs font-medium rounded-full ring-1 ring-[#11B4D9]/20 hover:bg-[#11B4D9]/20 hover:ring-[#11B4D9]/30 transition-all duration-200">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                            <path d="M7 8h10M7 12h10M7 16h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          </svg>
+                          {t}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <!-- Newsletter CTA -->
+              <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-[#11B4D9]/10 to-[#038C7F]/10 p-6 shadow-sm">
+                <div class="text-center space-y-4">
+                  <div class="w-12 h-12 bg-gradient-to-r from-[#035AA6] to-[#11B4D9] rounded-full flex items-center justify-center mx-auto">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/>
+                      <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-gray-900">¿Te gustó este artículo?</h3>
+                    <p class="text-sm text-gray-600">Recibe más contenido como este en tu email</p>
+                  </div>
+                  <form class="space-y-3" id="sidebar-newsletter">
+                    <input type="email" placeholder="tu@email.com" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none ring-0 focus:border-[#035AA6] focus:ring-2 focus:ring-[#035AA6]/20 transition-all duration-200" />
+                    <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-[#035AA6] to-[#11B4D9] px-4 py-3 text-sm font-semibold text-white shadow-sm hover:from-[#07598C] hover:to-[#038C7F] transition-all duration-200">Suscribirme gratis</button>
+                  </form>
+                  <p class="text-xs text-gray-500">Sin spam. Cancela cuando quieras.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-[#035AA6] text-white p-3 rounded-full shadow-lg hover:bg-[#07598C] transition-all duration-200 opacity-0 pointer-events-none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M18 15l-6-6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </article>
+
+  <!-- Include the blog slug script -->
+  <script src="/src/scripts/blog/slug.ts" type="module"></script>
+</BasedLayout>

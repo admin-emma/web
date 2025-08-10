@@ -1,0 +1,496 @@
+---
+import BasedLayout from '../layouts/BasedLayout.astro';
+import "../styles/global.css";
+---
+
+<BasedLayout title="Contacto - EMMA" description="Contacta con EMMA. Te ayudamos con todas tus necesidades de gestión de recursos humanos. Agenda una demostración gratuita.">
+  <main>
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden emma-hero-gradient text-white py-20">
+      <!-- Elementos decorativos de fondo -->
+      <div class="absolute inset-0">
+        <div class="absolute top-20 left-10 w-32 h-32 bg-white/5 rounded-full blur-xl"></div>
+        <div class="absolute top-40 right-20 w-48 h-48 bg-[#11B4D9]/10 rounded-full blur-2xl"></div>
+        <div class="absolute bottom-20 left-1/3 w-40 h-40 bg-[#038C7F]/10 rounded-full blur-xl"></div>
+      </div>
+      
+      <div class="relative max-w-7xl mx-auto px-6 text-center">
+        <!-- Badge superior -->
+        <div class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm font-medium mb-6">
+          <i class="fas fa-headset mr-2 text-[#11B4D9]"></i>
+          <span>Soporte 24/7 Disponible</span>
+        </div>
+        
+        <!-- Título principal -->
+        <h1 class="text-5xl font-bold mb-6">
+          Contacta con 
+          <span class="bg-gradient-to-r from-[#11B4D9] to-[#038C7F] bg-clip-text text-transparent">
+            EMMA
+          </span>
+        </h1>
+        
+        <!-- Subtítulo mejorado -->
+        <p class="text-xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
+          Transformemos juntos la gestión de recursos humanos de tu empresa. 
+          <br class="hidden md:block">
+          <span class="text-[#11B4D9] font-medium">Agenda una demostración personalizada</span> y descubre el futuro de RRHH.
+        </p>
+        
+        <!-- Estadísticas rápidas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-12">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-[#11B4D9] mb-2">24h</div>
+            <div class="text-blue-200 text-sm">Tiempo de respuesta</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-[#038C7F] mb-2">100+</div>
+            <div class="text-blue-200 text-sm">Empresas interesadas</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-[#11B4D9] mb-2">15min</div>
+            <div class="text-blue-200 text-sm">Demo personalizada</div>
+          </div>
+        </div>
+        
+        <!-- CTAs principales -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="#contact-form" class="bg-gradient-to-r from-[#11B4D9] to-[#038C7F] text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-[#07598C] hover:to-[#038C7F] transition-all shadow-xl hover:shadow-2xl hover:scale-105 flex items-center group">
+            <i class="fas fa-calendar-alt mr-3 group-hover:scale-110 transition-transform"></i>
+            Agendar Demo Gratuita
+          </a>
+          <a href="#contact-info" class="border-2 border-[#11B4D9]/50 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-[#11B4D9]/10 hover:border-[#11B4D9] transition-all flex items-center group backdrop-blur-sm">
+            <i class="fas fa-phone mr-3 group-hover:scale-110 transition-transform"></i>
+            Llamar Ahora
+          </a>
+        </div>
+      </div>
+      
+      <!-- Flecha hacia abajo -->
+      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <i class="fas fa-chevron-down text-white/60 text-2xl"></i>
+      </div>
+    </section>
+
+    <div class="container mx-auto px-4 py-12">
+
+    <div class="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+      <!-- Información de contacto -->
+      <div id="contact-info" class="space-y-8">
+        <div class="bg-gradient-to-br from-[#11B4D9]/10 to-[#038C7F]/10 rounded-2xl p-8 contact-card border border-[#11B4D9]/20">
+          <h2 class="text-2xl font-bold text-[#0D0D0D] mb-6">
+            <i class="fas fa-handshake text-[#035AA6] mr-3"></i>
+            Hablemos de tu proyecto
+          </h2>
+          <p class="text-gray-600 mb-6">
+            Nuestro equipo de expertos está listo para ayudarte a implementar la solución 
+            de RRHH perfecta para tu organización.
+          </p>
+          
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-[#11B4D9]/10 border border-[#11B4D9]/30 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-envelope text-[#035AA6] text-lg"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-[#0D0D0D]">Email</p>
+                <a href="mailto:info@emma.pe" class="text-[#035AA6] hover:text-[#07598C]">info@emma.pe</a>
+              </div>
+            </div>
+            
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-[#038C7F]/10 border border-[#038C7F]/30 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-phone text-[#038C7F] text-lg"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-[#0D0D0D]">Teléfono</p>
+                <a href="tel:+51987654321" class="text-gray-600 hover:text-[#035AA6]">+51 987 654 321</a>
+              </div>
+            </div>
+            
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-[#11B4D9]/10 border border-[#11B4D9]/30 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-globe text-[#07598C] text-lg"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-[#0D0D0D]">Sitio Web</p>
+                <a href="https://emma.pe" target="_blank" class="text-[#035AA6] hover:text-[#07598C]">www.emma.pe</a>
+              </div>
+            </div>
+            
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-[#07598C]/10 border border-[#07598C]/30 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-map-marker-alt text-[#07598C] text-lg"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-[#0D0D0D]">Ubicación</p>
+                <p class="text-gray-600">Lima, Perú</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Horarios y respuesta -->
+        <div class="bg-white rounded-2xl shadow-lg border border-[#11B4D9]/20 p-8 contact-card">
+          <h3 class="text-xl font-bold text-[#0D0D0D] mb-6">
+            <i class="fas fa-clock text-[#038C7F] mr-3"></i>
+            Horarios de atención
+          </h3>
+          
+          <div class="space-y-3">
+            <div class="flex justify-between items-center py-2 border-b border-[#11B4D9]/10">
+              <span class="font-medium text-[#0D0D0D]">Lunes - Viernes</span>
+              <span class="text-gray-600">9:00 AM - 6:00 PM</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-[#11B4D9]/10">
+              <span class="font-medium text-[#0D0D0D]">Sábados</span>
+              <span class="text-gray-600">9:00 AM - 1:00 PM</span>
+            </div>
+            <div class="flex justify-between items-center py-2">
+              <span class="font-medium text-[#0D0D0D]">Domingos</span>
+              <span class="text-gray-600">Cerrado</span>
+            </div>
+          </div>
+          
+          <div class="mt-6 p-4 bg-[#038C7F]/10 rounded-lg border border-[#038C7F]/30">
+            <div class="flex items-center">
+              <i class="fas fa-check-circle text-[#038C7F] mr-2"></i>
+              <span class="text-[#038C7F] font-medium">Respuesta garantizada en 24 horas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de contacto -->
+      <div id="contact-form" class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 contact-card">
+        <h2 class="text-2xl font-bold text-[#0D0D0D] mb-2">
+          <i class="fas fa-paper-plane text-[#035AA6] mr-3"></i>
+          Envíanos un mensaje
+        </h2>
+        <p class="text-gray-600 mb-8">
+          Completa el formulario y nos pondremos en contacto contigo lo antes posible.
+        </p>
+        
+        <form id="contactForm" class="space-y-6">
+          <div id="messageAlert" class="hidden p-4 rounded-lg mb-4"></div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="nombre">
+                <i class="fas fa-user text-[#035AA6] mr-2"></i>Nombre
+              </label>
+              <input 
+                type="text" 
+                id="nombre" 
+                name="nombre" 
+                class="w-full border border-[#11B4D9]/30 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#11B4D9] focus:border-[#11B4D9] transition-colors bg-white" 
+                placeholder="Tu nombre completo"
+                required 
+              />
+            </div>
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="empresa">
+                <i class="fas fa-building text-[#035AA6] mr-2"></i>Empresa
+              </label>
+              <input 
+                type="text" 
+                id="empresa" 
+                name="empresa" 
+                class="w-full border border-[#11B4D9]/30 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#11B4D9] focus:border-[#11B4D9] transition-colors bg-white" 
+                placeholder="Nombre de tu empresa"
+              />
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="email">
+                <i class="fas fa-envelope text-[#035AA6] mr-2"></i>Email
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="w-full border border-[#11B4D9]/30 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#11B4D9] focus:border-[#11B4D9] transition-colors bg-white" 
+                placeholder="tu@email.com"
+                required 
+              />
+            </div>
+            <div>
+              <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="telefono">
+                <i class="fas fa-phone text-[#035AA6] mr-2"></i>Teléfono
+              </label>
+              <input 
+                type="tel" 
+                id="telefono" 
+                name="telefono" 
+                class="w-full border border-[#11B4D9]/30 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#11B4D9] focus:border-[#11B4D9] transition-colors bg-white" 
+                placeholder="+51 987 654 321"
+              />
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="asunto">
+              <i class="fas fa-tag text-[#035AA6] mr-2"></i>Asunto
+            </label>
+            <select 
+              id="asunto" 
+              name="asunto" 
+              class="w-full border border-[#11B4D9]/30 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#11B4D9] focus:border-[#11B4D9] transition-colors bg-white"
+              required
+            >
+              <option value="">Selecciona un tema</option>
+              <option value="demo">Solicitar demostración</option>
+              <option value="precios">Información de precios</option>
+              <option value="soporte">Soporte técnico</option>
+              <option value="integracion">Integración con sistemas</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-left font-semibold mb-2 text-[#0D0D0D]" for="mensaje">
+              <i class="fas fa-comment text-[#035AA6] mr-2"></i>Mensaje
+            </label>
+            <textarea 
+              id="mensaje" 
+              name="mensaje" 
+              rows="5" 
+              class="w-full border border-[#11B4D9]/30 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#11B4D9] focus:border-[#11B4D9] transition-colors bg-white" 
+              placeholder="Cuéntanos cómo podemos ayudarte..."
+              required
+            ></textarea>
+          </div>
+          
+          <button 
+            type="submit" 
+            id="submitBtn"
+            class="w-full bg-gradient-to-r from-[#035AA6] to-[#11B4D9] text-white font-bold py-4 px-6 rounded-lg hover:from-[#07598C] hover:to-[#038C7F] transition-all duration-300 flex items-center justify-center group shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span id="submitText">
+              <i class="fas fa-paper-plane mr-2 group-hover:translate-x-1 transition-transform"></i>
+              Enviar mensaje
+            </span>
+            <span id="submitSpinner" class="hidden">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Enviando...
+            </span>
+          </button>
+        </form>
+        
+        <div class="mt-8 p-4 bg-[#11B4D9]/10 rounded-lg border border-[#11B4D9]/30">
+          <div class="flex items-start">
+            <i class="fas fa-shield-alt text-[#035AA6] mt-1 mr-3"></i>
+            <div>
+              <p class="text-[#035AA6] font-medium text-sm">Política de privacidad</p>
+              <p class="text-[#07598C] text-xs mt-1">
+                Tu información está protegida y solo será utilizada para responder a tu consulta.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action adicional -->
+    <div class="mt-16 text-center">
+      <div class="bg-gradient-to-r from-[#035AA6] to-[#11B4D9] rounded-2xl p-8 text-white">
+        <h3 class="text-2xl font-bold mb-4">¿Necesitas una respuesta inmediata?</h3>
+        <p class="text-cyan-100 mb-6">
+          Programa una videollamada con nuestro equipo y resuelve todas tus dudas en tiempo real.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="mailto:info@emma.pe?subject=Solicitud de videollamada" 
+            class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-cyan-50 transition-colors inline-flex items-center justify-center"
+          >
+            <i class="fas fa-video mr-2"></i>
+            Agendar videollamada
+          </a>
+          <a 
+            href="https://emma.pe" 
+            target="_blank"
+            class="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-cyan-600 transition-colors inline-flex items-center justify-center"
+          >
+            <i class="fas fa-external-link-alt mr-2"></i>
+            Visitar sitio web
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</BasedLayout>
+
+<script>
+  const contactForm = document.getElementById('contactForm') as HTMLFormElement | null;
+  
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e: Event) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
+      const submitText = document.getElementById('submitText') as HTMLElement | null;
+      const submitSpinner = document.getElementById('submitSpinner') as HTMLElement | null;
+      const messageAlert = document.getElementById('messageAlert') as HTMLElement | null;
+      
+      if (!submitBtn || !submitText || !submitSpinner || !messageAlert) {
+        console.error('Required form elements not found');
+        return;
+      }
+      
+      // UI Loading state
+      submitBtn.disabled = true;
+      submitText.classList.add('hidden');
+      submitSpinner.classList.remove('hidden');
+      messageAlert.classList.add('hidden');
+      
+      try {
+        const target = e.target as HTMLFormElement;
+        const formData = new FormData(target);
+        const contactData = {
+          name: formData.get('nombre') as string,
+          email: formData.get('email') as string,
+          company: formData.get('empresa') as string,
+          subject: formData.get('asunto') as string,
+          message: formData.get('mensaje') as string
+        };
+        
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(contactData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          messageAlert.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4';
+          messageAlert.innerHTML = `
+            <div class="flex items-center">
+              <i class="fas fa-check-circle mr-2"></i>
+              <span>${data.message}</span>
+            </div>
+          `;
+          messageAlert.classList.remove('hidden');
+          
+          // Reset form
+          target.reset();
+          
+          // Scroll to message
+          messageAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          messageAlert.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
+          messageAlert.innerHTML = `
+            <div class="flex items-center">
+              <i class="fas fa-exclamation-circle mr-2"></i>
+              <span>${data.message}</span>
+            </div>
+          `;
+          messageAlert.classList.remove('hidden');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        messageAlert.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
+        messageAlert.innerHTML = `
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span>Error de conexión. Por favor intenta nuevamente.</span>
+          </div>
+        `;
+        messageAlert.classList.remove('hidden');
+      } finally {
+        // Reset UI
+        submitBtn.disabled = false;
+        submitText.classList.remove('hidden');
+        submitSpinner.classList.add('hidden');
+      }
+    });
+  }
+</script>
+
+<style>
+  /* Animaciones suaves para la entrada */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Aplicar animaciones con scroll suave */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Efectos de hover mejorados */
+  .contact-card {
+    transition: all 0.3s ease;
+  }
+  
+  .contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  /* Efectos de gradiente dinámico con paleta EMMA */
+  .emma-hero-gradient {
+    background: linear-gradient(135deg, #035AA6 0%, #07598C 25%, #00262e 50%, #033e8c 75%, #0D0D0D 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 25% 25%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 75% 75%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Pulso suave para elementos importantes */
+  .pulse-soft {
+    animation: pulseSoft 2s infinite;
+  }
+  
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+  
+  /* Efecto de typing para texto dinámico */
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+</style>

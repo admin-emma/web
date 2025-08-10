@@ -1,0 +1,21 @@
+---
+interface NotificationBanner {
+  id: number;
+  title: string;
+  description?: string;
+  banner_type: 'system' | 'news' | 'event' | 'promotion' | 'warning';
+  image_url?: string;
+  action_url?: string;
+  action_text?: string;
+  is_active: boolean;
+  dismissible: boolean;
+  show_on_pages: string; // 'all', 'home', 'specific'
+}
+---
+
+<div id="notification-banner-container" class="relative z-40">
+  <!-- Los banners se cargan dinámicamente aquí -->
+</div>
+
+<!-- Script Import -->
+<script src="/src/scripts/components/notification-banner.ts"></script>

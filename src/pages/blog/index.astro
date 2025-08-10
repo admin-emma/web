@@ -1,114 +1,238 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+// import { getCollection } from 'astro:content'
+import BasedLayout from '../../layouts/BasedLayout.astro'
+import FormattedDate from '../../components/FormattedDate.astro'
+import "../../styles/global.css"
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+interface BlogPost {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    pubDate: Date;
+    heroImage: string | { src: string };
+  };
+  slug: string;
+  content: string;
+}
+
+// Obtener blogs desde la base de datos
+let posts: BlogPost[] = [];
+try {
+  const response = await fetch(`${Astro.url.origin}/api/blog?published=true`);
+  if (response.ok) {
+    const blogsData = await response.json();
+    posts = blogsData.map((blog: any): BlogPost => ({
+      id: blog.slug,
+      data: {
+        title: blog.title,
+        description: blog.description,
+        pubDate: new Date(blog.pub_date),
+        heroImage: blog.hero_image
+      },
+      slug: blog.slug,
+      content: blog.content
+    })).sort((a: BlogPost, b: BlogPost) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  }
+} catch (error) {
+  console.error('Error cargando blogs:', error);
+}
+
+const [featured, ...rest] = posts
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+<BasedLayout title="Blog RRHH - EMMA HR">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-br from-[#035AA6] via-[#07598C] to-[#11B4D9] text-white py-20 px-4">
+    <div class="container mx-auto text-center">
+      <h1 class="text-5xl md:text-6xl font-bold mb-6">
+        Blog <span class="text-[#11B4D9]">EMMA</span>
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 max-w-4xl mx-auto text-white/90">
+        Tendencias, ideas y prácticas accionables para potenciar tu gestión de personas. 
+        Descubre el futuro de los recursos humanos con insights expertos y casos de éxito.
+      </p>
+      <div class="flex justify-center items-center space-x-6 text-sm">
+        <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+          <i class="fas fa-newspaper mr-2 text-[#11B4D9]"></i>
+          <span>RRHH & Tecnología</span>
+        </div>
+        <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+          <i class="fas fa-clock mr-2 text-[#11B4D9]"></i>
+          <span>Actualizado frecuentemente</span>
+        </div>
+        <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+          <i class="fas fa-users mr-2 text-[#11B4D9]"></i>
+          <span>Casos de éxito</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-16">
+
+  <!-- FEATURED -->
+  {featured && (
+    <section class="bg-white mb-16">
+      <div class="max-w-7xl mx-auto">
+        <article class="grid items-stretch gap-6 lg:grid-cols-2">
+          <a href={`/blog/${featured.id}/`} class="group block overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:shadow-lg">
+            {featured.data.heroImage && (
+              <div class="relative aspect-[16/9] w-full overflow-hidden">
+                <img
+                  src={typeof featured.data.heroImage === 'string' ? featured.data.heroImage : featured.data.heroImage.src}
+                  alt={featured.data.title}
+                  class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  loading="eager"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
+              </div>
+            )}
+            <div class="p-6 sm:p-7">
+              <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                <span class="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-sky-700 ring-1 ring-sky-200">Destacado</span>
+                <span>•</span>
+                <FormattedDate date={featured.data.pubDate} />
+              </div>
+              <h2 class="mt-2 text-2xl font-semibold tracking-tight text-gray-900 transition-colors group-hover:text-sky-700">
+                {featured.data.title}
+              </h2>
+              {featured.data.description && (
+                <p class="mt-2 line-clamp-3 text-gray-600">{featured.data.description}</p>
+              )}
+              <div class="mt-4 flex items-center justify-between">
+                <div class="text-sm text-gray-500">Equipo EMMA</div>
+                <span class="text-sm font-medium text-sky-700 group-hover:translate-x-0.5 transition-transform">Leer más →</span>
+              </div>
+            </div>
+          </a>
+
+          <aside class="rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm space-y-6">
+            <!-- Categorías destacadas -->
+            <div>
+              <h3 class="text-sm font-semibold text-gray-900">Categorías destacadas</h3>
+              <div class="mt-4 flex flex-wrap gap-2">
+                {['Cultura','Tecnología','Talento','Capacitación','Compensaciones','Analytics'].map((t) => (
+                  <a href={`/blog?tag=${encodeURIComponent(t)}`} class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1 text-sm text-gray-700 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 12h10M7 12l4-4m-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    {t}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <!-- Artículos más populares -->
+            <div>
+              <h4 class="text-sm font-semibold text-gray-900 mb-3">Más leídos</h4>
+              <div class="space-y-3">
+                {posts.slice(0, 3).map((post, index) => (
+                  <a href={`/blog/${post.id}/`} class="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-sky-200 hover:bg-sky-50/50 transition-all duration-200 group">
+                    <div class="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-sky-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                      {index + 1}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <h5 class="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-sky-700">{post.data.title}</h5>
+                      <p class="text-xs text-gray-500 mt-1">
+                        <FormattedDate date={post.data.pubDate} />
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="bg-gradient-to-br from-sky-500 to-cyan-600 rounded-xl p-4 text-white">
+              <div class="text-center space-y-3">
+                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-white">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/>
+                    <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-sm font-semibold">Newsletter EMMA</h4>
+                  <p class="text-xs text-white/80">Recibe tendencias RRHH cada mes</p>
+                </div>
+                <form id="newsletter-sidebar-form" class="space-y-2">
+                  <input type="email" name="email" placeholder="tu@email.com" class="w-full rounded-lg border-0 bg-white/20 backdrop-blur-sm px-3 py-2 text-sm text-white placeholder-white/60 outline-none focus:bg-white/30 focus:ring-2 focus:ring-white/50" required />
+                  <button type="submit" class="w-full rounded-lg bg-white px-3 py-2 text-sm font-medium text-sky-600 hover:bg-gray-100 transition-colors">Suscribirme gratis</button>
+                </form>
+                <p class="text-xs text-white/60">Sin spam • Cancela cuando quieras</p>
+              </div>
+            </div>
+          </aside>
+        </article>
+      </div>
+    </section>
+  )}
+
+  <!-- GRID -->
+  <section class="bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl p-8 md:p-12 shadow-xl">
+    <div class="mb-8">
+      <h2 class="text-3xl font-bold text-[#0D0D0D] mb-2">Todos los artículos</h2>
+      <p class="text-gray-600">Explora nuestra biblioteca completa de contenido</p>
+    </div>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {rest.map((post) => (
+          <article class="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:shadow-lg">
+            <a href={`/blog/${post.id}/`} class="block">
+              {post.data.heroImage && (
+                <div class="relative aspect-[16/9] w-full overflow-hidden">
+                  <img
+                    src={typeof post.data.heroImage === 'string' ? post.data.heroImage : post.data.heroImage.src}
+                    alt={post.data.title}
+                    class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <div class="p-5">
+                <div class="flex items-center gap-2 text-xs text-gray-500">
+                  <FormattedDate date={post.data.pubDate} />
+                </div>
+                <h3 class="mt-2 line-clamp-2 text-lg font-semibold tracking-tight text-gray-900 transition-colors group-hover:text-sky-700">
+                  {post.data.title}
+                </h3>
+                {post.data.description && (
+                  <p class="mt-1 line-clamp-3 text-sm text-gray-600">{post.data.description}</p>
+                )}
+                <div class="mt-4 flex items-center justify-between text-sm">
+                  <span class="text-gray-500">Equipo EMMA</span>
+                  <span class="font-medium text-sky-700 transition group-hover:translate-x-0.5">Leer más →</span>
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+
+      {rest.length === 0 && (
+        <div class="mx-auto max-w-md text-center text-gray-500">
+          <p>No hay publicaciones aún. Pronto compartiremos novedades.</p>
+        </div>
+      )}
+
+      <!-- CTA -->
+      <div class="mt-14 grid items-center gap-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:grid-cols-5">
+        <div class="sm:col-span-3">
+          <h4 class="text-lg font-semibold text-[#0D0D0D]">¿Quieres recibir un resumen mensual?</h4>
+          <p class="mt-1 text-sm text-gray-600">Un correo, ideas prácticas y cero spam.</p>
+        </div>
+        <form id="newsletter-form" class="sm:col-span-2">
+          <div class="flex flex-col gap-2 sm:flex-row">
+            <input type="email" name="email" placeholder="tu@email.com" class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm outline-none ring-0 focus:border-[#035AA6]" required />
+            <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-[#035AA6] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#07598C]">Suscribirme</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    </div>
+
+  <!-- Contenedor de notificaciones -->
+  <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <!-- Include the blog index script -->
+  <script src="/src/scripts/blog/index.ts" type="module"></script>
+</BasedLayout>

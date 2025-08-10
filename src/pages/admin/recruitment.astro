@@ -1,0 +1,258 @@
+---
+import AdminSidebarLayout from '../../layouts/AdminSidebarLayout.astro';
+import { jobPositionQueries } from '../../lib/database.js';
+
+// Obtener todas las posiciones para los filtros y formularios
+const allPositions = jobPositionQueries.getAll.all();
+---
+
+<AdminSidebarLayout title="Reclutamiento - Administración EMMA">
+  <div id="loadingScreen" class="min-h-screen flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+      <p class="mt-4 text-gray-600">Cargando aplicaciones...</p>
+    </div>
+  </div>
+
+  <div id="adminContent" class="hidden min-h-screen bg-gray-50">
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Gestión de Reclutamiento</h1>
+      </div>
+
+      <!-- Pestañas -->
+      <div class="border-b border-gray-200 mb-6">
+        <nav class="-mb-px flex space-x-8">
+          <button id="list-tab" class="main-tab-button bg-white border-indigo-500 text-indigo-600 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+            Lista de Aplicaciones
+          </button>
+          <button id="create-tab" class="main-tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+            Agregar Candidato
+          </button>
+        </nav>
+      </div>
+
+      <!-- Panel de Lista -->
+      <div id="list-panel" class="main-tab-panel">
+        <!-- Filtros -->
+        <div class="bg-white shadow rounded-lg p-4 mb-6">
+          <div class="flex space-x-4">
+            <select id="statusFilter" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+              <option value="all">Todos los estados</option>
+              <option value="new">Nuevos</option>
+              <option value="reviewing">En revisión</option>
+              <option value="interview">Entrevista</option>
+              <option value="hired">Contratado</option>
+              <option value="rejected">Rechazado</option>
+            </select>
+            <select id="positionFilter" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+              <option value="all">Todas las posiciones</option>
+              {allPositions.map((position: any) => (
+                <option value={position.id}>{position.title}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <!-- Lista de Aplicaciones -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-medium text-gray-900">Aplicaciones Recibidas</h2>
+          </div>
+          <div id="recruitmentsList" class="divide-y divide-gray-200">
+            <!-- Se llenará con JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel de Creación -->
+      <div id="create-panel" class="main-tab-panel hidden">
+        <div class="bg-white shadow rounded-lg p-6">
+          <h2 class="text-lg font-medium text-gray-900 mb-6">Agregar Nuevo Candidato</h2>
+          
+          <form id="create-recruitment-form" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Nombre completo -->
+              <div>
+                <label for="candidateName" class="block text-sm font-medium text-gray-700 mb-1">
+                  Nombre completo *
+                </label>
+                <input
+                  type="text"
+                  id="candidateName"
+                  name="name"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Ej: Juan Pérez"
+                />
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label for="candidateEmail" class="block text-sm font-medium text-gray-700 mb-1">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="candidateEmail"
+                  name="email"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Ej: juan.perez@email.com"
+                />
+              </div>
+
+              <!-- Teléfono -->
+              <div>
+                <label for="candidatePhone" class="block text-sm font-medium text-gray-700 mb-1">
+                  Teléfono
+                </label>
+                <input
+                  type="tel"
+                  id="candidatePhone"
+                  name="phone"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Ej: +56 9 1234 5678"
+                />
+              </div>
+
+              <!-- Posición -->
+              <div>
+                <label for="candidatePosition" class="block text-sm font-medium text-gray-700 mb-1">
+                  Posición *
+                </label>
+                <select
+                  id="candidatePosition"
+                  name="position"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="">Seleccionar posición...</option>
+                  {allPositions.map((position: any) => (
+                    <option value={position.id}>{position.title}</option>
+                  ))}
+                </select>
+              </div>
+
+              <!-- Experiencia -->
+              <div>
+                <label for="candidateExperience" class="block text-sm font-medium text-gray-700 mb-1">
+                  Años de experiencia
+                </label>
+                <select
+                  id="candidateExperience"
+                  name="experience"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="">Seleccionar...</option>
+                  <option value="0-1">0-1 años</option>
+                  <option value="1-3">1-3 años</option>
+                  <option value="3-5">3-5 años</option>
+                  <option value="5-8">5-8 años</option>
+                  <option value="8+">8+ años</option>
+                </select>
+              </div>
+
+              <!-- Expectativa salarial -->
+              <div>
+                <label for="candidateSalary" class="block text-sm font-medium text-gray-700 mb-1">
+                  Expectativa salarial (rango)
+                </label>
+                <select
+                  id="candidateSalary"
+                  name="salaryExpectation"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="">Seleccionar rango...</option>
+                  <option value="2000-3000">S/ 2,000 - S/ 3,000</option>
+                  <option value="3000-4500">S/ 3,000 - S/ 4,500</option>
+                  <option value="4500-6000">S/ 4,500 - S/ 6,000</option>
+                  <option value="6000-8000">S/ 6,000 - S/ 8,000</option>
+                  <option value="8000-10000">S/ 8,000 - S/ 10,000</option>
+                  <option value="10000+">S/ 10,000+</option>
+                  <option value="negociable">A negociar</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Carta de presentación -->
+            <div>
+              <label for="candidateCoverLetter" class="block text-sm font-medium text-gray-700 mb-1">
+                Carta de presentación / Comentarios
+              </label>
+              <textarea
+                id="candidateCoverLetter"
+                name="coverLetter"
+                rows="4"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Información adicional sobre el candidato, motivaciones, comentarios del reclutador, etc."
+              ></textarea>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex justify-end space-x-4">
+              <button
+                type="button"
+                id="cancelCreate"
+                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-2 bg-indigo-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <i class="fas fa-plus mr-2"></i>
+                Agregar Candidato
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para ver aplicación completa -->
+  <div id="applicationModal" class="hidden fixed inset-0 bg-black bg-opacity-25 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Aplicación de Trabajo</h3>
+        <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <div id="applicationContent" class="mb-6">
+        <!-- Se llenará con JavaScript -->
+      </div>
+      
+      <div class="flex items-center space-x-2 mb-4">
+        <label for="newStatus" class="text-sm font-medium text-gray-700">Estado:</label>
+        <select id="newStatus" class="px-3 py-1 border border-gray-300 rounded-md text-sm">
+          <option value="new">Nuevo</option>
+          <option value="reviewing">En revisión</option>
+          <option value="interview">Entrevista</option>
+          <option value="hired">Contratado</option>
+          <option value="rejected">Rechazado</option>
+        </select>
+      </div>
+      
+      <div class="flex justify-between">
+        <button id="deleteApplicationBtn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+          Eliminar
+        </button>
+        <div class="space-x-2">
+          <button id="updateStatusBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+            Actualizar Estado
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminSidebarLayout>
+
+<script>
+  import '/src/scripts/admin/recruitment.ts';
+</script>

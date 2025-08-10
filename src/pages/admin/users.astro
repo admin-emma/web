@@ -1,0 +1,177 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Gestión de Usuarios">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Encabezado -->
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-gray-900">Gestión de Usuarios</h1>
+      <p class="mt-2 text-gray-600">Administra usuarios del sistema</p>
+    </div>
+
+    <!-- Pestañas principales -->
+    <div class="mb-6">
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8">
+          <button
+            id="list-users-tab"
+            class="main-tab-button bg-white border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-6 border-b-2 font-medium text-base flex items-center"
+          >
+            <i class="fas fa-users mr-2"></i>
+            Lista de Usuarios
+          </button>
+          <button
+            id="create-user-tab"
+            class="main-tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-6 border-b-2 font-medium text-base flex items-center"
+          >
+            <i class="fas fa-user-plus mr-2"></i>
+            Crear Usuario
+          </button>
+          <button
+            id="change-password-tab"
+            class="main-tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-6 border-b-2 font-medium text-base flex items-center"
+          >
+            <i class="fas fa-key mr-2"></i>
+            Cambiar Contraseña
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Panel: Lista de Usuarios -->
+    <div id="list-users-panel" class="main-tab-panel">
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            Usuarios Registrados
+          </h3>
+          <div id="users-list" class="space-y-4">
+            <!-- Los usuarios se cargan dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Crear Usuario -->
+    <div id="create-user-panel" class="main-tab-panel hidden">
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            Crear Nuevo Usuario
+          </h3>
+          <form id="create-user-form" class="space-y-4">
+            <div>
+              <label for="new-username" class="block text-sm font-medium text-gray-700">
+                Nombre de Usuario
+              </label>
+              <input
+                type="text"
+                id="new-username"
+                required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="usuario123"
+              />
+            </div>
+            <div>
+              <label for="new-password" class="block text-sm font-medium text-gray-700">
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="new-password"
+                required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="••••••••"
+              />
+            </div>
+            <div>
+              <label for="new-role" class="block text-sm font-medium text-gray-700">
+                Rol
+              </label>
+              <select
+                id="new-role"
+                required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="">Seleccionar rol</option>
+                <option value="admin">Administrador</option>
+                <option value="editor">Editor</option>
+                <option value="viewer">Visualizador</option>
+              </select>
+            </div>
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium"
+              >
+                Crear Usuario
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Cambiar Contraseña -->
+    <div id="change-password-panel" class="main-tab-panel hidden">
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            Cambiar Contraseña
+          </h3>
+          <form id="change-password-form" class="space-y-4">
+            <div>
+              <label for="current-password" class="block text-sm font-medium text-gray-700">
+                Contraseña Actual
+              </label>
+              <input
+                type="password"
+                id="current-password"
+                required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="••••••••"
+              />
+            </div>
+            <div>
+              <label for="new-user-password" class="block text-sm font-medium text-gray-700">
+                Nueva Contraseña
+              </label>
+              <input
+                type="password"
+                id="new-user-password"
+                required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="••••••••"
+              />
+            </div>
+            <div>
+              <label for="confirm-password" class="block text-sm font-medium text-gray-700">
+                Confirmar Nueva Contraseña
+              </label>
+              <input
+                type="password"
+                id="confirm-password"
+                required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="••••••••"
+              />
+            </div>
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium"
+              >
+                Cambiar Contraseña
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import "/src/scripts/admin/users.ts";
+  </script>
+</AdminLayout>

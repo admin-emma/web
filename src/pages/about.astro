@@ -1,63 +1,536 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import BasedLayout from "../layouts/BasedLayout.astro";
+import Logo from "../assets/logo-emma.png";
+import "../styles/global.css";
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
+<BasedLayout
+  title="Acerca de EMMA"
+  description="Conoce más sobre EMMA - Employee Management Monitoring & Administration. Tu solución integral para la gestión de recursos humanos."
 >
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <div
+      class="bg-gradient-to-br from-[#035AA6] via-[#07598C] to-[#11B4D9] text-white py-20 px-4"
+    >
+      <div class="container mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+          Acerca de  <span class="bg-gradient-to-r from-[#11B4D9] to-[#038C7F] bg-clip-text text-transparent">
+            EMMA
+          </span>
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-4xl mx-auto text-white/90">
+          <strong>Employee Management Monitoring & Administration</strong> - Tu solución
+          integral para la gestión moderna de recursos humanos, diseñada para potenciar
+          el talento y optimizar los procesos empresariales en la era digital.
+        </p>
+        <div class="flex justify-center items-center space-x-6 text-sm">
+          <div
+            class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2"
+          >
+            <i class="fas fa-cloud mr-2 text-[#11B4D9]"></i>
+            <span>Alojado en Azure</span>
+          </div>
+          <div
+            class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2"
+          >
+            <i class="fas fa-shield-alt mr-2 text-[#11B4D9]"></i>
+            <span>Seguridad empresarial</span>
+          </div>
+          <div
+            class="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2"
+          >
+            <i class="fas fa-chart-line mr-2 text-[#11B4D9]"></i>
+            <span>IA próximamente</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+    <div class="container mx-auto px-4 py-16">
+      <!-- Dashboard Demo Section -->
+    <div class="bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl p-8 md:p-12 mb-16 shadow-xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-[#0D0D0D] mb-4">
+          Plataforma Integral de <span class="text-[#035AA6]">RRHH</span>
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Descubre cómo EMMA revoluciona la gestión de recursos humanos con tecnología de vanguardia
+        </p>
+      </div>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+      <div class="flex flex-col md:flex-row items-center gap-8">
+        <div class="md:w-1/2">
+          <img
+            src={Logo.src}
+            alt="EMMA Logo"
+            class="w-32 mx-auto md:mx-0 mb-6 filter drop-shadow-lg"
+          />
+          
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            EMMA revoluciona la forma en que las empresas gestionan su capital
+            humano, combinando tecnología de vanguardia con procesos intuitivos
+            que simplifican desde la contratación hasta el desarrollo
+            profesional de tus empleados.
+          </p>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            Nuestra plataforma, alojada en <span
+              class="font-semibold text-[#035AA6]">Microsoft Azure</span
+            >, garantiza la máxima seguridad y escalabilidad, mientras que
+            nuestras funciones de inteligencia artificial (próximamente)
+            transformarán la toma de decisiones estratégicas en recursos
+            humanos.
+          </p>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+          <div
+            class="bg-white rounded-xl p-4 border-l-4 border-[#035AA6] shadow-sm"
+          >
+            <p class="text-gray-800 text-sm">
+              <span class="font-semibold text-[#035AA6]"
+                >🚀 Actualmente disponible:</span
+              >
+              Gestión completa de empleados, nóminas automatizadas, evaluaciones
+              de desempeño, y reportes en tiempo real.
+            </p>
+            <p class="text-gray-800 text-sm mt-2">
+              <span class="font-semibold text-[#038C7F]">⚡ Próximamente:</span>
+              Análisis predictivo con IA, big data analytics, y automatización inteligente
+              de procesos de selección.
+            </p>
+          </div>
+        </div>
+        
+        <div class="md:w-1/2">
+          <!-- Dashboard de RRHH -->
+          <div
+            class="relative bg-gradient-to-br from-[#0D0D0D] via-slate-800 to-[#0D0D0D] rounded-3xl p-6 shadow-2xl overflow-hidden"
+          >
+            <!-- Animated Background Elements -->
+            <div class="absolute inset-0 overflow-hidden">
+              <div
+                class="absolute top-4 right-4 w-32 h-32 bg-gradient-to-r from-[#035AA6]/20 to-[#11B4D9]/20 rounded-full filter blur-2xl animate-pulse"
+              >
+              </div>
+              <div
+                class="absolute bottom-4 left-4 w-24 h-24 bg-gradient-to-r from-[#038C7F]/20 to-[#07598C]/20 rounded-full filter blur-2xl animate-pulse delay-1000"
+              >
+              </div>
+            </div>
+
+            <!-- Dashboard Header -->
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 bg-gradient-to-br from-[#035AA6] to-[#11B4D9] rounded-xl flex items-center justify-center shadow-lg"
+                  >
+                    <svg
+                      class="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-white font-bold text-lg">Dashboard EMMA</h3>
+                    <p class="text-[#11B4D9] text-sm">
+                      Panel Principal de RRHH
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 bg-[#038C7F] rounded-full animate-pulse">
+                  </div>
+                  <span class="text-slate-300 text-xs">En vivo</span>
+                </div>
+              </div>
+
+              <!-- Metrics Grid -->
+              <div class="grid grid-cols-2 gap-4 mb-6">
+                <!-- Empleados Activos -->
+                <div
+                  class="bg-gradient-to-br from-slate-800/60 to-slate-700/60 rounded-xl p-4 border border-[#11B4D9]/30 hover:border-[#035AA6]/50 transition-all duration-300 group"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="p-2 bg-[#035AA6]/20 rounded-lg">
+                      <svg
+                        class="w-5 h-5 text-[#11B4D9]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div class="text-[#038C7F] text-xs font-semibold">
+                      ↗ +5%
+                    </div>
+                  </div>
+                  <div class="text-slate-400 text-xs mb-1">
+                    Empleados Activos
+                  </div>
+                  <div class="text-white text-xl font-bold">1,247</div>
+                </div>
+
+                <!-- Nuevas Contrataciones -->
+                <div
+                  class="bg-gradient-to-br from-slate-800/60 to-slate-700/60 rounded-xl p-4 border border-[#11B4D9]/30 hover:border-[#038C7F]/50 transition-all duration-300 group"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="p-2 bg-[#038C7F]/20 rounded-lg">
+                      <svg
+                        class="w-5 h-5 text-[#038C7F]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div class="text-[#038C7F] text-xs font-semibold">
+                      ↗ +12
+                    </div>
+                  </div>
+                  <div class="text-slate-400 text-xs mb-1">Este Mes</div>
+                  <div class="text-white text-xl font-bold">23</div>
+                </div>
+              </div>
+
+              <!-- Progress Bars -->
+              <div class="space-y-4 mb-6">
+                <div>
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="text-slate-300 text-sm"
+                      >Procesamiento Nóminas</span
+                    >
+                    <span class="text-[#11B4D9] text-sm font-semibold">92%</span
+                    >
+                  </div>
+                  <div class="w-full bg-slate-700 rounded-full h-2">
+                    <div
+                      class="bg-gradient-to-r from-[#035AA6] to-[#11B4D9] h-2 rounded-full animate-pulse"
+                      style="width: 92%"
+                    >
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="text-slate-300 text-sm"
+                      >Evaluaciones Pendientes</span
+                    >
+                    <span class="text-[#07598C] text-sm font-semibold">67%</span
+                    >
+                  </div>
+                  <div class="w-full bg-slate-700 rounded-full h-2">
+                    <div
+                      class="bg-gradient-to-r from-[#07598C] to-[#038C7F] h-2 rounded-full"
+                      style="width: 67%"
+                    >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="grid grid-cols-3 gap-2">
+                <button
+                  class="bg-gradient-to-r from-[#035AA6]/80 to-[#11B4D9]/80 text-white text-xs font-semibold py-2 px-3 rounded-lg hover:from-[#035AA6] hover:to-[#11B4D9] transition-all duration-300 flex items-center justify-center gap-1"
+                >
+                  <svg
+                    class="w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                  </svg>
+                  Nuevo
+                </button>
+                <button
+                  class="bg-gradient-to-r from-[#038C7F]/80 to-[#07598C]/80 text-white text-xs font-semibold py-2 px-3 rounded-lg hover:from-[#038C7F] hover:to-[#07598C] transition-all duration-300 flex items-center justify-center gap-1"
+                >
+                  <svg
+                    class="w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                  </svg>
+                  Reportes
+                </button>
+                <button
+                  class="bg-gradient-to-r from-[#07598C]/80 to-[#035AA6]/80 text-white text-xs font-semibold py-2 px-3 rounded-lg hover:from-[#07598C] hover:to-[#035AA6] transition-all duration-300 flex items-center justify-center gap-1"
+                >
+                  <svg
+                    class="w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  Config
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- Mission & Vision -->
+      <div class="grid md:grid-cols-2 gap-8 mb-16">
+        <div
+          class="bg-white rounded-3xl shadow-xl p-8 border-2 border-[#11B4D9]/20 hover:shadow-2xl transition-all duration-300"
+        >
+          <div class="text-[#035AA6] mb-4">
+            <i class="fas fa-bullseye text-4xl"></i>
+          </div>
+          <h2 class="text-3xl font-bold text-[#0D0D0D] mb-4">Nuestra Misión</h2>
+          <p class="text-gray-600 leading-relaxed">
+            Transformar la gestión de recursos humanos mediante tecnología
+            innovadora que facilite la administración del talento, mejore la
+            experiencia del empleado y optimice los procesos organizacionales.
+          </p>
+        </div>
+
+        <div
+          class="bg-white rounded-3xl shadow-xl p-8 border-2 border-[#11B4D9]/20 hover:shadow-2xl transition-all duration-300"
+        >
+          <div class="text-[#038C7F] mb-4">
+            <i class="fas fa-eye text-4xl"></i>
+          </div>
+          <h2 class="text-3xl font-bold text-[#0D0D0D] mb-4">Nuestra Visión</h2>
+          <p class="text-gray-600 leading-relaxed">
+            Ser la plataforma líder en gestión de recursos humanos, reconocida
+            por su capacidad de adaptación, innovación tecnológica y compromiso
+            con el desarrollo del capital humano.
+          </p>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="mb-16">
+        <h2 class="text-4xl font-bold text-center text-[#0D0D0D] mb-12">
+          Nuestros Servicios
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div
+            class="bg-gradient-to-br from-[#035AA6]/10 to-[#11B4D9]/10 rounded-3xl p-8 text-center border-2 border-[#11B4D9]/20 hover:shadow-xl transition-all duration-300 hover:scale-105"
+          >
+            <div class="text-[#035AA6] mb-6">
+              <i class="fas fa-users text-5xl"></i>
+            </div>
+            <h3 class="text-2xl font-semibold text-[#0D0D0D] mb-4">
+              Gestión de Personal
+            </h3>
+            <p class="text-gray-600">
+              Administración completa de empleados, desde reclutamiento hasta
+              desarrollo profesional.
+            </p>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-[#038C7F]/10 to-[#07598C]/10 rounded-3xl p-8 text-center border-2 border-[#038C7F]/20 hover:shadow-xl transition-all duration-300 hover:scale-105"
+          >
+            <div class="text-[#038C7F] mb-6">
+              <i class="fas fa-chart-line text-5xl"></i>
+            </div>
+            <h3 class="text-2xl font-semibold text-[#0D0D0D] mb-4">
+              Evaluaciones
+            </h3>
+            <p class="text-gray-600">
+              Sistemas de evaluación de desempeño y seguimiento de objetivos
+              empresariales.
+            </p>
+          </div>
+
+          <div
+            class="bg-gradient-to-br from-[#07598C]/10 to-[#11B4D9]/10 rounded-3xl p-8 text-center border-2 border-[#07598C]/20 hover:shadow-xl transition-all duration-300 hover:scale-105"
+          >
+            <div class="text-[#07598C] mb-6">
+              <i class="fas fa-graduation-cap text-5xl"></i>
+            </div>
+            <h3 class="text-2xl font-semibold text-[#0D0D0D] mb-4">
+              Capacitación
+            </h3>
+            <p class="text-gray-600">
+              Programas de formación y desarrollo continuo del talento humano.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div
+        class="bg-gradient-to-r from-[#035AA6] to-[#11B4D9] rounded-3xl p-8 md:p-12 text-white mb-16 shadow-2xl"
+      >
+        <div class="text-center mb-8">
+          <h2 class="text-4xl font-bold mb-4">
+            ¿Listo para transformar tu empresa?
+          </h2>
+          <p class="text-xl opacity-90">
+            Contáctanos y descubre cómo EMMA puede revolucionar tu gestión de
+            RRHH
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 text-center">
+          <div
+            class="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300"
+          >
+            <div class="mb-4">
+              <i class="fas fa-globe text-4xl text-[#11B4D9]"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Sitio Web</h3>
+            <a
+              href="https://emma.pe"
+              class="text-white/80 hover:text-white transition-colors"
+            >
+              www.emma.pe
+            </a>
+          </div>
+
+          <div
+            class="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300"
+          >
+            <div class="mb-4">
+              <i class="fas fa-envelope text-4xl text-[#11B4D9]"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Email</h3>
+            <a
+              href="mailto:info@emma.pe"
+              class="text-white/80 hover:text-white transition-colors"
+            >
+              info@emma.pe
+            </a>
+          </div>
+
+          <div
+            class="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300"
+          >
+            <div class="mb-4">
+              <i class="fas fa-handshake text-4xl text-[#11B4D9]"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Alianzas</h3>
+            <p class="text-white/80">Socios estratégicos en RRHH</p>
+          </div>
+        </div>
+
+        <div class="text-center mt-8">
+          <a
+            href="/contact"
+            class="inline-block bg-white text-[#035AA6] font-semibold px-8 py-4 rounded-xl hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            Contactar Ahora
+          </a>
+        </div>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="text-center">
+        <div
+          class="bg-white rounded-3xl shadow-2xl p-8 border-2 border-[#11B4D9]/20"
+        >
+          <h2 class="text-3xl font-bold text-[#0D0D0D] mb-8">
+            ¿Por qué elegir EMMA?
+          </h2>
+          <div class="grid md:grid-cols-4 gap-8">
+            <div class="group hover:scale-105 transition-all duration-300">
+              <div class="text-[#035AA6] mb-4">
+                <i
+                  class="fas fa-shield-alt text-3xl group-hover:scale-110 transition-transform"
+                ></i>
+              </div>
+              <h4 class="font-semibold text-[#0D0D0D] mb-3 text-lg">
+                Seguridad
+              </h4>
+              <p class="text-sm text-gray-600">
+                Protección total de datos empresariales
+              </p>
+            </div>
+
+            <div class="group hover:scale-105 transition-all duration-300">
+              <div class="text-[#038C7F] mb-4">
+                <i
+                  class="fas fa-rocket text-3xl group-hover:scale-110 transition-transform"
+                ></i>
+              </div>
+              <h4 class="font-semibold text-[#0D0D0D] mb-3 text-lg">
+                Innovación
+              </h4>
+              <p class="text-sm text-gray-600">
+                Tecnología de vanguardia en RRHH
+              </p>
+            </div>
+
+            <div class="group hover:scale-105 transition-all duration-300">
+              <div class="text-[#07598C] mb-4">
+                <i
+                  class="fas fa-cog text-3xl group-hover:scale-110 transition-transform"
+                ></i>
+              </div>
+              <h4 class="font-semibold text-[#0D0D0D] mb-3 text-lg">
+                Personalización
+              </h4>
+              <p class="text-sm text-gray-600">Adaptable a tu empresa</p>
+            </div>
+
+            <div class="group hover:scale-105 transition-all duration-300">
+              <div class="text-[#11B4D9] mb-4">
+                <i
+                  class="fas fa-headset text-3xl group-hover:scale-110 transition-transform"
+                ></i>
+              </div>
+              <h4 class="font-semibold text-[#0D0D0D] mb-3 text-lg">
+                Soporte 24/7
+              </h4>
+              <p class="text-sm text-gray-600">
+                Asistencia continua especializada
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</BasedLayout>

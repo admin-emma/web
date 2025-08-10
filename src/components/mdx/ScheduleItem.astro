@@ -1,0 +1,19 @@
+---
+export interface Props {
+  time: string;
+  title: string;
+  description: string;
+}
+
+const { time, title, description } = Astro.props;
+---
+
+<div class="flex items-center gap-4 p-3 border-b border-gray-100 last:border-b-0">
+  <div class="bg-gray-700 text-white px-3 py-1 font-medium min-w-[70px] text-center text-sm">
+    {time}
+  </div>
+  <div class="flex-1">
+    <div class="font-medium text-gray-800 text-sm">{title}</div>
+    <div class="text-gray-600 text-xs">{description}</div>
+  </div>
+</div>

@@ -1,0 +1,378 @@
+---
+import BasedLayout from '../layouts/BasedLayout.astro';
+---
+
+<BasedLayout title="Roadmap de Desarrollo - EMMA" description="Conoce el progreso y las próximas funcionalidades de EMMA, el sistema de gestión de recursos humanos del futuro.">
+  <main class="min-h-screen bg-gradient-to-br from-gray-50 to-[#11B4D9]/10">
+    <!-- Hero Section -->
+    <section class="py-20 bg-gradient-to-br from-[#035AA6] via-[#07598C] to-[#11B4D9] text-white">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <div class="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <i class="fas fa-map-marked-alt mr-2"></i>
+          Roadmap de Desarrollo
+        </div>
+        <h1 class="text-5xl font-bold mb-6">
+          El Futuro de  <span class="bg-gradient-to-r from-[#11B4D9] to-[#038C7F] bg-clip-text text-transparent">
+            EMMA
+          </span>
+        </h1>
+        <p class="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+          Descubre las funcionalidades que estamos desarrollando y cómo EMMA evolucionará para convertirse en la plataforma de RRHH más completa del mercado.
+        </p>
+        <div class="flex items-center justify-center space-x-8 text-sm">
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-[#038C7F] rounded-full mr-2"></div>
+            <span>Completado</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
+            <span>En Desarrollo</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-[#07598C] rounded-full mr-2"></div>
+            <span>Planificado</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stack Tecnológico -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-[#0D0D0D] mb-4">Stack Tecnológico</h2>
+          <p class="text-lg text-gray-600">Construido con las mejores tecnologías para garantizar escalabilidad y rendimiento</p>
+        </div>
+        
+        <div class="grid md:grid-cols-4 gap-8">
+          <div class="text-center p-6 bg-gradient-to-br from-[#035AA6]/10 to-[#07598C]/10 rounded-xl border border-[#035AA6]/30">
+            <div class="w-16 h-16 bg-[#035AA6] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-database text-2xl text-white"></i>
+            </div>
+            <h3 class="font-bold text-[#035AA6] mb-2">SQL Server</h3>
+            <p class="text-sm text-[#07598C]">Base de datos robusta y escalable</p>
+          </div>
+          
+          <div class="text-center p-6 bg-gradient-to-br from-[#11B4D9]/10 to-[#038C7F]/10 rounded-xl border border-[#11B4D9]/30">
+            <div class="w-16 h-16 bg-[#11B4D9] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-cloud text-2xl text-white"></i>
+            </div>
+            <h3 class="font-bold text-[#11B4D9] mb-2">Azure Functions</h3>
+            <p class="text-sm text-[#07598C]">Backend serverless con .NET</p>
+          </div>
+          
+          <div class="text-center p-6 bg-gradient-to-br from-[#038C7F]/10 to-[#035AA6]/10 rounded-xl border border-[#038C7F]/30">
+            <div class="w-16 h-16 bg-[#038C7F] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <i class="fab fa-react text-2xl text-white"></i>
+            </div>
+            <h3 class="font-bold text-[#038C7F] mb-2">React</h3>
+            <p class="text-sm text-[#07598C]">Frontend moderno y reactivo</p>
+          </div>
+          
+          <div class="text-center p-6 bg-gradient-to-br from-[#07598C]/10 to-[#11B4D9]/10 rounded-xl border border-[#07598C]/30">
+            <div class="w-16 h-16 bg-[#07598C] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-shield-alt text-2xl text-white"></i>
+            </div>
+            <h3 class="font-bold text-[#07598C] mb-2">Azure Security</h3>
+            <p class="text-sm text-[#035AA6]">Seguridad empresarial integrada</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline de Desarrollo -->
+    <section class="py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-[#0D0D0D] mb-4">Fases de Desarrollo</h2>
+          <p class="text-xl text-gray-600">Nuestro plan estructurado para construir el mejor sistema de RRHH</p>
+        </div>
+
+        <div class="relative">
+          <!-- Línea vertical del timeline -->
+          <div class="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-[#038C7F] via-amber-400 to-[#07598C]"></div>
+
+          <!-- Fase 1: Infraestructura y Fundamentos -->
+          <div class="relative mb-16">
+            <div class="flex items-start">
+              <div class="w-16 h-16 bg-[#038C7F] rounded-xl flex items-center justify-center text-white font-bold text-lg mr-8 relative z-10">
+                <i class="fas fa-check text-2xl"></i>
+              </div>
+              <div class="flex-1 bg-white rounded-2xl p-8 shadow-lg border border-[#038C7F]/30">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-2xl font-bold text-[#0D0D0D]">Fase 1: Infraestructura y Fundamentos</h3>
+                  <span class="bg-[#038C7F]/10 text-[#038C7F] px-3 py-1 rounded-full text-sm font-medium">Completado</span>
+                </div>
+                <p class="text-gray-600 mb-6">Establecimiento de la arquitectura base y componentes fundamentales del sistema.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 class="font-semibold text-[#0D0D0D] mb-3">✅ Completado</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                      <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-2"></i>Configuración de Azure Infrastructure</li>
+                      <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-2"></i>Base de datos SQL Server</li>
+                      <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-2"></i>Azure Functions con .NET</li>
+                      <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-2"></i>Sistema de autenticación</li>
+                      <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-2"></i>API REST básica</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-[#0D0D0D] mb-3">🎯 Entregables</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                      <li>• Arquitectura cloud-native escalable</li>
+                      <li>• Sistema de autenticación seguro</li>
+                      <li>• Base de datos optimizada</li>
+                      <li>• CI/CD pipeline configurado</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fase 2: Módulos Core de RRHH -->
+          <div class="relative mb-16">
+            <div class="flex items-start">
+              <div class="w-16 h-16 bg-amber-500 rounded-xl flex items-center justify-center text-white font-bold text-lg mr-8 relative z-10 animate-pulse">
+                <i class="fas fa-cog text-2xl"></i>
+              </div>
+              <div class="flex-1 bg-white rounded-2xl p-8 shadow-lg border border-amber-200">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-2xl font-bold text-[#0D0D0D]">Fase 2: Módulos Core de RRHH</h3>
+                  <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium">En Desarrollo - 65%</span>
+                </div>
+                <p class="text-gray-600 mb-6">Desarrollo de las funcionalidades fundamentales para la gestión de recursos humanos.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 class="font-semibold text-[#0D0D0D] mb-3">🔄 En Desarrollo</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                      <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-2"></i>Gestión de empleados</li>
+                      <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-2"></i>Estructura organizacional</li>
+                      <li class="flex items-center"><i class="fas fa-cog text-amber-500 mr-2 animate-spin"></i>Sistema de nóminas</li>
+                      <li class="flex items-center"><i class="fas fa-cog text-amber-500 mr-2 animate-spin"></i>Control de asistencia</li>
+                      <li class="flex items-center"><i class="fas fa-clock text-[#07598C] mr-2"></i>Gestión de vacaciones</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-[#0D0D0D] mb-3">🎯 Próximos Hitos</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                      <li>• Dashboard ejecutivo</li>
+                      <li>• Reportes básicos</li>
+                      <li>• Gestión de permisos</li>
+                      <li>• Interfaz mobile-responsive</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="mt-6 bg-amber-50 p-4 rounded-lg border border-amber-200">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-medium text-amber-800">Progreso de la Fase</span>
+                    <span class="text-sm font-medium text-amber-800">65%</span>
+                  </div>
+                  <div class="w-full bg-amber-200 rounded-full h-2">
+                    <div class="bg-amber-500 h-2 rounded-full" style="width: 65%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fase 3: Funcionalidades Avanzadas -->
+          <div class="relative mb-16">
+            <div class="flex items-start">
+              <div class="w-16 h-16 bg-[#11B4D9] rounded-xl flex items-center justify-center text-white font-bold text-lg mr-8 relative z-10">
+                <i class="fas fa-rocket text-2xl"></i>
+              </div>
+              <div class="flex-1 bg-white rounded-2xl p-8 shadow-lg border border-[#11B4D9]/30">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-2xl font-bold text-[#0D0D0D]">Fase 3: Funcionalidades Avanzadas</h3>
+                  <span class="bg-[#11B4D9]/10 text-[#11B4D9] px-3 py-1 rounded-full text-sm font-medium">Q4 2025</span>
+                </div>
+                <p class="text-gray-600 mb-6">Implementación de herramientas avanzadas de gestión y automatización.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 class="font-semibold text-[#0D0D0D] mb-3">🔮 Planificado</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                      <li class="flex items-center"><i class="fas fa-robot text-[#11B4D9] mr-2"></i>Automatización de procesos</li>
+                      <li class="flex items-center"><i class="fas fa-chart-line text-[#11B4D9] mr-2"></i>Analytics y KPIs avanzados</li>
+                      <li class="flex items-center"><i class="fas fa-users text-[#11B4D9] mr-2"></i>Gestión de performance</li>
+                      <li class="flex items-center"><i class="fas fa-graduation-cap text-[#11B4D9] mr-2"></i>Plataforma de capacitación</li>
+                      <li class="flex items-center"><i class="fas fa-search text-[#11B4D9] mr-2"></i>Reclutamiento inteligente</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-[#0D0D0D] mb-3">🎯 Objetivos</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                      <li>• IA para recomendaciones</li>
+                      <li>• Integración con redes sociales</li>
+                      <li>• Workflows personalizables</li>
+                      <li>• API para terceros</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fase 4: Optimización y Lanzamiento -->
+          <div class="relative mb-16">
+            <div class="flex items-start">
+              <div class="w-16 h-16 bg-[#07598C] rounded-xl flex items-center justify-center text-white font-bold text-lg mr-8 relative z-10">
+                <i class="fas fa-star text-2xl"></i>
+              </div>
+              <div class="flex-1 bg-white rounded-2xl p-8 shadow-lg border border-[#07598C]/30">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-2xl font-bold text-[#0D0D0D]">Fase 4: Optimización y Lanzamiento</h3>
+                  <span class="bg-[#07598C]/10 text-[#07598C] px-3 py-1 rounded-full text-sm font-medium">Q1 2026</span>
+                </div>
+                <p class="text-gray-600 mb-6">Pruebas, optimización y lanzamiento oficial de la plataforma.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 class="font-semibold text-[#0D0D0D] mb-3">🎯 Lanzamiento</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                      <li class="flex items-center"><i class="fas fa-vial text-[#07598C] mr-2"></i>Beta testing extensivo</li>
+                      <li class="flex items-center"><i class="fas fa-tachometer-alt text-[#07598C] mr-2"></i>Optimización de rendimiento</li>
+                      <li class="flex items-center"><i class="fas fa-mobile-alt text-[#07598C] mr-2"></i>Aplicación móvil nativa</li>
+                      <li class="flex items-center"><i class="fas fa-headset text-[#07598C] mr-2"></i>Centro de soporte</li>
+                      <li class="flex items-center"><i class="fas fa-rocket text-[#07598C] mr-2"></i>Lanzamiento comercial</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-[#0D0D0D] mb-3">🎯 Meta Final</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                      <li>• Plataforma 100% funcional</li>
+                      <li>• Documentación completa</li>
+                      <li>• Onboarding automatizado</li>
+                      <li>• Certificaciones de seguridad</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Módulos Detallados -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-[#0D0D0D] mb-4">Módulos del Sistema</h2>
+          <p class="text-xl text-gray-600">Funcionalidades completas para la gestión integral de recursos humanos</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+          <!-- Gestión de Personal -->
+          <div class="bg-gradient-to-br from-[#035AA6]/10 to-[#11B4D9]/10 rounded-2xl p-8 border border-[#035AA6]/30">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-[#035AA6] rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-users text-white text-xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-[#035AA6]">Gestión de Personal</h3>
+            </div>
+            <ul class="space-y-3 text-[#07598C]">
+              <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-3"></i>Expediente digital completo</li>
+              <li class="flex items-center"><i class="fas fa-check text-[#038C7F] mr-3"></i>Organigrama dinámico</li>
+              <li class="flex items-center"><i class="fas fa-cog text-amber-500 mr-3"></i>Gestión de contratos</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Evaluaciones de desempeño</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Plan de carrera</li>
+            </ul>
+          </div>
+
+          <!-- Nómina y Compensaciones -->
+          <div class="bg-gradient-to-br from-[#038C7F]/10 to-[#11B4D9]/10 rounded-2xl p-8 border border-[#038C7F]/30">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-[#038C7F] rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-money-bill-wave text-white text-xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-[#038C7F]">Nómina y Compensaciones</h3>
+            </div>
+            <ul class="space-y-3 text-[#07598C]">
+              <li class="flex items-center"><i class="fas fa-cog text-amber-500 mr-3"></i>Cálculo automático de nómina</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Gestión de deducciones</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Reportes fiscales</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Bonificaciones variables</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Integración bancaria</li>
+            </ul>
+          </div>
+
+          <!-- Tiempo y Asistencia -->
+          <div class="bg-gradient-to-br from-[#11B4D9]/10 to-[#07598C]/10 rounded-2xl p-8 border border-[#11B4D9]/30">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-[#11B4D9] rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-clock text-white text-xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-[#11B4D9]">Tiempo y Asistencia</h3>
+            </div>
+            <ul class="space-y-3 text-[#07598C]">
+              <li class="flex items-center"><i class="fas fa-cog text-amber-500 mr-3"></i>Control de horarios</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Gestión de ausencias</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Solicitud de vacaciones</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Horas extras automáticas</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Reportes de productividad</li>
+            </ul>
+          </div>
+
+          <!-- Reclutamiento y Selección -->
+          <div class="bg-gradient-to-br from-[#07598C]/10 to-[#038C7F]/10 rounded-2xl p-8 border border-[#07598C]/30">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-[#07598C] rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-search text-white text-xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-[#07598C]">Reclutamiento y Selección</h3>
+            </div>
+            <ul class="space-y-3 text-[#035AA6]">
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Portal de candidatos</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>ATS integrado</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Evaluaciones técnicas</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Videoentrevistas</li>
+              <li class="flex items-center"><i class="fas fa-clock text-gray-400 mr-3"></i>Onboarding digital</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-[#035AA6] to-[#11B4D9] text-white">
+      <div class="max-w-4xl mx-auto text-center px-6">
+        <h2 class="text-3xl font-bold mb-6">¿Quieres ser parte de la evolución?</h2>
+        <p class="text-xl text-blue-100 mb-8">
+          Únete a nuestro programa de beta testing y obtén acceso anticipado a las nuevas funcionalidades de EMMA.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/contact" class="bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+            <i class="fas fa-envelope mr-2"></i>
+            Solicitar Demo
+          </a>
+          <a href="/careers" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors">
+            <i class="fas fa-users mr-2"></i>
+            Únete al Equipo
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BasedLayout>
+
+<style>
+  /* Animaciones adicionales */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+  }
+</style>
