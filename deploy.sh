@@ -67,9 +67,6 @@ if [ -z "$SESSION_SECRET" ] || [ "$SESSION_SECRET" = "GENERAR_UN_SECRET_ALEATORI
 fi
 
 log_info "✅ Configuración validada correctamente"
-    log_error "No se encontró docker-compose.yml. Ejecuta este script desde el directorio del proyecto."
-    exit 1
-fi
 
 # Crear directorios necesarios
 log_info "Creando directorios necesarios..."
