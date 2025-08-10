@@ -17,9 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
-# database files (uncomment to exclude from git)
-# database.sqlite
-# *.db
+# database files (exclude from git)
+database.sqlite
+*.db
 
 # uploads and user content (exclude from git)
 public/uploads/
