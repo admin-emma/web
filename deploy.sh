@@ -28,6 +28,45 @@ log_error() {
 
 # Verificar que estamos en el directorio correcto
 if [ ! -f "docker-compose.yml" ]; then
+    log_error "docker-compose.yml no encontrado. Ejecutar desde el directorio raíz del proyecto."
+    exit 1
+fi
+
+# Verificar si existe archivo .env
+if [ ! -f ".env" ]; then
+    log_warn "Archivo .env no encontrado. Creando desde .env.example..."
+    if [ -f ".env.example" ]; then
+        cp .env.example .env
+        log_warn "📝 IMPORTANTE: Edita el archivo .env con tus configuraciones:"
+        log_warn "   - ADMIN_PASSWORD: Contraseña del administrador"
+        log_warn "   - SESSION_SECRET: Secret aleatorio para sesiones"
+        log_warn "   - SSL_EMAIL: Tu email para certificados SSL"
+        log_warn ""
+        log_warn "Ejecuta: nano .env"
+        log_warn "Luego vuelve a ejecutar: ./deploy.sh"
+        exit 1
+    else
+        log_error "Ni .env ni .env.example encontrados"
+        exit 1
+    fi
+fi
+
+# Cargar variables de entorno
+log_info "Cargando configuración desde .env..."
+source .env
+
+# Verificar variables críticas
+if [ -z "$ADMIN_PASSWORD" ] || [ "$ADMIN_PASSWORD" = "CAMBIAR_ESTA_CONTRASEÑA" ]; then
+    log_error "ADMIN_PASSWORD debe ser configurada en .env"
+    exit 1
+fi
+
+if [ -z "$SESSION_SECRET" ] || [ "$SESSION_SECRET" = "GENERAR_UN_SECRET_ALEATORIO_AQUI" ]; then
+    log_error "SESSION_SECRET debe ser configurada en .env"
+    exit 1
+fi
+
+log_info "✅ Configuración validada correctamente"
     log_error "No se encontró docker-compose.yml. Ejecuta este script desde el directorio del proyecto."
     exit 1
 fi

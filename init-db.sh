@@ -5,6 +5,23 @@
 
 echo "🌱 Inicializando base de datos EMMA con seed data..."
 
+# Verificar variables de entorno requeridas
+if [ -z "$ADMIN_PASSWORD" ]; then
+    echo "❌ ERROR: Variable ADMIN_PASSWORD no configurada"
+    echo "💡 Crear archivo .env con ADMIN_PASSWORD=tu_contraseña"
+    exit 1
+fi
+
+if [ -z "$ADMIN_EMAIL" ]; then
+    ADMIN_EMAIL="admin@emma.pe"
+    echo "⚠️  Usando email por defecto: $ADMIN_EMAIL"
+fi
+
+if [ -z "$ADMIN_USERNAME" ]; then
+    ADMIN_USERNAME="admin"
+    echo "⚠️  Usando username por defecto: $ADMIN_USERNAME"
+fi
+
 # En producción, siempre empezamos desde cero
 # Eliminar base de datos existente si existe
 if [ -f "/app/database.sqlite" ]; then
@@ -130,6 +147,43 @@ if [ -f "/app/seed-data.sql" ]; then
     echo "✅ Seed data aplicado correctamente"
 else
     echo "⚠️  Archivo seed-data.sql no encontrado, continuando sin datos de ejemplo"
+fi
+
+# Generar hash de contraseña para el admin usando Node.js
+echo "🔐 Configurando usuario administrador..."
+ADMIN_HASH=$(node -e "
+const bcrypt = require('bcrypt');
+bcrypt.hash('$ADMIN_PASSWORD', 10).then(hash => {
+    console.log(hash);
+    process.exit(0);
+}).catch(err => {
+    console.error('Error:', err);
+    process.exit(1);
+});
+")
+
+if [ $? -ne 0 ]; then
+    echo "❌ Error generando hash de contraseña"
+    exit 1
+fi
+
+# Actualizar el usuario admin con la contraseña real
+sqlite3 /app/database.sqlite "
+UPDATE users 
+SET password_hash = '$ADMIN_HASH',
+    email = '$ADMIN_EMAIL',
+    username = '$ADMIN_USERNAME'
+WHERE id = 1;
+"
+
+if [ $? -eq 0 ]; then
+    echo "✅ Usuario administrador configurado:"
+    echo "   📧 Email: $ADMIN_EMAIL"
+    echo "   👤 Username: $ADMIN_USERNAME"
+    echo "   🔐 Password: ********"
+else
+    echo "❌ Error configurando usuario administrador"
+    exit 1
 fi
 
 # Establecer permisos correctos
