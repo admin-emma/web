@@ -46,8 +46,17 @@ RUN npm ci --only=production && npm cache clean --force
 COPY --from=builder --chown=astro:nodejs /app/dist ./dist
 COPY --from=builder --chown=astro:nodejs /app/data ./data
 
+# Copiar scripts de inicialización de BD
+COPY --chown=astro:nodejs seed-data.sql ./
+COPY --chown=astro:nodejs init-db.sh ./
+RUN chmod +x init-db.sh
+
 # Crear directorio para uploads si no existe
 RUN mkdir -p /app/public/uploads && chown -R astro:nodejs /app/public/uploads
+RUN mkdir -p /app/public/cv && chown -R astro:nodejs /app/public/cv
+
+# Inicializar base de datos limpia en producción
+RUN ./init-db.sh
 
 # Cambiar al usuario no-root
 USER astro

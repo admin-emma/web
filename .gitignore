@@ -17,6 +17,16 @@ pnpm-debug.log*
 .env
 .env.production
 
+# database files (uncomment to exclude from git)
+# database.sqlite
+# *.db
+
+# uploads and user content (exclude from git)
+public/uploads/
+public/cv/
+uploads/
+cv/
+
 # macOS-specific files
 .DS_Store
 
