@@ -1,0 +1,12 @@
+#!/bin/bash
+# Script de compatibilidad para docker-compose con estructura organizada
+# Redirige todos los comandos a la nueva ubicación
+
+# Si no se especifica archivo, usar el archivo principal
+if [[ "$*" == *"-f"* ]]; then
+    # Ya especifica archivo, pasar comando tal como está
+    docker-compose "$@"
+else
+    # Usar el archivo principal de la estructura organizada
+    docker-compose -f docker/compose/docker-compose.yml "$@"
+fi

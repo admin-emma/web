@@ -26,8 +26,8 @@ log_error() {
 }
 
 # Verificar que estamos en el directorio correcto
-if [ ! -f "docker-compose.yml" ]; then
-    log_error "docker-compose.yml no encontrado. Ejecutar desde el directorio raíz del proyecto."
+if [ ! -f "docker/compose/docker-compose.yml" ]; then
+    log_error "docker/compose/docker-compose.yml no encontrado. Ejecutar desde el directorio raíz del proyecto."
     exit 1
 fi
 
@@ -152,7 +152,7 @@ export ADMIN_USERNAME="$ADMIN_USERNAME"
 
 # Verificar que docker-compose puede ver las variables
 log_info "Verificando que docker-compose puede acceder a las variables..."
-if docker-compose config | grep -q "SESSION_SECRET"; then
+if docker-compose -f docker/compose/docker-compose.yml config | grep -q "SESSION_SECRET"; then
     log_error "⚠️  PROBLEMA: docker-compose.yml parece referenciar SESSION_SECRET directamente"
     log_info "Las variables se pasarán via environment"
 fi
@@ -174,7 +174,7 @@ if [ -f "nginx/conf.d/emma.pe.http-only.conf" ]; then
 fi
 
 log_info "Levantando contenedores con la base de datos actual..."
-docker-compose up --build -d
+docker-compose -f docker/compose/docker-compose.yml up --build -d
 
 # Esperar a que los contenedores arranquen
 log_info "Esperando a que los contenedores se inicialicen..."
@@ -188,7 +188,7 @@ for i in {1..6}; do
         break
     elif [ $i -eq 6 ]; then
         log_warn "⚠️  La aplicación no responde en HTTP. Verificando logs..."
-        docker-compose logs emma-app --tail 10
+        docker-compose -f docker/compose/docker-compose.yml logs emma-app --tail 10
         log_warn "Continuando con el despliegue..."
     else
         log_info "Intento $i/6: Esperando respuesta de la aplicación..."
@@ -197,7 +197,7 @@ for i in {1..6}; do
 done
 
 log_info "📊 Estado final del despliegue:"
-docker-compose ps
+docker-compose -f docker/compose/docker-compose.yml ps
 
 log_info "🌐 La aplicación está disponible en:"
 log_info "   HTTP:  http://descubre.emma.pe"
@@ -214,7 +214,7 @@ log_info "📱 Panel de administración:"
 log_info "   https://descubre.emma.pe/admin"
 
 log_info "📋 Para ver logs en tiempo real:"
-log_info "   docker-compose logs -f"
+log_info "   docker-compose -f docker/compose/docker-compose.yml logs -f"
 
 echo ""
 log_info "🎉 ¡Despliegue completado exitosamente!"

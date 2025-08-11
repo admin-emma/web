@@ -5,7 +5,7 @@ services:
   emma-dev:
     build: 
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: docker/images/Dockerfile.dev
     container_name: emma-dev
     restart: unless-stopped
     ports:
