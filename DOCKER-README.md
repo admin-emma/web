@@ -74,9 +74,9 @@ chmod +x deploy.sh
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│     Nginx       │────│   EMMA App      │    │    Certbot     │
-│  (Reverse Proxy)│    │  (Astro + Node) │    │  (SSL Certs)   │
-│   Port 80/443   │    │   Port 4321     │    │   (Scheduled)  │
+│     Nginx       │────│   EMMA App      │    │    Certbot      │
+│  (Reverse Proxy)│    │  (Astro + Node) │    │  (SSL Certs)    │
+│   Port 80/443   │    │   Port 4321     │    │   (Scheduled)   │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │
          │              ┌─────────────────┐
