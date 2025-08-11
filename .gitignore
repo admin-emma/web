@@ -19,22 +19,12 @@ pnpm-debug.log*
 .env.local
 .env.development
 
-# database files (exclude from git)
-database.sqlite
-*.db
-
 # uploads and user content (exclude from git)
 public/uploads/
 public/cv/
 uploads/
 cv/
 
-# development utilities and sensitive scripts
-generate-admin-password.js
-change-password.js
-fix-hero-image.js
-*-password*.js
-*-secret*.js
 
 # macOS-specific files
 .DS_Store
