@@ -38,11 +38,14 @@ COPY --from=builder --chown=astro:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=astro:nodejs /app/package*.json ./
 COPY --from=builder --chown=astro:nodejs /app/public ./public
 
-# Copiar archivos de base de datos desde el builder
-COPY --from=builder /app/seed-data.sql ./
-COPY --from=builder /app/init-db.sh ./
+# Copiar archivos de base de datos DIRECTAMENTE del contexto de build
+COPY seed-database.sql ./
+COPY init-db.sh ./
 
-# Hacer el script ejecutable y verificar que existe
+# Verificar que los archivos están presentes
+RUN ls -la ./
+
+# Hacer el script ejecutable y verificar
 RUN chmod +x ./init-db.sh && ls -la ./init-db.sh
 
 # Crear directorio para uploads si no existe
@@ -55,9 +58,20 @@ RUN npm install -g bcrypt
 # Configurar variables de entorno temporales para la inicialización
 ENV ADMIN_PASSWORD=admin123
 ENV SESSION_SECRET=default-secret-key
+ENV ADMIN_EMAIL=admin@emma.pe
+ENV ADMIN_USERNAME=admin
 
-# Inicializar base de datos limpia en producción (como root)
-RUN ./init-db.sh
+# Inicializar base de datos directamente
+RUN echo "🌱 Inicializando base de datos EMMA..." && \
+    # Crear estructura de base de datos
+    sqlite3 /app/database.sqlite < /app/seed-database.sql && \
+    echo "📊 Seed data aplicado" && \
+    # Generar hash de contraseña y actualizar usuario admin
+    ADMIN_HASH=$(node -e "const bcrypt = require('bcrypt'); console.log(bcrypt.hashSync('${ADMIN_PASSWORD}', 10));") && \
+    sqlite3 /app/database.sqlite "UPDATE users SET password_hash = '${ADMIN_HASH}', email = '${ADMIN_EMAIL}', username = '${ADMIN_USERNAME}' WHERE id = 1;" && \
+    echo "✅ Usuario administrador configurado" && \
+    # Verificar base de datos
+    echo "📈 Usuarios en BD: $(sqlite3 /app/database.sqlite 'SELECT COUNT(*) FROM users;')"
 
 # Cambiar propiedad de la base de datos al usuario astro
 RUN chown astro:nodejs database.sqlite
