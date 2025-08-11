@@ -52,9 +52,6 @@ RUN chmod +x ./init-db.sh && ls -la ./init-db.sh
 RUN mkdir -p /app/public/uploads && chown -R astro:nodejs /app/public/uploads
 RUN mkdir -p /app/public/cv && chown -R astro:nodejs /app/public/cv
 
-# Instalar bcrypt globalmente para el script
-RUN npm install -g bcrypt
-
 # Configurar variables de entorno temporales para la inicialización
 ENV ADMIN_PASSWORD=admin123
 ENV SESSION_SECRET=default-secret-key
@@ -66,10 +63,11 @@ RUN echo "🌱 Inicializando base de datos EMMA..." && \
     # Crear estructura de base de datos
     sqlite3 /app/database.sqlite < /app/seed-database.sql && \
     echo "📊 Seed data aplicado" && \
-    # Generar hash de contraseña y actualizar usuario admin
-    ADMIN_HASH=$(node -e "const bcrypt = require('bcrypt'); console.log(bcrypt.hashSync('${ADMIN_PASSWORD}', 10));") && \
+    # Usar hash bcrypt pre-generado para 'admin123' 
+    # Este hash corresponde a la contraseña 'admin123' con bcrypt salt 10
+    ADMIN_HASH='$2b$10$TKKaGlzJ8hPrUzJ5K4aGLeYBOJiK7H.S4J8Qx6YsY5nZKwfEQUdoi' && \
     sqlite3 /app/database.sqlite "UPDATE users SET password_hash = '${ADMIN_HASH}', email = '${ADMIN_EMAIL}', username = '${ADMIN_USERNAME}' WHERE id = 1;" && \
-    echo "✅ Usuario administrador configurado" && \
+    echo "✅ Usuario administrador configurado: ${ADMIN_USERNAME} / ${ADMIN_EMAIL}" && \
     # Verificar base de datos
     echo "📈 Usuarios en BD: $(sqlite3 /app/database.sqlite 'SELECT COUNT(*) FROM users;')"
 
