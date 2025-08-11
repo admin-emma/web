@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Script de acceso rápido para verificar despliegue
+# Uso: ./verify
+
+echo "🔍 Verificando despliegue de EMMA..."
+echo "📂 Ejecutando: scripts/deployment/verify-deployment.sh"
+echo ""
+
+# Verificar que el script existe
+if [ ! -f "scripts/deployment/verify-deployment.sh" ]; then
+    echo "❌ Error: Script de verificación no encontrado"
+    echo "📁 Estructura esperada:"
+    echo "   scripts/deployment/verify-deployment.sh"
+    exit 1
+fi
+
+# Hacer ejecutable y ejecutar
+chmod +x scripts/deployment/verify-deployment.sh
+./scripts/deployment/verify-deployment.sh "$@"

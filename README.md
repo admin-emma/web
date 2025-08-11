@@ -1,4 +1,149 @@
-# 🚀 EMMA - Plataforma de Recursos Humanos
+# 🌟 EMMA - Plataforma Web
+
+Plataforma web moderna desarrollada con Astro, Node.js y SQLite para gestión empresarial.
+
+## 🚀 Inicio Rápido
+
+### Despliegue en Producción
+```bash
+./deploy          # Despliegue completo
+./setup-ssl       # Configurar HTTPS (después del despliegue)
+./verify          # Verificar estado del despliegue
+```
+
+### Desarrollo Local
+```bash
+./dev docker      # Desarrollo con Docker
+./dev npm         # Desarrollo con npm
+```
+
+## 📁 Estructura del Proyecto
+
+```
+├── 📂 docs/                    # Documentación
+│   ├── DEPLOYMENT-GUIDE.md     # Guía completa de despliegue
+│   ├── DEPLOY.md              # Documentación de despliegue
+│   └── DOCKER-README.md        # Documentación de Docker
+│
+├── 📂 scripts/                 # Scripts organizados
+│   ├── 📂 deployment/          # Scripts de producción
+│   │   ├── deploy.sh           # ⭐ Despliegue principal
+│   │   ├── setup-ssl.sh        # Configurar SSL/HTTPS
+│   │   ├── setup-server.sh     # Configurar servidor inicial
+│   │   ├── verify-deployment.sh # Verificar despliegue
+│   │   ├── fix-ssl.sh          # Corregir problemas SSL
+│   │   ├── setup-http-only.sh  # Configurar solo HTTP
+│   │   └── check-system.sh     # Verificar sistema
+│   │
+│   ├── 📂 database/            # Scripts de base de datos
+│   │   ├── backup-db.sh        # Backup de base de datos
+│   │   └── restore-db.sh       # Restaurar base de datos
+│   │
+│   └── 📂 development/         # Scripts de desarrollo
+│       ├── dev.sh              # Desarrollo Linux/Mac
+│       ├── dev.ps1             # Desarrollo Windows
+│       └── restart-nginx-http.ps1
+│
+├── 📂 nginx/                   # Configuración nginx
+├── 📂 src/                     # Código fuente Astro
+├── 📂 public/                  # Archivos estáticos
+└── 📄 Acceso rápido (raíz)
+    ├── deploy                  # → scripts/deployment/deploy.sh
+    ├── setup-ssl              # → scripts/deployment/setup-ssl.sh
+    ├── verify                  # → scripts/deployment/verify-deployment.sh
+    └── dev                     # → scripts/development/dev.sh
+```
+
+## 🔧 Comandos Principales
+
+| Comando | Descripción | Ubicación |
+|---------|-------------|-----------|
+| `./deploy` | Despliegue completo automatizado | `scripts/deployment/deploy.sh` |
+| `./setup-ssl` | Configurar SSL con Let's Encrypt | `scripts/deployment/setup-ssl.sh` |
+| `./verify` | Verificar estado del despliegue | `scripts/deployment/verify-deployment.sh` |
+| `./dev docker` | Desarrollo con Docker | `scripts/development/dev.sh` |
+
+## 📚 Documentación
+
+- **[📖 Guía de Despliegue](docs/DEPLOYMENT-GUIDE.md)** - Proceso completo paso a paso
+- **[🐳 Docker](docs/DOCKER-README.md)** - Configuración de contenedores
+- **[🚀 Deploy](docs/DEPLOY.md)** - Documentación de despliegue
+
+## 🛠️ Tecnologías
+
+- **Frontend**: Astro + TypeScript
+- **Backend**: Node.js + Express
+- **Base de datos**: SQLite
+- **Contenedores**: Docker + Docker Compose
+- **Proxy**: nginx
+- **SSL**: Let's Encrypt
+- **CI/CD**: Scripts automatizados
+
+## 🌐 URLs de Producción
+
+- **Aplicación**: https://descubre.emma.pe
+- **Admin**: https://descubre.emma.pe/admin
+- **Health Check**: https://descubre.emma.pe/api/health
+
+## ⚡ Scripts por Categoría
+
+### � Despliegue y Producción
+```bash
+scripts/deployment/deploy.sh           # Despliegue principal
+scripts/deployment/setup-ssl.sh        # Configurar HTTPS
+scripts/deployment/verify-deployment.sh # Verificar estado
+scripts/deployment/setup-server.sh     # Configurar servidor
+```
+
+### 🗄️ Base de Datos
+```bash
+scripts/database/backup-db.sh          # Backup automático
+scripts/database/restore-db.sh         # Restaurar backup
+```
+
+### 💻 Desarrollo
+```bash
+scripts/development/dev.sh             # Desarrollo Linux/Mac
+scripts/development/dev.ps1            # Desarrollo Windows
+```
+
+## 🔒 Seguridad
+
+- SSL/TLS automático con Let's Encrypt
+- Variables de entorno seguras
+- Rate limiting en nginx
+- Validación de archivos subidos
+- Headers de seguridad configurados
+
+## 🆘 Solución de Problemas
+
+```bash
+# Ver logs en tiempo real
+docker-compose logs -f
+
+# Verificar estado de contenedores
+docker-compose ps
+
+# Verificar configuración completa
+./verify
+
+# Ver documentación completa
+cat docs/DEPLOYMENT-GUIDE.md
+```
+
+---
+
+## 🤝 Contribución
+
+1. Haz fork del repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.🚀 EMMA - Plataforma de Recursos Humanos
 
 EMMA es una plataforma integral de gestión de recursos humanos diseñada para transformar la experiencia laboral en Perú. Combina tecnología moderna con un enfoque centrado en el empleado para ofrecer soluciones completas de RRHH.
 
