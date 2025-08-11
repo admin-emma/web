@@ -38,6 +38,15 @@ fi
 
 # Verificar que el dominio está configurado
 DOMAIN="descubre.emma.pe"
+log_step "Verificando que nginx esté funcionando con HTTP..."
+
+# Verificar que nginx responde
+if ! curl -s -o /dev/null -w "%{http_code}" http://localhost | grep -q "200\|301\|302\|500"; then
+    log_error "nginx no está respondiendo en puerto 80. Verifica que el despliegue haya sido exitoso."
+    log_error "Ejecuta primero: ./deploy.sh"
+    exit 1
+fi
+
 log_step "Verificando configuración DNS para $DOMAIN..."
 
 # Obtener IP pública del servidor
@@ -48,6 +57,11 @@ log_info "IP pública del servidor: $PUBLIC_IP"
 DNS_IP=$(dig +short $DOMAIN | tail -n1)
 if [ "$DNS_IP" != "$PUBLIC_IP" ]; then
     log_warn "⚠️  El dominio $DOMAIN no apunta a este servidor"
+    log_warn "DNS IP: $DNS_IP, Servidor IP: $PUBLIC_IP"
+    log_warn "Continuando de todas formas... pero SSL puede fallar."
+else
+    log_info "✅ DNS configurado correctamente"
+fi
     log_warn "   DNS resuelve a: $DNS_IP"
     log_warn "   Servidor está en: $PUBLIC_IP"
     log_warn "   Configura tu DNS antes de continuar"

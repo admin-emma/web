@@ -31,28 +31,57 @@ if [ ! -f "docker-compose.yml" ]; then
     exit 1
 fi
 
-# Verificar si existe archivo .env
+# Verificar o crear archivo .env
 if [ ! -f ".env" ]; then
-    log_error "Archivo .env no encontrado. Configura tus variables antes de desplegar."
-    exit 1
+    log_warn "Archivo .env no encontrado. Creando con valores por defecto..."
+    cat > .env << EOF
+SESSION_SECRET=emma-secret-key-$(date +%s)
+ADMIN_PASSWORD=admin123
+ADMIN_EMAIL=admin@emma.pe
+ADMIN_USERNAME=admin
+EOF
+    log_info "✅ Archivo .env creado. Edita las credenciales si es necesario."
 fi
 
 log_info "Cargando configuración desde .env..."
 source .env
+
+# Verificar variables críticas
+if [ -z "$SESSION_SECRET" ]; then
+    log_error "SESSION_SECRET no configurado en .env"
+    exit 1
+fi
 
 log_info "Creando directorios necesarios..."
 mkdir -p ssl
 mkdir -p public/uploads
 mkdir -p logs
 
-# Verificar que existe la base de datos
+# Verificar que existe la base de datos o la inicializamos
 if [ ! -f "database.sqlite" ]; then
-    log_error "Base de datos database.sqlite no encontrada en el directorio raíz."
-    log_info "Asegúrate de que database.sqlite esté presente antes del despliegue."
-    exit 1
+    log_warn "Base de datos database.sqlite no encontrada. Inicializando..."
+    
+    # Verificar si existe script de inicialización
+    if [ -f "init-db.sh.backup" ]; then
+        log_info "Encontrado script de inicialización. Ejecutando..."
+        chmod +x init-db.sh.backup
+        cp init-db.sh.backup init-db.sh
+        chmod +x init-db.sh
+        ./init-db.sh
+        log_info "✅ Base de datos inicializada"
+    else
+        # Crear base de datos vacía con permisos correctos
+        log_info "Creando base de datos vacía..."
+        touch database.sqlite
+        chmod 666 database.sqlite
+        log_warn "⚠️  Base de datos vacía creada. La aplicación creará las tablas automáticamente."
+    fi
+else
+    log_info "✅ Base de datos encontrada: database.sqlite"
+    # Verificar permisos de la base de datos
+    chmod 666 database.sqlite
+    log_info "✅ Permisos de base de datos verificados"
 fi
-
-log_info "Base de datos encontrada: database.sqlite"
 
 # Verificar dependencias del sistema
 log_info "Verificando dependencias del sistema..."
@@ -77,18 +106,50 @@ fi
 
 log_info "✅ Dependencias verificadas"
 
+# Configurar nginx para HTTP primero (antes de SSL)
+log_info "Configurando nginx para despliegue HTTP temporal..."
+if [ -f "nginx/conf.d/emma.pe.http-only.conf" ]; then
+    log_info "Usando configuración HTTP-only para arranque inicial..."
+    cp nginx/conf.d/emma.pe.conf nginx/conf.d/emma.pe.ssl.conf.backup 2>/dev/null || true
+    cp nginx/conf.d/emma.pe.http-only.conf nginx/conf.d/emma.pe.conf
+    log_info "✅ nginx configurado para HTTP temporal"
+fi
+
 log_info "Levantando contenedores con la base de datos actual..."
 docker-compose up --build -d
+
+# Esperar a que los contenedores arranquen
+log_info "Esperando a que los contenedores se inicialicen..."
+sleep 15
+
+# Verificar que la aplicación esté respondiendo
+log_info "Verificando que la aplicación esté funcionando..."
+for i in {1..6}; do
+    if curl -s -o /dev/null -w "%{http_code}" http://localhost | grep -q "200\|301\|302"; then
+        log_info "✅ Aplicación respondiendo correctamente"
+        break
+    elif [ $i -eq 6 ]; then
+        log_warn "⚠️  La aplicación no responde en HTTP. Verificando logs..."
+        docker-compose logs emma-app --tail 10
+        log_warn "Continuando con el despliegue..."
+    else
+        log_info "Intento $i/6: Esperando respuesta de la aplicación..."
+        sleep 10
+    fi
+done
 
 log_info "📊 Estado final del despliegue:"
 docker-compose ps
 
 log_info "🌐 La aplicación está disponible en:"
 log_info "   HTTP:  http://descubre.emma.pe"
+log_info "   IP:    http://$(curl -s ifconfig.me || echo 'IP-del-servidor')"
+
 if [ -f "./ssl/live/descubre.emma.pe/fullchain.pem" ]; then
     log_info "   HTTPS: https://descubre.emma.pe (SSL configurado)"
 else
     log_warn "   HTTPS: No configurado - ejecuta './setup-ssl.sh' para habilitar SSL"
+    log_warn "   ⚠️  Actualmente funcionando en HTTP únicamente"
 fi
 
 log_info "📱 Panel de administración:"
