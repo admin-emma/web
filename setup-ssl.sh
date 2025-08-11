@@ -97,12 +97,24 @@ docker-compose stop nginx
 # Obtener certificado SSL con certbot
 log_step "Solicitando certificado SSL para $DOMAIN..."
 
+# Verificar si existe el subdominio www antes de incluirlo
+log_info "Verificando subdominios disponibles..."
+WWW_EXISTS=$(dig +short www.$DOMAIN | tail -n1)
+if [ -n "$WWW_EXISTS" ] && [ "$WWW_EXISTS" != "NXDOMAIN" ]; then
+    DOMAINS="$DOMAIN,www.$DOMAIN"
+    log_info "✅ Usando dominios: $DOMAIN y www.$DOMAIN"
+else
+    DOMAINS="$DOMAIN"
+    log_info "✅ Usando solo dominio principal: $DOMAIN"
+    log_warn "⚠️  www.$DOMAIN no existe en DNS, se excluye del certificado"
+fi
+
 # Crear comando certbot
 CERTBOT_COMMAND="certbot certonly --standalone \
     --non-interactive \
     --agree-tos \
     --email admin@$DOMAIN \
-    --domains $DOMAIN,www.$DOMAIN \
+    --domains $DOMAINS \
     --cert-path ./ssl/live/$DOMAIN/ \
     --key-path ./ssl/live/$DOMAIN/ \
     --fullchain-path ./ssl/live/$DOMAIN/ \

@@ -31,26 +31,59 @@ if [ ! -f "docker-compose.yml" ]; then
     exit 1
 fi
 
-# Verificar o crear archivo .env
-if [ ! -f ".env" ]; then
-    log_warn "Archivo .env no encontrado. Creando con valores por defecto..."
+# Verificar o crear archivo .env SIEMPRE
+log_info "Verificando configuración de variables de entorno..."
+
+# Crear .env si no existe O si está incompleto
+if [ ! -f ".env" ] || ! grep -q "SESSION_SECRET" .env || ! grep -q "ADMIN_PASSWORD" .env; then
+    log_warn "Archivo .env faltante o incompleto. Creando/corrigiendo..."
+    
+    # Backup si existe
+    [ -f ".env" ] && cp .env .env.backup-$(date +%s)
+    
+    # Crear .env completo
     cat > .env << EOF
-SESSION_SECRET=emma-secret-key-$(date +%s)
+SESSION_SECRET=emma-secret-key-$(date +%s)-$(openssl rand -hex 8)
 ADMIN_PASSWORD=admin123
 ADMIN_EMAIL=admin@emma.pe
 ADMIN_USERNAME=admin
 EOF
-    log_info "✅ Archivo .env creado. Edita las credenciales si es necesario."
+    log_info "✅ Archivo .env creado/corregido con todas las variables requeridas"
+    log_warn "🔒 IMPORTANTE: Cambia ADMIN_PASSWORD en producción!"
+else
+    log_info "✅ Archivo .env encontrado y completo"
 fi
 
+# Forzar carga de variables
 log_info "Cargando configuración desde .env..."
+set -a  # Exportar automáticamente todas las variables
 source .env
+set +a
 
-# Verificar variables críticas
-if [ -z "$SESSION_SECRET" ]; then
-    log_error "SESSION_SECRET no configurado en .env"
-    exit 1
+# Verificar TODAS las variables críticas
+MISSING_VARS=""
+[ -z "$SESSION_SECRET" ] && MISSING_VARS="$MISSING_VARS SESSION_SECRET"
+[ -z "$ADMIN_PASSWORD" ] && MISSING_VARS="$MISSING_VARS ADMIN_PASSWORD"
+[ -z "$ADMIN_EMAIL" ] && MISSING_VARS="$MISSING_VARS ADMIN_EMAIL"
+[ -z "$ADMIN_USERNAME" ] && MISSING_VARS="$MISSING_VARS ADMIN_USERNAME"
+
+if [ -n "$MISSING_VARS" ]; then
+    log_error "Variables críticas faltantes:$MISSING_VARS"
+    log_error "Recreando archivo .env..."
+    cat > .env << EOF
+SESSION_SECRET=emma-secret-key-$(date +%s)-$(openssl rand -hex 8)
+ADMIN_PASSWORD=admin123
+ADMIN_EMAIL=admin@emma.pe
+ADMIN_USERNAME=admin
+EOF
+    source .env
+    log_info "✅ Variables recreadas exitosamente"
 fi
+
+log_info "✅ Variables de entorno verificadas:"
+log_info "   SESSION_SECRET: ${SESSION_SECRET:0:20}..."
+log_info "   ADMIN_USERNAME: $ADMIN_USERNAME"
+log_info "   ADMIN_EMAIL: $ADMIN_EMAIL"
 
 log_info "Creando directorios necesarios..."
 mkdir -p ssl
@@ -105,6 +138,31 @@ if ! docker ps &> /dev/null; then
 fi
 
 log_info "✅ Dependencias verificadas"
+
+# ==========================================
+# VERIFICACIÓN FINAL DE VARIABLES DE ENTORNO
+# ==========================================
+log_info "🔍 Verificación final de variables antes del despliegue..."
+
+# Exportar variables explícitamente para docker-compose
+export SESSION_SECRET="$SESSION_SECRET"
+export ADMIN_PASSWORD="$ADMIN_PASSWORD"
+export ADMIN_EMAIL="$ADMIN_EMAIL"
+export ADMIN_USERNAME="$ADMIN_USERNAME"
+
+# Verificar que docker-compose puede ver las variables
+log_info "Verificando que docker-compose puede acceder a las variables..."
+if docker-compose config | grep -q "SESSION_SECRET"; then
+    log_error "⚠️  PROBLEMA: docker-compose.yml parece referenciar SESSION_SECRET directamente"
+    log_info "Las variables se pasarán via environment"
+fi
+
+# Mostrar variables que se usarán (sin mostrar valores sensibles)
+log_info "✅ Variables que se pasarán a los contenedores:"
+echo "   SESSION_SECRET=***hidden***"
+echo "   ADMIN_PASSWORD=***hidden***"
+echo "   ADMIN_EMAIL=$ADMIN_EMAIL"
+echo "   ADMIN_USERNAME=$ADMIN_USERNAME"
 
 # Configurar nginx para HTTP primero (antes de SSL)
 log_info "Configurando nginx para despliegue HTTP temporal..."
