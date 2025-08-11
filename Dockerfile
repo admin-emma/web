@@ -13,6 +13,9 @@ RUN npm ci --only=production && npm cache clean --force
 # Copiar código fuente
 COPY . .
 
+# Verificar que los archivos de BD están presentes
+RUN ls -la init-db.sh seed-data.sql
+
 # Build de la aplicación
 RUN npm run build
 
@@ -35,12 +38,12 @@ COPY --from=builder --chown=astro:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=astro:nodejs /app/package*.json ./
 COPY --from=builder --chown=astro:nodejs /app/public ./public
 
-# Copiar archivos de base de datos
-COPY --chown=root:root seed-data.sql ./
-COPY --chown=root:root init-db.sh ./
+# Copiar archivos de base de datos desde el builder
+COPY --from=builder /app/seed-data.sql ./
+COPY --from=builder /app/init-db.sh ./
 
-# Hacer el script ejecutable
-RUN chmod +x init-db.sh
+# Hacer el script ejecutable y verificar que existe
+RUN chmod +x ./init-db.sh && ls -la ./init-db.sh
 
 # Crear directorio para uploads si no existe
 RUN mkdir -p /app/public/uploads && chown -R astro:nodejs /app/public/uploads
