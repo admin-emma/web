@@ -30,7 +30,7 @@ sqlite3 database.sqlite "SELECT COUNT(*) FROM users;"
 ## 🔧 Cambiar Contraseña en Producción
 
 ### Opción 1: A través del Panel de Administración
-1. Accede a `https://emma.pe/admin` 
+1. Accede a `https://descubre.emma.pe/admin` 
 2. Inicia sesión con las credenciales por defecto
 3. Ve a la sección de usuarios
 4. Cambia la contraseña del usuario admin
@@ -56,7 +56,7 @@ El Dockerfile está configurado para:
 ## � Configuración SSL/HTTPS
 
 ### Prerrequisitos para SSL
-- Dominio emma.pe configurado para apuntar a tu servidor
+- Dominio descubre.emma.pe configurado para apuntar a tu servidor
 - Puerto 80 y 443 abiertos en el firewall
 - Aplicación funcionando correctamente en HTTP
 
@@ -73,10 +73,10 @@ El Dockerfile está configurado para:
 ### Verificar SSL
 ```bash
 # Verificar certificado
-openssl x509 -in ssl/live/emma.pe/fullchain.pem -text -noout
+openssl x509 -in ssl/live/descubre.emma.pe/fullchain.pem -text -noout
 
 # Probar HTTPS
-curl -I https://emma.pe
+curl -I https://descubre.emma.pe
 ```
 
 ## �🛡️ Seguridad
@@ -151,10 +151,10 @@ docker-compose down -v
 
 ## 🔍 Verificación Post-Deployment
 
-1. **Web principal**: `https://emma.pe`
-2. **Panel admin**: `https://emma.pe/admin`
-3. **Careers**: `https://emma.pe/careers`
-4. **Contact**: `https://emma.pe/contact`
+1. **Web principal**: `https://descubre.emma.pe`
+2. **Panel admin**: `https://descubre.emma.pe/admin`
+3. **Careers**: `https://descubre.emma.pe/careers`
+4. **Contact**: `https://descubre.emma.pe/contact`
 
 ---
 

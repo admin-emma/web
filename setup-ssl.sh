@@ -37,7 +37,7 @@ if [ ! -f "docker-compose.yml" ]; then
 fi
 
 # Verificar que el dominio está configurado
-DOMAIN="emma.pe"
+DOMAIN="descubre.emma.pe"
 log_step "Verificando configuración DNS para $DOMAIN..."
 
 # Obtener IP pública del servidor
@@ -161,7 +161,7 @@ docker-compose stop nginx
 certbot renew --quiet
 
 # Copiar certificados actualizados
-sudo cp /etc/letsencrypt/live/emma.pe/* ./ssl/live/emma.pe/ 2>/dev/null || true
+sudo cp /etc/letsencrypt/live/descubre.emma.pe/* ./ssl/live/descubre.emma.pe/ 2>/dev/null || true
 sudo chown -R $(whoami):$(whoami) ./ssl/
 
 # Reiniciar nginx

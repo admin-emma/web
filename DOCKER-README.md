@@ -26,8 +26,8 @@
 
 ### Configuración Nginx
 - **`nginx/nginx.conf`** - Configuración base con seguridad
-- **`nginx/conf.d/emma.pe.conf`** - Virtual host con SSL/HTTPS
-- **`nginx/conf.d/emma.pe.http-only.conf`** - Configuración temporal HTTP
+- **`nginx/conf.d/descubre.emma.pe.conf`** - Virtual host con SSL/HTTPS
+- **`nginx/conf.d/descubre.emma.pe.http-only.conf`** - Configuración temporal HTTP
 
 ### Health Check
 - **`src/pages/api/health.js`** - Endpoint para monitoreo de contenedores
@@ -165,7 +165,7 @@ docker-compose exec emma-app ls -la database.sqlite
 docker-compose exec nginx nginx -t
 
 # Verificar certificados SSL
-docker-compose exec nginx ls -la /etc/nginx/ssl/live/emma.pe/
+docker-compose exec nginx ls -la /etc/nginx/ssl/live/descubre.emma.pe/
 
 # Reload configuración
 docker-compose exec nginx nginx -s reload
@@ -174,7 +174,7 @@ docker-compose exec nginx nginx -s reload
 ### Problemas de SSL
 ```bash
 # Verificar certificados
-openssl x509 -in ssl/live/emma.pe/fullchain.pem -text -noout
+openssl x509 -in ssl/live/descubre.emma.pe/fullchain.pem -text -noout
 
 # Regenerar certificados (con la aplicación parada)
 docker-compose stop nginx
@@ -184,10 +184,10 @@ docker-compose stop nginx
 ## � Endpoints Importantes
 
 - **Aplicación**: `http://localhost:3000` (interno)
-- **Web pública**: `https://emma.pe`
-- **Admin**: `https://emma.pe/admin`
-- **Health check**: `https://emma.pe/api/health`
-- **API**: `https://emma.pe/api/*`
+- **Web pública**: `https://descubre.emma.pe`
+- **Admin**: `https://descubre.emma.pe/admin`
+- **Health check**: `https://descubre.emma.pe/api/health`
+- **API**: `https://descubre.emma.pe/api/*`
 
 ---
 

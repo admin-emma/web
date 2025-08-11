@@ -8,7 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	site: 'https://site.emma.pe',
 	output: 'server', // Habilitar SSR
 	adapter: node({
 		mode: 'standalone'

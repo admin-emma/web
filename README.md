@@ -92,7 +92,7 @@ La aplicación estará disponible en `http://localhost:4321`
 # Preparar servidor Ubuntu
 curl -fsSL https://raw.githubusercontent.com/tu-repo/setup-server.sh | bash
 
-# Configurar DNS: emma.pe → IP_del_servidor
+# Configurar DNS: descubre.emma.pe → IP_del_servidor
 
 # Clonar y desplegar
 git clone https://github.com/tu-usuario/emma-web.git /opt/emma
@@ -152,28 +152,28 @@ All commands are run from the root of the project, from a terminal:
 ## 📱 URLs Importantes
 
 ### Sitio Web Público
-- **Inicio**: https://emma.pe
-- **Blog**: https://emma.pe/blog
-- **Carreras**: https://emma.pe/careers
-- **Contacto**: https://emma.pe/contact
-- **Acerca de**: https://emma.pe/about
+- **Inicio**: https://descubre.emma.pe
+- **Blog**: https://descubre.emma.pe/blog
+- **Carreras**: https://descubre.emma.pe/careers
+- **Contacto**: https://descubre.emma.pe/contact
+- **Acerca de**: https://descubre.emma.pe/about
 
 ### Panel de Administración
-- **Dashboard**: https://emma.pe/admin
-- **Gestión de Blogs**: https://emma.pe/admin/blogs
-- **Gestión de Posiciones**: https://emma.pe/admin/job-positions
-- **Gestión de Testimonios**: https://emma.pe/admin/testimonials
-- **Gestión de Hero Slides**: https://emma.pe/admin/hero-slides
-- **Gestión de Usuarios**: https://emma.pe/admin/users
-- **Gestión de Contactos**: https://emma.pe/admin/contacts
-- **Gestión de Newsletter**: https://emma.pe/admin/recruitment
+- **Dashboard**: https://descubre.emma.pe/admin
+- **Gestión de Blogs**: https://descubre.emma.pe/admin/blogs
+- **Gestión de Posiciones**: https://descubre.emma.pe/admin/job-positions
+- **Gestión de Testimonios**: https://descubre.emma.pe/admin/testimonials
+- **Gestión de Hero Slides**: https://descubre.emma.pe/admin/hero-slides
+- **Gestión de Usuarios**: https://descubre.emma.pe/admin/users
+- **Gestión de Contactos**: https://descubre.emma.pe/admin/contacts
+- **Gestión de Newsletter**: https://descubre.emma.pe/admin/recruitment
 
 ### APIs Disponibles
-- **Health Check**: https://emma.pe/api/health
-- **Blog API**: https://emma.pe/api/blog
-- **Contacto API**: https://emma.pe/api/contact
-- **Newsletter API**: https://emma.pe/api/newsletter
-- **Autenticación**: https://emma.pe/api/auth
+- **Health Check**: https://descubre.emma.pe/api/health
+- **Blog API**: https://descubre.emma.pe/api/blog
+- **Contacto API**: https://descubre.emma.pe/api/contact
+- **Newsletter API**: https://descubre.emma.pe/api/newsletter
+- **Autenticación**: https://descubre.emma.pe/api/auth
 
 ## 🔒 Seguridad Implementada
 

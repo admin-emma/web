@@ -84,15 +84,15 @@ log_info "📊 Estado final del despliegue:"
 docker-compose ps
 
 log_info "🌐 La aplicación está disponible en:"
-log_info "   HTTP:  http://emma.pe"
-if [ -f "./ssl/live/emma.pe/fullchain.pem" ]; then
-    log_info "   HTTPS: https://emma.pe (SSL configurado)"
+log_info "   HTTP:  http://descubre.emma.pe"
+if [ -f "./ssl/live/descubre.emma.pe/fullchain.pem" ]; then
+    log_info "   HTTPS: https://descubre.emma.pe (SSL configurado)"
 else
     log_warn "   HTTPS: No configurado - ejecuta './setup-ssl.sh' para habilitar SSL"
 fi
 
 log_info "📱 Panel de administración:"
-log_info "   https://emma.pe/admin"
+log_info "   https://descubre.emma.pe/admin"
 
 log_info "📋 Para ver logs en tiempo real:"
 log_info "   docker-compose logs -f"
@@ -100,8 +100,8 @@ log_info "   docker-compose logs -f"
 echo ""
 log_info "🎉 ¡Despliegue completado exitosamente!"
 echo ""
-if [ ! -f "./ssl/live/emma.pe/fullchain.pem" ]; then
+if [ ! -f "./ssl/live/descubre.emma.pe/fullchain.pem" ]; then
     log_warn "⚠️  SSL no está configurado. Para habilitar HTTPS:"
-    log_warn "   1. Asegúrate de que tu dominio emma.pe apunte a este servidor"
+    log_warn "   1. Asegúrate de que tu dominio descubre.emma.pe apunte a este servidor"
     log_warn "   2. Ejecuta: chmod +x setup-ssl.sh && ./setup-ssl.sh"
 fi

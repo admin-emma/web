@@ -147,11 +147,11 @@ echo ""
 
 # Verificar SSL
 log_check "Verificando configuración SSL..."
-if [ -f "ssl/live/emma.pe/fullchain.pem" ] && [ -f "ssl/live/emma.pe/privkey.pem" ]; then
+if [ -f "ssl/live/descubre.emma.pe/fullchain.pem" ] && [ -f "ssl/live/descubre.emma.pe/privkey.pem" ]; then
     log_info "✅ Certificados SSL encontrados"
     
     # Verificar validez del certificado
-    if openssl x509 -in ssl/live/emma.pe/fullchain.pem -noout -checkend 2592000 &> /dev/null; then
+    if openssl x509 -in ssl/live/descubre.emma.pe/fullchain.pem -noout -checkend 2592000 &> /dev/null; then
         log_info "✅ Certificado SSL válido por más de 30 días"
     else
         log_warn "⚠️  Certificado SSL expira en menos de 30 días"

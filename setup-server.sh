@@ -160,7 +160,7 @@ log_info "✅ Directorio /opt/emma creado"
 log_step "Configurando SSL/Let's Encrypt..."
 # Crear directorios para SSL
 mkdir -p /opt/emma/ssl
-mkdir -p /opt/emma/ssl/live/emma.pe
+mkdir -p /opt/emma/ssl/live/descubre.emma.pe
 chown -R emma:emma /opt/emma/ssl
 
 # Configurar Certbot para renovación automática
@@ -222,5 +222,5 @@ log_info "   3. Clonar tu repositorio: git clone <tu-repo> ."
 log_info "   4. Configurar variables de entorno: cp .env.example .env && nano .env"
 log_info "   5. Ejecutar el despliegue: ./deploy.sh"
 echo ""
-log_warn "⚠️  IMPORTANTE: Configura tu dominio emma.pe para apuntar a esta IP antes del despliegue"
+log_warn "⚠️  IMPORTANTE: Configura tu dominio descubre.emma.pe para apuntar a esta IP antes del despliegue"
 echo ""
