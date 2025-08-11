@@ -1,76 +1,6 @@
-# 🐳 EMMA - Dockerización Completa para emma.pe
+# 🐳 EMMA - Configuración Docker
 
-## 📋 Resumen de Archivos Creados
-
-### Docker
-- `Dockerfile` - Imagen optimizada multi-stage para producción
-- `docker-compose.yml` - Orquestación completa (App + Nginx + SSL)
-- `.dockerignore` - Exclusiones para optimizar build
-
-### Nginx
-- `nginx/nginx.conf` - Configuración principal con seguridad
-- `nginx/conf.d/emma.pe.conf` - Virtual host para emma.pe con SSL
-
-### Scripts de Despliegue
-- `deploy.sh` - Script automatizado de despliegue
-- `setup-server.sh` - Configuración inicial del servidor Ubuntu
-- `.env.production` - Variables de entorno de producción
-
-### Health Check
-- `src/pages/api/health.js` - Endpoint para monitoreo Docker
-
-## 🚀 Guía de Despliegue
-
-### 1. Preparar Servidor Ubuntu
-
-```bash
-# En tu servidor Ubuntu (como root)
-curl -fsSL https://raw.githubusercontent.com/tu-repo/setup-server.sh | bash
-
-# O manualmente:
-apt update && apt upgrade -y
-curl -fsSL https://get.docker.com | sh
-curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-```
-
-### 2. Configurar DNS
-Apunta tu dominio emma.pe a la IP de tu servidor:
-- A record: emma.pe → IP_DEL_SERVIDOR
-- A record: www.emma.pe → IP_DEL_SERVIDOR
-
-### 3. Subir Código al Servidor
-
-```bash
-# En el servidor
-su - emma
-cd /opt/emma
-git clone https://github.com/tu-usuario/emma-web.git .
-
-# O subir archivos vía SCP/FTP
-```
-
-### 4. Configurar Variables de Entorno
-
-```bash
-# Editar variables de producción
-nano .env.production
-
-# Cambiar especialmente:
-JWT_SECRET=genera_un_secret_muy_seguro_aqui
-```
-
-### 5. Ejecutar Despliegue
-
-```bash
-# Hacer ejecutable el script
-chmod +x deploy.sh
-
-# Ejecutar despliegue
-./deploy.sh
-```
-
-## 🏗️ Arquitectura de Contenedores
+## � Arquitectura de Contenedores
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -87,97 +17,178 @@ chmod +x deploy.sh
                         └─────────────────┘
 ```
 
-## 🔧 Componentes Incluidos
+## 🗂️ Archivos Docker
 
-### ✅ Aplicación Astro
-- Build optimizado multi-stage
-- Usuario no-root para seguridad
+### Contenedores
+- **`Dockerfile`** - Imagen multi-stage optimizada para producción
+- **`docker-compose.yml`** - Orquestación de servicios
+- **`.dockerignore`** - Exclusiones para optimizar build
+
+### Configuración Nginx
+- **`nginx/nginx.conf`** - Configuración base con seguridad
+- **`nginx/conf.d/emma.pe.conf`** - Virtual host con SSL/HTTPS
+- **`nginx/conf.d/emma.pe.http-only.conf`** - Configuración temporal HTTP
+
+### Health Check
+- **`src/pages/api/health.js`** - Endpoint para monitoreo de contenedores
+
+## 🔧 Servicios Docker
+
+### 📱 emma-app
+```yaml
+# Aplicación principal Astro/Node.js
+ports: 3000:4321
+volumes:
+  - ./database.sqlite:/app/database.sqlite  # Base de datos persistente
+  - ./public/uploads:/app/public/uploads    # Archivos subidos
+```
+
+**Características:**
+- Build multi-stage optimizado
+- Usuario no-root (astro:nodejs)
 - Health checks automáticos
-- Manejo adecuado de señales
+- Manejo de señales con dumb-init
 
-### ✅ Nginx
-- Reverse proxy con SSL
-- Rate limiting por endpoints
-- Compresión Gzip
-- Headers de seguridad
-- Caché para archivos estáticos
+### 🌐 nginx
+```yaml
+# Reverse proxy y servidor web
+ports: 80:80, 443:443
+volumes:
+  - ./ssl:/etc/nginx/ssl           # Certificados SSL
+  - ./public/uploads:/var/www/uploads  # Archivos estáticos
+```
 
-### ✅ SSL/HTTPS
-- Certificados automáticos Let's Encrypt
-- Renovación automática
+**Características:**
+- Rate limiting por endpoint
+- Compresión Gzip automática
+- Headers de seguridad HTTP
 - Configuración SSL moderna
-- HSTS headers
 
-### ✅ Persistencia
-- Base de datos SQLite persistente
-- Uploads de usuarios persistentes
-- Logs persistentes
+### 🔒 certbot
+```yaml
+# Gestión automática de certificados SSL
+volumes:
+  - ./ssl:/etc/letsencrypt        # Certificados
+  - ./public:/var/www/certbot     # Challenge files
+```
 
-## 📊 Monitoreo y Mantenimiento
+**Características:**
+- Renovación automática cada 12h
+- Certificados Let's Encrypt gratuitos
+- Soporte para múltiples dominios
 
-### Ver Estado
+## � Comandos Docker Útiles
+
+### Gestión básica
 ```bash
+# Ver estado de contenedores
 docker-compose ps
+
+# Ver logs en tiempo real
 docker-compose logs -f
-```
 
-### Actualizar Aplicación
-```bash
-git pull
-./deploy.sh
-```
-
-### Backup Base de Datos
-```bash
-cp data/database.sqlite backups/database-$(date +%Y%m%d).sqlite
-```
-
-### Ver Logs por Servicio
-```bash
+# Ver logs de un servicio específico
 docker-compose logs nginx
 docker-compose logs emma-app
-docker-compose logs certbot
+
+# Reiniciar un servicio
+docker-compose restart emma-app
+
+# Rebuild completo
+docker-compose down && docker-compose up --build -d
 ```
 
-## 🔒 Seguridad Implementada
-
-- ✅ Contenedores con usuarios no-root
-- ✅ Rate limiting en APIs
-- ✅ Headers de seguridad HTTP
-- ✅ SSL/TLS moderno
-- ✅ Firewall UFW configurado
-- ✅ Validación de uploads
-- ✅ Denegación de archivos sensibles
-
-## 🚨 Troubleshooting
-
-### Contenedores no inician
+### Debugging
 ```bash
-docker-compose logs
-docker-compose down && docker-compose up --build
+# Acceder al contenedor de la aplicación
+docker-compose exec emma-app sh
+
+# Acceder al contenedor nginx
+docker-compose exec nginx sh
+
+# Ver uso de recursos
+docker stats
+
+# Inspeccionar configuración
+docker-compose config
 ```
 
-### SSL no funciona
+### Limpieza
 ```bash
-# Verificar certificados
+# Limpiar contenedores parados
+docker container prune
+
+# Limpiar imágenes sin usar
+docker image prune
+
+# Limpiar volúmenes sin usar (¡CUIDADO!)
+docker volume prune
+```
+
+## 🔒 Configuración de Seguridad
+
+### Aplicación
+- Usuario no-root (UID 1001)
+- Variables de entorno para secretos
+- Validación de uploads
+- Rate limiting en APIs
+
+### Nginx
+- Headers de seguridad HTTP configurados
+- Denegación de archivos sensibles (.php, .sh, etc.)
+- Rate limiting por endpoint:
+  - Admin: 5 req/min
+  - API: 20 req/min
+
+### Red
+- Red interna docker (emma-network)
+- Solo puertos necesarios expuestos (80, 443)
+- Certificados SSL automáticos
+
+## 🚨 Solución de Problemas
+
+### La aplicación no inicia
+```bash
+# Ver logs detallados
+docker-compose logs emma-app
+
+# Verificar variables de entorno
+docker-compose exec emma-app env | grep -E "(NODE_ENV|PORT|ADMIN)"
+
+# Verificar base de datos
+docker-compose exec emma-app ls -la database.sqlite
+```
+
+### Nginx no responde
+```bash
+# Verificar configuración
+docker-compose exec nginx nginx -t
+
+# Verificar certificados SSL
 docker-compose exec nginx ls -la /etc/nginx/ssl/live/emma.pe/
 
-# Regenerar certificados
-docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d emma.pe
+# Reload configuración
+docker-compose exec nginx nginx -s reload
 ```
 
-### Base de datos corrupta
+### Problemas de SSL
 ```bash
-# Restaurar desde backup
-cp backups/database-FECHA.sqlite data/database.sqlite
-docker-compose restart emma-app
+# Verificar certificados
+openssl x509 -in ssl/live/emma.pe/fullchain.pem -text -noout
+
+# Regenerar certificados (con la aplicación parada)
+docker-compose stop nginx
+./setup-ssl.sh
 ```
 
-## 📞 Soporte
+## � Endpoints Importantes
 
-La aplicación estará disponible en:
-- **Producción**: https://emma.pe
-- **Admin**: https://emma.pe/admin
-- **Health**: https://emma.pe/api/health
+- **Aplicación**: `http://localhost:3000` (interno)
+- **Web pública**: `https://emma.pe`
+- **Admin**: `https://emma.pe/admin`
+- **Health check**: `https://emma.pe/api/health`
+- **API**: `https://emma.pe/api/*`
 
-¡Todo listo para producción en emma.pe! 🎉
+---
+
+> 💡 **Tip**: Para documentación de despliegue completo, ver `DEPLOYMENT-README.md`

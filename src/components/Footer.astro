@@ -3,123 +3,62 @@ import logoEmma from "../assets/logo-emma.png";
 const today = new Date();
 ---
 
-<footer class="bg-gray-50 border-t border-gray-200">
+<footer class="bg-gradient-to-br from-[#035AA6]/5 via-white to-[#11B4D9]/10 border-t border-[#11B4D9]/20">
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
       <!-- Información de la empresa -->
-
       <div class="md:col-span-2">
-        <img
-          src={logoEmma.src}
-          alt="EMMA HR"
-          class="h-12 w-auto mb-4 select-none"
-        />
-
-        <div class="text-sm text-gray-500 font-medium">
-          <span class="font-bold text-gray-900">EMMA</span> [Employee Management
-          Monitoring & Administration]
+        <img src={logoEmma.src} alt="EMMA HR" class="h-12 w-auto mb-4 select-none drop-shadow-lg" />
+        <div class="text-sm text-[#07598C] font-medium">
+          <span class="font-bold text-[#035AA6]">EMMA</span> [Employee Management Monitoring & Administration]
         </div>
-
-        <p class=" text-slate-600 max-w-md">
-          Plataforma de RR. HH. para gestionar empleados, asistencia, nómina y
-          reclutamiento con una experiencia simple y segura.
+        <p class="text-slate-700 max-w-md">
+          Plataforma de RR. HH. para gestionar empleados, asistencia, nómina y reclutamiento con una experiencia simple y segura.
         </p>
         <div class="mt-6">
-          <p class="text-sm text-gray-500">Potenciado por Microsoft Azure</p>
+          <p class="text-sm text-[#11B4D9]">Potenciado por Microsoft Azure</p>
         </div>
       </div>
 
       <!-- Enlaces rápidos -->
       <div>
-        <h3
-          class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4"
-        >
-          Navegación
-        </h3>
+        <h3 class="text-sm font-semibold text-[#11B4D9] tracking-wider uppercase mb-4">Navegación</h3>
         <ul class="space-y-1">
-          <li>
-            <a
-              href="/"
-              class="text-gray-600 hover:text-blue-600 transition-colors"
-              >Inicio</a
-            >
-          </li>
-          <li>
-            <a
-              href="/about"
-              class="text-gray-600 hover:text-blue-600 transition-colors"
-              >Nosotros</a
-            >
-          </li>
-          <li>
-            <a
-              href="/blog"
-              class="text-gray-600 hover:text-blue-600 transition-colors"
-              >Blog</a
-            >
-          </li>
-          <li>
-            <a
-              href="/contact"
-              class="text-gray-600 hover:text-blue-600 transition-colors"
-              >Contacto</a
-            >
-          </li>
+          <li><a href="/" class="text-[#035AA6] hover:text-[#11B4D9] transition-colors">Inicio</a></li>
+          <li><a href="/about" class="text-[#035AA6] hover:text-[#11B4D9] transition-colors">Nosotros</a></li>
+          <li><a href="/blog" class="text-[#035AA6] hover:text-[#11B4D9] transition-colors">Blog</a></li>
+          <li><a href="/contact" class="text-[#035AA6] hover:text-[#11B4D9] transition-colors">Contacto</a></li>
         </ul>
       </div>
 
       <!-- Información -->
       <div>
-        <h3
-          class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4"
-        >
-          Información
-        </h3>
+        <h3 class="text-sm font-semibold text-[#11B4D9] tracking-wider uppercase mb-4">Información</h3>
         <ul class="space-y-1">
-          <li>
-            <a
-              href="https://emma.pe"
-              target="_blank"
-              class="text-gray-600 hover:text-blue-600 transition-colors"
-              >Sitio Web</a
-            >
-          </li>
-          <li>
-            <a
-              href="mailto:info@emma.pe"
-              class="text-gray-600 hover:text-blue-600 transition-colors"
-              >info@emma.pe</a
-            >
-          </li>
-          <li><span class="text-gray-600">RRHH Digital</span></li>
-          <li><span class="text-gray-600">Gestión de Talento</span></li>
+          <li><a href="https://emma.pe" target="_blank" class="text-[#035AA6] hover:text-[#11B4D9] transition-colors">Sitio Web</a></li>
+          <li><a href="mailto:info@emma.pe" class="text-[#035AA6] hover:text-[#11B4D9] transition-colors">info@emma.pe</a></li>
+          <li><span class="text-[#07598C]">RRHH Digital</span></li>
+          <li><span class="text-[#07598C]">Gestión de Talento</span></li>
         </ul>
       </div>
     </div>
 
     <!-- Línea divisoria -->
-    <div class="mt-8 pt-8 border-t border-gray-200">
+    <div class="mt-8 pt-8 border-t border-[#11B4D9]/20">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="flex items-center space-x-6">
-          <p class="text-sm text-gray-500">
-            &copy; {today.getFullYear()} EMMA. Todos los derechos reservados.
-          </p>
+          <p class="text-sm text-[#07598C]">&copy; {today.getFullYear()} EMMA. Todos los derechos reservados.</p>
+          <span class="text-sm text-[#035AA6]">
+            Desarrollado por <a href="https://codevo.pe" target="_blank" class="underline hover:text-[#11B4D9] transition-colors font-semibold">Codevo</a>
+          </span>
         </div>
-
         <!-- Tecnologías utilizadas -->
         <div class="flex items-center space-x-4 mt-4 md:mt-0">
-          <span class="text-xs text-gray-400">Desarrollado con:</span>
+          <span class="text-xs text-[#11B4D9]">Desarrollado con:</span>
           <div class="flex items-center space-x-2">
-            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
-              >.NET</span
-            >
-            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
-              >React</span
-            >
-            <span
-              class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
-              >Astro</span
-            >
+            <span class="text-xs bg-[#11B4D9]/10 text-[#035AA6] px-2 py-1 rounded">.NET</span>
+            <span class="text-xs bg-[#11B4D9]/10 text-[#035AA6] px-2 py-1 rounded">React</span>
+            <span class="text-xs bg-[#11B4D9]/10 text-[#035AA6] px-2 py-1 rounded">Astro</span>
           </div>
         </div>
       </div>

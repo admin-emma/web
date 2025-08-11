@@ -6,6 +6,7 @@ logs/
 .env
 .env.local
 .env.production
+.env.dev
 
 # Certificados SSL (se generarán en el servidor)
 ssl/
@@ -14,6 +15,28 @@ ssl/
 
 # Archivos de base de datos (comentar si quieres incluir la BD)
 # database.sqlite
+
+# Archivos de desarrollo
+.git/
+.github/
+.vscode/
+node_modules/
+dist/
+.astro/
+
+# Scripts de desarrollo y despliegue
+dev.sh
+dev.ps1
+setup-server.sh
+deploy.sh
+backup-db.sh
+restore-db.sh
+setup-ssl.sh
+check-system.sh
+
+# Archivos de configuración Docker
+docker-compose.dev.yml
+Dockerfile.dev
 
 # Archivos subidos por usuarios
 public/uploads/*

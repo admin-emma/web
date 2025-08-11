@@ -1,0 +1,39 @@
+# Dockerfile para desarrollo local
+FROM node:22-alpine
+
+# Instalar dumb-init y sqlite3
+RUN apk add --no-cache dumb-init sqlite
+
+# Crear usuario para desarrollo
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S astro -u 1001
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Cambiar propiedad del directorio al usuario astro
+RUN chown astro:nodejs /app
+
+# Cambiar al usuario no-root
+USER astro
+
+# Copiar archivos de configuración
+COPY --chown=astro:nodejs package*.json ./
+
+# Instalar dependencias (incluyendo dev dependencies)
+RUN npm ci
+
+# Crear directorio para uploads si no existe
+RUN mkdir -p /app/public/uploads
+RUN mkdir -p /app/public/cv
+
+# Exponer puerto de desarrollo
+EXPOSE 4321
+
+# Variables de entorno para desarrollo
+ENV NODE_ENV=development
+ENV HOST=0.0.0.0
+ENV PORT=4321
+
+# Comando por defecto para desarrollo
+CMD ["dumb-init", "--", "npm", "run", "dev", "--", "--host", "0.0.0.0"]

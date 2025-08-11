@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Aplicación EMMA en modo desarrollo
+  emma-dev:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: emma-dev
+    restart: unless-stopped
+    ports:
+      - "4321:4321"  # Puerto de desarrollo Astro
+      - "3000:3000"  # Puerto alternativo
+    volumes:
+      # Montar código fuente para hot reload
+      - .:/app
+      - /app/node_modules
+      # Persistir base de datos SQLite
+      - ./database.sqlite:/app/database.sqlite
+      # Persistir uploads
+      - ./public/uploads:/app/public/uploads
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=4321
+      # Variables de entorno para desarrollo
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@emma.pe}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - SESSION_SECRET=${SESSION_SECRET:-dev-secret-key-change-in-production}
+      - DOMAIN=${DOMAIN:-localhost}
+      # Configuración de uploads
+      - MAX_FILE_SIZE=${MAX_FILE_SIZE:-10485760}
+      - ALLOWED_FILE_TYPES=${ALLOWED_FILE_TYPES:-pdf,doc,docx}
+    command: npm run dev -- --host 0.0.0.0
+    networks:
+      - emma-dev-network
+
+networks:
+  emma-dev-network:
+    driver: bridge
