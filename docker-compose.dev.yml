@@ -4,8 +4,8 @@ services:
   emma_dev:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    image: emma-astro-dev:alpine
+      dockerfile: Dockerfile.dev   # <-- Debian bookworm-slim
+    image: emma-astro-dev:bookworm
     container_name: emma-dev
     working_dir: /app
     env_file: ./.env.dev
@@ -16,7 +16,7 @@ services:
       - node_modules_cache:/app/node_modules
       - ./data:/data
     command: >
-      sh -lc "
+      bash -lc "
         npm ci &&
         npm run dev -- --host --port ${PORT}
       "

@@ -1,26 +1,26 @@
 # ---------- Build ----------
-FROM node:22-alpine AS builder
-
-# deps para compilar addons nativos (better-sqlite3, sharp)
-RUN apk add --no-cache \
-  python3 make g++ pkgconfig autoconf automake libtool \
-  vips-dev libc6-compat git
+FROM node:22.18.0-bookworm-slim AS builder
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+ && apt-get -y upgrade \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates git python3 build-essential \
+ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-
-# instala TODAS las deps (dev + prod) para poder build
 COPY package*.json ./
 RUN npm ci
-
-# copia código y build
 COPY . .
 RUN npm run build
 
 # ---------- Runtime ----------
-FROM node:22-alpine AS runtime
-
-# deps runtime (sharp necesita vips) + signals
-RUN apk add --no-cache vips libc6-compat dumb-init tzdata
+FROM node:22.18.0-bookworm-slim AS runtime
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+ && apt-get -y upgrade \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates dumb-init tzdata \
+ && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
@@ -29,25 +29,20 @@ ENV NODE_ENV=production \
     DATABASE_FILE=app.db \
     TZ=America/Lima
 
-# usuario no-root
-RUN addgroup -g 1001 -S app && adduser -S astro -u 1001 -G app \
- && mkdir -p /app /data && chown -R astro:app /app /data
+# usuario no-root + dirs
+RUN useradd -m -u 10001 appuser \
+ && mkdir -p /app /data \
+ && chown -R appuser:appuser /app /data
 
 WORKDIR /app
-
-# instala SOLO prod deps en runtime (no copiar node_modules del builder)
-COPY --chown=astro:app package*.json ./
+COPY --chown=appuser:appuser package*.json ./
 RUN npm ci --omit=dev --no-audit --no-fund
 
-# copia artefactos de build
-COPY --from=builder --chown=astro:app /app/dist ./dist
-COPY --from=builder --chown=astro:app /app/public ./public
+# artefactos
+COPY --from=builder --chown=appuser:appuser /app/dist ./dist
+COPY --from=builder --chown=appuser:appuser /app/public ./public
 
-# ¡No copies database.sqlite! La DB va en /data (montada como volumen)
-# Si guardas uploads, también apúntalos a /data o crea otro volumen
-
-USER astro
+USER appuser
 EXPOSE 3000
-
 ENTRYPOINT ["dumb-init","--"]
-CMD ["node", "./dist/server/entry.mjs"]
+CMD ["node","./dist/server/entry.mjs"]
