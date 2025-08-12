@@ -1,0 +1,65 @@
+version: "3.9"
+
+networks:
+  web: {}
+
+services:
+  traefik:
+    image: traefik:v3.1
+    container_name: traefik
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.le.acme.httpchallenge=true
+      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.le.acme.email=tu-correo@tu-dominio.com
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    networks: [web]
+    restart: unless-stopped
+
+  emma_web:
+    build: .
+    image: emma-astro-web:latest
+    container_name: emma-web
+    environment:
+      NODE_ENV: "production"
+      PORT: "3000"
+      DATABASE_DIR: "/data"
+      DATABASE_FILE: "app.db"
+      ADMIN_USER: "admin"      # cambia en prod
+      ADMIN_PASS: "admin123"   # cambia en prod
+      TZ: "America/Lima"
+    volumes:
+      - ./data:/data
+    labels:
+      - "traefik.enable=true"
+      # dominio principal
+      - "traefik.http.routers.emma.rule=Host(`descubre.emma.pe`)"
+      - "traefik.http.routers.emma.entrypoints=websecure"
+      - "traefik.http.routers.emma.tls.certresolver=le"
+      - "traefik.http.services.emma.loadbalancer.server.port=3000"
+      # (opcional) redirigir www -> no-www
+      - "traefik.http.routers.emma-www.rule=Host(`www.descubre.emma.pe`)"
+      - "traefik.http.routers.emma-www.entrypoints=websecure"
+      - "traefik.http.routers.emma-www.tls.certresolver=le"
+      - "traefik.http.routers.emma-www.middlewares=emma-redirect-nonwww@docker"
+      - "traefik.http.middlewares.emma-redirect-nonwww.redirectregex.regex=^https?://www\\.descubre\\.emma\\.pe/(.*)"
+      - "traefik.http.middlewares.emma-redirect-nonwww.redirectregex.replacement=https://descubre.emma.pe/$$1"
+      - "traefik.http.middlewares.emma-redirect-nonwww.redirectregex.permanent=true"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks: [web]
+    restart: unless-stopped

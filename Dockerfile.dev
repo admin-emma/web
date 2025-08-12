@@ -1,0 +1,23 @@
+# Dockerfile.dev
+FROM node:22-alpine
+
+# Toolchain para compilar addons nativos (better-sqlite3, sharp)
+RUN apk add --no-cache \
+  python3 make g++ pkgconfig autoconf automake libtool \
+  vips-dev libc6-compat git
+
+WORKDIR /app
+
+# Dejamos que el código se monte por volumen; node_modules va en un volumen
+COPY package*.json ./
+
+# No instalamos aquí; lo haremos en el command del compose (así se re-ejecuta si cambias deps)
+RUN true
+
+ENV NODE_ENV=development \
+    TZ=America/Lima
+
+EXPOSE 3000
+
+# El comando real irá en docker-compose.dev.yml
+CMD ["sh", "-lc", "npm run dev -- --host --port 3000"]
