@@ -8,25 +8,17 @@ services:
     image: emma-astro-dev:alpine
     container_name: emma-dev
     working_dir: /app
+    env_file: .env.dev
     ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: development
-      TZ: America/Lima
-      # Base de datos en volumen local
-      DATABASE_DIR: /data
-      DATABASE_FILE: app.dev.db
-      # Hot reload estable en contenedor
-      CHOKIDAR_USEPOLLING: "true"
-      WATCHPACK_POLLING: "true"
+      - "${PORT}:${PORT}"
     volumes:
-      - ./:/app:delegated               # tu código
+      - ./:/app:delegated
       - node_modules_cache:/app/node_modules
-      - ./data:/data                    # SQLite persistente en dev (similar a prod)
+      - ./data:/data
     command: >
       sh -lc "
         npm ci &&
-        npm run dev -- --host --port 3000
+        npm run dev -- --host --port ${PORT}
       "
     restart: unless-stopped
 

@@ -31,3 +31,6 @@ cv/
 
 # jetbrains setting folder
 .idea/
+
+# datos y archivos generados
+/data/
