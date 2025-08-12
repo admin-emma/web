@@ -43,13 +43,6 @@ services:
       - "traefik.http.routers.emma.entrypoints=websecure"
       - "traefik.http.routers.emma.tls.certresolver=le"
       - "traefik.http.services.emma.loadbalancer.server.port=${PORT}"
-      - "traefik.http.routers.emma-www.rule=Host(`www.${DOMAIN}`)"
-      - "traefik.http.routers.emma-www.entrypoints=websecure"
-      - "traefik.http.routers.emma-www.tls.certresolver=le"
-      - "traefik.http.routers.emma-www.middlewares=emma-redirect-nonwww@docker"
-      - "traefik.http.middlewares.emma-redirect-nonwww.redirectregex.regex=^https?://www\\.${DOMAIN}/(.*)"
-      - "traefik.http.middlewares.emma-redirect-nonwww.redirectregex.replacement=https://${DOMAIN}/$$1"
-      - "traefik.http.middlewares.emma-redirect-nonwww.redirectregex.permanent=true"
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:${PORT}').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
