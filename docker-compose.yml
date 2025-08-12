@@ -41,6 +41,8 @@ services:
       - "traefik.http.routers.emma.entrypoints=websecure"
       - "traefik.http.routers.emma.tls.certresolver=le"
       - "traefik.http.services.emma.loadbalancer.server.port=${PORT}"
+      - "traefik.http.middlewares.secure-headers.headers.contentSecurityPolicy=upgrade-insecure-requests"
+      - "traefik.http.routers.emma.middlewares=secure-headers@docker"
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:${PORT}').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
