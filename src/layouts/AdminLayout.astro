@@ -11,146 +11,317 @@ import "../styles/global.css";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body class="bg-gray-100 text-gray-900 font-sans min-h-screen">
-    <!-- Navigation Bar -->
-    <nav class="bg-gradient-to-r from-blue-500 to-cyan-800 shadow-lg">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-          <!-- Logo y título -->
-          <div class="flex items-center">
-            <h1 class="text-xl font-bold text-white">Panel de Administración</h1>
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+  <aside id="sidebar" class="hidden lg:flex bg-gradient-to-b from-blue-600 via-blue-500 to-cyan-600 text-white w-64 min-h-screen shadow-xl transition-all duration-300 ease-in-out flex-col overflow-y-auto">
+        <!-- Header del sidebar -->
+        <div class="p-6 border-b border-blue-500/30">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+              <i class="fas fa-chart-line text-blue-600 text-lg"></i>
+            </div>
+            <div>
+              <h1 class="text-lg font-bold">EMMA</h1>
+              <p class="text-blue-200 text-sm">Panel Admin</p>
+            </div>
           </div>
-          <!-- Navigation Links -->
-          <div class="hidden md:flex items-center space-x-6">
+        </div>
+        
+        <!-- Navegación -->
+        <nav class="p-4 space-y-2 flex-1">
+          <a 
+            href="/admin/dashboard" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-chart-line text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Dashboard</span>
+          </a>
+          
+          <a 
+            href="/admin/blogs" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-blog text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Blogs</span>
+          </a>
+          
+          <a 
+            href="/admin/hero-slides" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-images text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Hero Slides</span>
+          </a>
+          
+          <a 
+            href="/admin/testimonials" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-comments text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Testimonios</span>
+          </a>
+
             <a 
-              href="/admin/dashboard" 
-              class="text-white hover:text-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:-translate-y-0.5"
-            >
-              <i class="fas fa-chart-line mr-2"></i>Dashboard
-            </a>
-            <a 
-              href="/admin/blogs" 
-              class="text-white hover:text-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:-translate-y-0.5"
-            >
-              <i class="fas fa-blog mr-2"></i>Blogs
-            </a>
-            <a 
-              href="/admin/contacts" 
-              class="text-white hover:text-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:-translate-y-0.5"
-            >
-              <i class="fas fa-envelope mr-2"></i>Contactos
-            </a>
-            <a 
-              href="/admin/job-positions" 
-              class="text-white hover:text-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:-translate-y-0.5"
-            >
-              <i class="fas fa-briefcase mr-2"></i>Posiciones
-            </a>
-            <a 
-              href="/admin/recruitment" 
-              class="text-white hover:text-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:-translate-y-0.5"
-            >
-              <i class="fas fa-users mr-2"></i>Reclutamiento
-            </a>
+            href="/admin/banners" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-bullhorn text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Banners</span>
+          </a>
+              
+          <a 
+            href="/admin/contacts" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-envelope text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Contactos</span>
+          </a>
+          
+          <a 
+            href="/admin/job-positions" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-briefcase text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Posiciones</span>
+          </a>
+          
+          <a 
+            href="/admin/recruitment" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-users text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Reclutamiento</span>
+          </a>
+          
             <a 
               href="/admin/users" 
-              class="text-white hover:text-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:-translate-y-0.5"
+              class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
             >
-              <i class="fas fa-user-cog mr-2"></i>Usuarios
+              <i class="fas fa-user text-blue-200 group-hover:text-white"></i>
+              <span class="group-hover:text-white">Usuarios</span>
             </a>
-          </div>
           
-          <!-- User Menu -->
-          <div class="flex items-center space-x-4">
-            <!-- Botón volver al sitio -->
-            <a 
-              href="/" 
-              class="text-white hover:text-blue-100 border border-white border-opacity-30 hover:border-opacity-50 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200"
-              title="Volver al sitio principal"
+          <!-- Separador -->
+          <div class="border-t border-blue-500/30 my-4"></div>
+          
+          <a 
+            href="/admin/newsletter" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-envelope text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Newsletter</span>
+          </a>
+          
+          <a 
+            href="/" 
+            class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+          >
+            <i class="fas fa-home text-blue-200 group-hover:text-white"></i>
+            <span class="group-hover:text-white">Sitio Web</span>
+          </a>
+        </nav>
+        
+        <!-- Footer del sidebar -->
+        <div class="p-4">
+          <button 
+            id="logoutBtn" 
+            class="w-full flex items-center justify-center space-x-2 p-3 bg-gradient-to-r from-blue-900 to-cyan-900 rounded-lg transition-all duration-200 group"
+          >
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </aside>
+      
+      <!-- Mobile sidebar overlay -->
+      <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden"></div>
+      
+      <!-- Main Content Area -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+          <div class="flex items-center justify-between px-6 py-4">
+            <!-- Mobile menu button -->
+            <button 
+              id="mobile-menu-btn"
+              class="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             >
-              <i class="fas fa-home mr-2"></i>Sitio Web
-            </a>
+              <i class="fas fa-bars text-xl"></i>
+            </button>
             
-            <!-- Logout button -->
-            <button 
-              id="logoutBtn" 
-              class="bg-red-500 hover:bg-red-600 text-white border border-red-500 hover:border-red-600 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:shadow-lg"
-            >
-              <i class="fas fa-sign-out-alt mr-2"></i>Salir
-            </button>
+            <!-- Page title area -->
+            <div class="flex-1">
+              <h2 id="page-title" class="text-xl font-semibold text-gray-900">
+                <!-- Se actualiza dinámicamente -->
+              </h2>
+            </div>
+            
+            <!-- User info -->
+            <div class="flex items-center space-x-4">
+              <div class="text-sm text-gray-500">
+                <span id="current-time"></span>
+              </div>
+              <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-white text-sm"></i>
+              </div>
+            </div>
           </div>
-          
-          <!-- Mobile menu button -->
-          <div class="md:hidden">
-            <button 
-              type="button" 
-              id="mobile-menu-button"
-              class="text-white hover:text-blue-100 focus:outline-none focus:text-blue-100"
-            >
-              <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-gray-50">
+          <div class="p-6">
+            <slot />
           </div>
+        </main>
+      </div>
+    </div>
+    
+    <!-- Mobile Sidebar -->
+    <div id="mobile-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 text-white transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden flex flex-col">
+      <!-- Mobile sidebar content (same as desktop) -->
+      <div class="p-6 border-b border-blue-500/30">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+              <i class="fas fa-chart-line text-blue-600 text-lg"></i>
+            </div>
+            <div>
+              <h1 class="text-lg font-bold">EMMA HR</h1>
+              <p class="text-blue-200 text-sm">Panel Admin</p>
+            </div>
+          </div>
+          <button id="close-mobile-sidebar" class="text-blue-200 hover:text-white">
+            <i class="fas fa-times text-xl"></i>
+          </button>
         </div>
       </div>
       
-      <!-- Mobile menu -->
-      <div class="md:hidden hidden" id="mobile-menu">
-        <div class="px-2 pt-2 pb-3 space-y-1 bg-gradient-to-b from-indigo-600 to-purple-700">
-          <a href="/admin/dashboard" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-200">
-            <i class="fas fa-chart-line mr-2"></i>Dashboard
-          </a>
-          <a href="/admin/blogs" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-200">
-            <i class="fas fa-blog mr-2"></i>Blogs
-          </a>
-          <a href="/admin/contacts" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-200">
-            <i class="fas fa-envelope mr-2"></i>Contactos
-          </a>
-          <a href="/admin/recruitment" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-200">
-            <i class="fas fa-users mr-2"></i>Reclutamiento
-          </a>
-          <a href="/admin/users" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-200">
-            <i class="fas fa-user-cog mr-2"></i>Usuarios
-          </a>
-          <div class="border-t border-white border-opacity-20 pt-4">
-            <a href="/" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-200">
-              <i class="fas fa-home mr-2"></i>Sitio Web
-            </a>
-          </div>
-        </div>
+      <nav class="p-4 space-y-2 flex-1">
+        <a 
+          href="/admin/dashboard" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-chart-line text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Dashboard</span>
+        </a>
+        
+        <a 
+          href="/admin/blogs" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-blog text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Blogs</span>
+        </a>
+        
+        <a 
+          href="/admin/hero-slides" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-images text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Hero Slides</span>
+        </a>
+
+        <a 
+          href="/admin/banners" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-bullhorn text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Banners</span>
+        </a>
+
+        <a 
+          href="/admin/testimonials" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-comments text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Testimonios</span>
+        </a>
+            
+        <a 
+          href="/admin/contacts" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-envelope text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Contactos</span>
+        </a>
+        
+        <a 
+          href="/admin/job-positions" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-briefcase text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Posiciones</span>
+        </a>
+        
+        <a 
+          href="/admin/recruitment" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-users text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Reclutamiento</span>
+        </a>
+        
+        <!-- Separador -->
+        <div class="border-t border-blue-500/30 my-4"></div>
+        
+        <a 
+          href="/admin/newsletter" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-envelope text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Newsletter</span>
+        </a>
+        
+        <a 
+          href="/" 
+          class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/50 transition-all duration-200 group"
+        >
+          <i class="fas fa-home text-blue-200 group-hover:text-white"></i>
+          <span class="group-hover:text-white">Sitio Web</span>
+        </a>
+      </nav>
+      
+      <!-- Mobile sidebar footer -->
+      <div class="p-4">
+        <button 
+          id="mobile-logoutBtn" 
+          class="w-full flex items-center justify-center space-x-2 p-3 bg-gradient-to-r from-blue-950 to-cyan-950 rounded-lg transition-all duration-200"
+        >
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </button>
       </div>
-    </nav>
-    
-    <!-- Main Content -->
-    <main class="flex-1">
-      <slot />
-    </main>
-    
-    <!-- Footer para admin -->
-    <footer class="bg-white border-t border-gray-200 mt-auto">
-      <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center">
-          <p class="text-sm text-gray-500">
-            © 2025 EMMA HR. Panel de Administración.
-          </p>
-          <div class="flex items-center space-x-4 text-sm text-gray-500">
-            <span>v1.0.0</span>
-            <span>•</span>
-            <span id="current-time"></span>
-          </div>
-        </div>
-      </div>
-    </footer>
+    </div>
     
     <script>
-      // Mobile menu toggle
-      document.getElementById('mobile-menu-button')?.addEventListener('click', () => {
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenu?.classList.toggle('hidden');
-      });
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileSidebar = document.getElementById('mobile-sidebar');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+      const closeMobileSidebar = document.getElementById('close-mobile-sidebar');
+      
+      function openMobileMenu() {
+        mobileSidebar?.classList.remove('-translate-x-full');
+        sidebarOverlay?.classList.remove('hidden');
+      }
+      
+      function closeMobileMenu() {
+        mobileSidebar?.classList.add('-translate-x-full');
+        sidebarOverlay?.classList.add('hidden');
+      }
+      
+      mobileMenuBtn?.addEventListener('click', openMobileMenu);
+      closeMobileSidebar?.addEventListener('click', closeMobileMenu);
+      sidebarOverlay?.addEventListener('click', closeMobileMenu);
       
       // Logout functionality
       document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+        localStorage.removeItem('auth-token');
+        window.location.href = '/admin';
+      });
+      
+      document.getElementById('mobile-logoutBtn')?.addEventListener('click', async () => {
         localStorage.removeItem('auth-token');
         window.location.href = '/admin';
       });
@@ -168,21 +339,39 @@ import "../styles/global.css";
         }
       }
       
-      // Update time every minute
       updateTime();
       setInterval(updateTime, 60000);
       
-      // Highlight active navigation item
+      // Set page title based on current path
       document.addEventListener('DOMContentLoaded', () => {
         const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('nav a[href]');
+        const pageTitle = document.getElementById('page-title');
         
+        const pageNames: Record<string, string> = {
+          '/admin/dashboard': 'Dashboard',
+          '/admin/blogs': 'Gestión de Blogs',
+          '/admin/hero-slides': 'Gestión de Hero Slides',
+          '/admin/testimonials': 'Gestión de Testimonios',
+          '/admin/contacts': 'Mensajes de Contacto',
+          '/admin/job-positions': 'Gestión de Posiciones',
+          '/admin/recruitment': 'Aplicaciones de Empleo',
+          '/admin/newsletter': 'Newsletter'
+        };
+        
+        if (pageTitle && pageNames[currentPath]) {
+          pageTitle.textContent = pageNames[currentPath];
+        }
+        
+        // Highlight active navigation item
+        const navLinks = document.querySelectorAll('nav a[href]');
         navLinks.forEach(link => {
           if (link.getAttribute('href') === currentPath) {
-            // Remover clases de estado normal
-            link.classList.remove('text-white', 'hover:text-blue-50');
-            // Agregar clases de estado activo
-            link.classList.add('bg-white', 'text-blue-800', 'font-semibold', 'shadow-md', 'hover:text-blue-900', 'hover:bg-blue-50');
+            link.classList.add('bg-blue-600/70', 'font-semibold');
+            const icon = link.querySelector('i');
+            const span = link.querySelector('span');
+            if (icon) icon.classList.remove('text-blue-200');
+            if (icon) icon.classList.add('text-white');
+            if (span) span.classList.add('text-white');
           }
         });
       });

@@ -6,8 +6,7 @@ export async function GET() {
     
     const banners = db.prepare(`
       SELECT * FROM notification_banners 
-      WHERE is_active = 1 
-      ORDER BY id DESC
+      ORDER BY is_active DESC
     `).all();
 
     return new Response(JSON.stringify(banners), {
@@ -94,6 +93,11 @@ export async function PUT({ request }) {
           'Content-Type': 'application/json',
         },
       });
+    }
+
+    // Si se activa este banner, desactivar todos los demás
+    if (is_active) {
+      db.prepare(`UPDATE notification_banners SET is_active = 0 WHERE is_active = 1 AND id != ?`).run(id);
     }
 
     const stmt = db.prepare(`

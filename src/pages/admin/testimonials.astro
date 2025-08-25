@@ -1,5 +1,5 @@
 ---
-import AdminSidebarLayout from '../../layouts/AdminSidebarLayout.astro';
+import AdminSidebarLayout from '../../layouts/AdminLayout.astro';
 import { testimonialsQueries } from '../../lib/database.js';
 
 // TypeScript interfaces
@@ -108,7 +108,7 @@ const testimonials = testimonialsQueries.getAll.all() as Testimonial[];
             <p class="text-gray-700 text-sm leading-relaxed line-clamp-4">{testimonial.content}</p>
           </div>
           
-          <!-- Actions -->
+          <!-- Actions  -->
           <div class="p-4 bg-gray-50 border-t border-gray-100">
             <div class="flex flex-wrap gap-2 justify-center">
               <button 

@@ -1,5 +1,10 @@
 ---
-import AdminSidebarLayout from '../../layouts/AdminSidebarLayout.astro';
+import AdminSidebarLayout from '../../layouts/AdminLayout.astro';
+
+// Variables para alertas y datos
+let message = '';
+let error = '';
+let recruitments = [];
 import { jobPositionQueries } from '../../lib/database.js';
 
 // Obtener todas las posiciones para los filtros y formularios
@@ -16,9 +21,54 @@ const allPositions = jobPositionQueries.getAll.all();
 
   <div id="adminContent" class="hidden min-h-screen bg-gray-50">
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Gestión de Reclutamiento</h1>
+      <!-- Header unificado -->
+      <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 pb-4 border-b border-blue-200">
+        <div class="mb-4 lg:mb-0">
+          <h1 class="text-2xl lg:text-3xl font-bold text-blue-800 mb-2">Gestión de Reclutamiento</h1>
+          <p class="text-blue-600">Administra las aplicaciones de candidatos</p>
+        </div>
+        <button 
+          id="btn-nueva-aplicacion"
+          class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Nueva Aplicación
+        </button>
       </div>
+      <!-- Alertas de éxito/error -->
+      {message && (
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+          <i class="fas fa-check-circle"></i>
+          <span>{message}</span>
+        </div>
+      )}
+      {error && (
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+          <i class="fas fa-exclamation-circle"></i>
+          <span>{error}</span>
+        </div>
+      )}
+      <!-- Mensaje cuando no hay aplicaciones -->
+      {Array.isArray(recruitments) && recruitments.length === 0 && (
+        <div class="flex flex-col items-center justify-center py-16">
+          <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center">
+            <i class="fas fa-user-tie text-4xl text-blue-500 mb-4"></i>
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">No hay aplicaciones configuradas</h2>
+            <p class="text-gray-600 mb-6">Comienza agregando la primera aplicación de candidato</p>
+            <button 
+              id="btn-nueva-aplicacion"
+              class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Nueva Aplicación
+            </button>
+          </div>
+        </div>
+      )}
 
       <!-- Pestañas -->
       <div class="border-b border-gray-200 mb-6">

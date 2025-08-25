@@ -28,6 +28,7 @@ export function applySchema(db) {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       email TEXT NOT NULL,
+      phone TEXT,
       company TEXT,
       subject TEXT,
       message TEXT NOT NULL,

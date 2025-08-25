@@ -1,134 +1,114 @@
 ---
-import AdminSidebarLayout from "../../layouts/AdminSidebarLayout.astro";
+import AdminSidebarLayout from "../../layouts/AdminLayout.astro";
+
+// Variables para alertas y datos
+let message = "";
+let error = "";
+let blogs = [];
 ---
 
 <AdminSidebarLayout title="Gestión de Blogs">
-  <!-- Encabezado principal -->
+  <!-- Header unificado -->
   <div class="p-8">
-    <h1 class="text-3xl font-bold text-gray-900">Gestión de Blogs</h1>
-        <p class="text-gray-600 mt-2">Administra el contenido de tu blog</p>
+    <div
+      class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 pb-4 border-b border-blue-200"
+    >
+      <div class="mb-4 lg:mb-0">
+        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
+          Gestión de Blogs
+        </h1>
+        <p class="text-gray-600">Administra el contenido de tu blog</p>
       </div>
-
-      <!-- Pestañas principales (Lista vs Crear) -->
-      <div class="border-b border-gray-200 mb-6">
-        <nav class="-mb-px flex space-x-8">
-          <button
-            id="list-main-tab"
-            class="main-tab-button bg-white border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-6 border-b-2 font-medium text-base flex items-center"
-          >
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-            </svg>
-            Lista de Blogs
-          </button>
-          <button
-            id="form-main-tab"
-            class="main-tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-6 border-b-2 font-medium text-base flex items-center"
-          >
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 4v16m8-8H4"></path>
-            </svg>
-            <span id="formTitle">Crear Nuevo Blog</span>
-          </button>
-        </nav>
-      </div>
-
-      <!-- Panel: Lista de Blogs -->
-      <div id="list-main-panel" class="main-tab-panel">
-        <div class="bg-white rounded-lg shadow">
-          <div class="p-6 border-b border-gray-200">
-            <div class="flex justify-between items-center">
-              <h2 class="text-xl font-semibold text-gray-800">
-                Blogs Existentes
-              </h2>
-              <button
-                onclick="openForm()"
-                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium flex items-center"
-              >
-                <svg
-                  class="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 4v16m8-8H4"></path>
-                </svg>
-                Nuevo Blog
-              </button>
-            </div>
-          </div>
-
-          <div
-            id="blogsList"
-            class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-          >
-            <!-- Los blogs se cargan aquí dinámicamente -->
-          </div>
+      <button
+        id="btn-nuevo-blog"
+        class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"></path>
+        </svg>
+        Nuevo Blog
+      </button>
+    </div>
+    <!-- Alertas de éxito/error -->
+    {
+      message && (
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+          <i class="fas fa-check-circle" />
+          <span>{message}</span>
         </div>
+      )
+    }
+    {
+      error && (
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+          <i class="fas fa-exclamation-circle" />
+          <span>{error}</span>
+        </div>
+      )
+    }
+
+    <!-- Vista: Lista de Blogs -->
+    <div id="blogsListView">
+      <div id="blogsList">
+        <!-- Los blogs se cargan aquí dinámicamente -->
       </div>
+    </div>
 
-      <!-- Panel: Formulario de Blog -->
-      <div id="form-main-panel" class="main-tab-panel hidden">
-        <div class="bg-white rounded-lg shadow">
-          <!-- Pestañas del formulario -->
-          <div class="border-b border-gray-200">
-            <nav class="px-6 flex space-x-8">
-              <button
-                id="editor-tab"
-                class="tab-button border-indigo-500 text-indigo-600 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
-              >
-                Editor
-              </button>
-              <button
-                id="components-tab"
-                class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
-              >
-                Componentes
-              </button>
-              <button
-                id="images-tab"
-                class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
-              >
-                Imágenes
-              </button>
-              <button
-                id="preview-tab"
-                class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
-              >
-                Vista Previa
-              </button>
-            </nav>
-          </div>
-
-          <!-- Panel: Editor Principal -->
-          <div id="editor-panel" class="tab-panel p-6">
-            <form id="blogFormElement" class="space-y-6">
-              <input type="hidden" id="blogId" />
-
-              <!-- Fila 1: Título y Autor -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Vista: Formulario de Blog (oculta por defecto) -->
+    <div id="blogFormView" class="hidden">
+      <div class="mb-2">
+        <button
+          id="backToListBtn"
+          type="button"
+          aria-label="Volver a la lista de blogs"
+          class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-900 px-0 py-2"
+        >
+          <span class="text-xl" aria-hidden="true">←</span>
+          <span class="font-medium">Volver a la lista</span>
+        </button>
+      </div>
+      <div class="bg-white rounded-lg shadow p-6">
+        <!-- Pestañas internas del formulario -->
+        <div class="border-b border-gray-200 mb-6">
+          <nav class="px-6 flex space-x-8">
+            <button
+              id="editor-tab"
+              class="tab-button border-blue-500 text-blue-600 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+              >Editor</button
+            >
+            <button
+              id="components-tab"
+              class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+              >Componentes</button
+            >
+            <button
+              id="images-tab"
+              class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+              >Imágenes</button
+            >
+            <button
+              id="preview-tab"
+              class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+              >Vista Previa</button
+            >
+          </nav>
+        </div>
+        <!-- Panel: Editor Principal -->
+        <div id="editor-panel" class="tab-panel p-6">
+          <form id="blogFormElement" class="space-y-6">
+            <input type="hidden" id="blogId" />
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <!-- Lado izquierdo: datos generales -->
+              <div class="space-y-6">
                 <div>
                   <label
                     for="blogTitle"
@@ -139,29 +119,41 @@ import AdminSidebarLayout from "../../layouts/AdminSidebarLayout.astro";
                     type="text"
                     id="blogTitle"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
-
-                <div>
-                  <label
-                    for="blogAuthor"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    >Autor</label
-                  >
-                  <select
-                    id="blogAuthor"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  >
-                    <option value="">Seleccionar autor...</option>
-                    <!-- Los autores se cargan dinámicamente -->
-                  </select>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      for="blogAuthor"
+                      class="block text-sm font-medium text-gray-700 mb-2"
+                      >Autor</label
+                    >
+                    <select
+                      id="blogAuthor"
+                      required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Seleccionar autor...</option>
+                      <!-- Los autores se cargan dinámicamente -->
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="blogStatus"
+                      class="block text-sm font-medium text-gray-700 mb-2"
+                      >Estado</label
+                    >
+                    <select
+                      id="blogStatus"
+                      required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="draft">Borrador</option>
+                      <option value="published">Publicado</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-
-              <!-- Fila 2: Descripción e Imagen Principal -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label
                     for="blogDescription"
@@ -171,11 +163,9 @@ import AdminSidebarLayout from "../../layouts/AdminSidebarLayout.astro";
                   <textarea
                     id="blogDescription"
                     rows="3"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Breve descripción del blog..."
-                  ></textarea>
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Breve descripción del blog..."></textarea>
                 </div>
-
                 <div>
                   <label
                     for="blogHeroImage"
@@ -185,15 +175,11 @@ import AdminSidebarLayout from "../../layouts/AdminSidebarLayout.astro";
                   <input
                     type="text"
                     id="blogHeroImage"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="https://ejemplo.com/imagen.jpg o /uploads/imagen.jpg"
                   />
                   <div id="hero-image-preview" class="hidden mt-3"></div>
                 </div>
-              </div>
-
-              <!-- Fila 3: Slug y Estado -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label
                     for="blogSlug"
@@ -204,365 +190,289 @@ import AdminSidebarLayout from "../../layouts/AdminSidebarLayout.astro";
                     type="text"
                     id="blogSlug"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="se-genera-automaticamente"
                   />
                   <p class="text-xs text-gray-500 mt-1">
-                    Se genera automáticamente desde el título. Puedes editarlo manualmente.
+                    Se genera automáticamente desde el título. Puedes editarlo
+                    manualmente.
                   </p>
                 </div>
-
-                <div>
-                  <label
-                    for="blogStatus"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    >Estado</label
-                  >
-                  <select
-                    id="blogStatus"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  >
-                    <option value="draft">Borrador</option>
-                    <option value="published">Publicado</option>
-                  </select>
-                </div>
               </div>
-
-              <!-- Área de Contenido -->
-              <div class="col-span-1 md:col-span-2">
+              <!-- Lado derecho: contenido -->
+              <div>
                 <label
                   for="blogContent"
                   class="block text-sm font-medium text-gray-700 mb-2"
                   >Contenido</label
                 >
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <!-- Textarea del contenido -->
-                  <div>
-                    <textarea
-                      id="blogContent"
-                      rows="15"
-                      required
-                      placeholder="Escribe tu contenido aquí usando Markdown..."
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono"
-                    ></textarea>
-                  </div>
-                  
-                  <!-- Panel de componentes lateral -->
-                  <div class="lg:block hidden">
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 h-full">
-                      <h4 class="text-sm font-medium text-gray-900 mb-3">
-                        Componentes de Formato
-                      </h4>
-                      
-                      <!-- Componentes en grid compacto -->
-                      <div class="grid grid-cols-2 gap-2 mb-4">
-                        <button
-                          type="button"
-                          class="component-btn-inline p-2 border border-gray-200 rounded hover:bg-gray-100 text-xs text-left"
-                          data-component="## Subtítulo
-
-Texto del subtítulo...
-
-"
-                        >
-                          <div class="font-medium">Subtítulo</div>
-                        </button>
-
-                        <button
-                          type="button"
-                          class="component-btn-inline p-2 border border-gray-200 rounded hover:bg-gray-100 text-xs text-left"
-                          data-component="**Texto en negrita**"
-                        >
-                          <div class="font-medium">Negrita</div>
-                        </button>
-
-                        <button
-                          type="button"
-                          class="component-btn-inline p-2 border border-gray-200 rounded hover:bg-gray-100 text-xs text-left"
-                          data-component="*Texto en cursiva*"
-                        >
-                          <div class="font-medium">Cursiva</div>
-                        </button>
-
-                        <button
-                          type="button"
-                          class="component-btn-inline p-2 border border-gray-200 rounded hover:bg-gray-100 text-xs text-left"
-                          data-component="
-- Elemento 1
-- Elemento 2
-- Elemento 3
-
-"
-                        >
-                          <div class="font-medium">Lista</div>
-                        </button>
-
-                        <button
-                          type="button"
-                          class="component-btn-inline p-2 border border-gray-200 rounded hover:bg-gray-100 text-xs text-left"
-                          data-component="
-1. Primer paso
-2. Segundo paso
-3. Tercer paso
-
-"
-                        >
-                          <div class="font-medium">Numerada</div>
-                        </button>
-
-                        <button
-                          type="button"
-                          class="component-btn-inline p-2 border border-gray-200 rounded hover:bg-gray-100 text-xs text-left"
-                          data-component="
-> Esta es una cita importante que quiero destacar en mi artículo.
-
-"
-                        >
-                          <div class="font-medium">Cita</div>
-                        </button>
-
-                        <button
-                          type="button"
-                          class="component-btn-inline p-2 border border-gray-200 rounded hover:bg-gray-100 text-xs text-left"
-                          data-component="
----
-
-"
-                        >
-                          <div class="font-medium">Separador</div>
-                        </button>
-
-                        <button
-                          type="button"
-                          class="component-btn-inline p-2 border border-gray-200 rounded hover:bg-gray-100 text-xs text-left"
-                          data-component="
-
-&nbsp;
-
-"
-                        >
-                          <div class="font-medium">Espacio</div>
-                        </button>
-                      </div>
-
-                      <!-- Vista previa en tiempo real -->
-                      <div class="mt-4">
-                        <h5 class="text-xs font-medium text-gray-700 mb-2">Vista Previa:</h5>
-                        <div class="bg-white border rounded p-3 min-h-20 text-xs">
-                          <div id="inline-component-preview" class="prose prose-xs max-w-none">
-                            <p class="text-gray-400 italic">Pasa el cursor sobre un componente para ver la vista previa</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Botón para insertar imagen -->
-                      <div class="mt-4">
-                        <button
-                          type="button"
-                          id="insertImageBtnInline"
-                          class="w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-xs"
-                        >
-                          + Insertar Imagen
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <textarea
+                  id="blogContent"
+                  rows="20"
+                  required
+                  placeholder="Escribe tu contenido aquí usando Markdown..."
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                ></textarea>
               </div>
-
-              <!-- Botones del formulario -->
-              <div
-                class="flex justify-end space-x-4 pt-4 border-t border-gray-200"
+            </div>
+            <!-- Botones del formulario -->
+            <div
+              class="flex items-center justify-between pt-4 border-t border-gray-200"
+            >
+              <!-- Izquierda: Cancelar (ghost) -->
+              <button
+                type="button"
+                id="cancelFormBtn"
+                class="px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md"
               >
-                <button
-                  type="button"
-                  id="cancelFormBtn"
-                  class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 font-medium"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium"
-                >
-                  Guardar Blog
-                </button>
-              </div>
-            </form>
-          </div>
+                Cancelar
+              </button>
 
-          <!-- Panel: Componentes -->
-          <div id="components-panel" class="tab-panel hidden p-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <!-- Lado izquierdo: Componentes disponibles -->
-              <div>
-                <h3 class="text-lg font-medium text-gray-900 mb-4">
-                  Componentes de Formato
-                </h3>
-                <div class="grid grid-cols-2 gap-3">
-                  <button
-                    class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
-                    data-component="## Subtítulo
-
-Texto del subtítulo...
-
-"
-                  >
-                    <div class="font-medium text-sm">Subtítulo</div>
-                    <div class="text-xs text-gray-500">Agrega un subtítulo</div>
-                  </button>
-
-                  <button
-                    class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
-                    data-component="**Texto en negrita**"
-                  >
-                    <div class="font-medium text-sm">Negrita</div>
-                    <div class="text-xs text-gray-500">Texto resaltado</div>
-                  </button>
-
-                  <button
-                    class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
-                    data-component="*Texto en cursiva*"
-                  >
-                    <div class="font-medium text-sm">Cursiva</div>
-                    <div class="text-xs text-gray-500">Texto en itálica</div>
-                  </button>
-
-                  <button
-                    class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
-                    data-component="
-- Elemento 1
-- Elemento 2
-- Elemento 3
-
-"
-                  >
-                    <div class="font-medium text-sm">Lista</div>
-                    <div class="text-xs text-gray-500">Lista con viñetas</div>
-                  </button>
-
-                  <button
-                    class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
-                    data-component="
-1. Primer paso
-2. Segundo paso
-3. Tercer paso
-
-"
-                  >
-                    <div class="font-medium text-sm">Lista Numerada</div>
-                    <div class="text-xs text-gray-500">Lista ordenada</div>
-                  </button>
-
-                  <button
-                    class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
-                    data-component="
-> Esta es una cita importante que quiero destacar en mi artículo.
-
-"
-                  >
-                    <div class="font-medium text-sm">Cita</div>
-                    <div class="text-xs text-gray-500">Texto destacado</div>
-                  </button>
-
-                  <button
-                    class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
-                    data-component="
----
-
-"
-                  >
-                    <div class="font-medium text-sm">Separador</div>
-                    <div class="text-xs text-gray-500">Línea divisoria</div>
-                  </button>
-
-                  <button
-                    class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
-                    data-component="
-
-&nbsp;
-
-"
-                  >
-                    <div class="font-medium text-sm">Espacio</div>
-                    <div class="text-xs text-gray-500">Espacio en blanco</div>
-                  </button>
-                </div>
-
-                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-                  <h4 class="font-medium text-blue-900 mb-2">
-                    Insertar Imagen por URL
-                  </h4>
-                  <button
-                    id="insertImageBtn"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
-                  >
-                    Insertar Imagen por URL
-                  </button>
-                </div>
-              </div>
-
-              <!-- Lado derecho: Vista previa de componentes -->
-              <div>
-                <h3 class="text-lg font-medium text-gray-900 mb-4">
-                  Vista Previa
-                </h3>
-                <div class="border border-gray-200 rounded-lg p-4 bg-white min-h-96">
-                  <div id="component-preview" class="prose prose-sm max-w-none">
-                    <p class="text-gray-500 italic">Selecciona un componente de la izquierda para ver cómo se verá en tu blog.</p>
-                  </div>
-                </div>
-              </div>
+              <!-- Derecha: Guardar -->
+              <button
+                type="submit"
+                class="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:bg-gradient-to-l text-white rounded-md font-medium"
+              >
+                Guardar Blog
+              </button>
             </div>
-          </div>
-
-          <!-- Panel: Imágenes -->
-          <div id="images-panel" class="tab-panel hidden p-6">
-            <div class="mb-6">
-              <h3 class="text-lg font-medium text-gray-900 mb-2">
-                Subir Nueva Imagen
-              </h3>
-              <div class="flex items-center space-x-4">
-                <input
-                  type="file"
-                  id="imageUpload"
-                  accept="image/*"
-                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                />
-              </div>
-            </div>
-
+          </form>
+        </div>
+        <!-- Panel: Componentes -->
+        <div id="components-panel" class="tab-panel hidden p-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               <h3 class="text-lg font-medium text-gray-900 mb-4">
-                Imágenes Disponibles
+                Componentes de Formato
               </h3>
-              <div
-                id="assets-grid"
-                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-              >
-                <!-- Las imágenes se cargan aquí dinámicamente -->
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
+                  data-component="## Subtítulo\n\nTexto del subtítulo...\n\n"
+                >
+                  <div class="font-medium text-sm">Subtítulo</div>
+                  <div class="text-xs text-gray-500">Agrega un subtítulo</div>
+                </button>
+                <button
+                  class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
+                  data-component="**Texto en negrita**"
+                >
+                  <div class="font-medium text-sm">Negrita</div>
+                  <div class="text-xs text-gray-500">Texto resaltado</div>
+                </button>
+                <button
+                  class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
+                  data-component="*Texto en cursiva*"
+                >
+                  <div class="font-medium text-sm">Cursiva</div>
+                  <div class="text-xs text-gray-500">Texto en itálica</div>
+                </button>
+                <button
+                  class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
+                  data-component="\n- Elemento 1\n- Elemento 2\n- Elemento 3\n\n"
+                >
+                  <div class="font-medium text-sm">Lista</div>
+                  <div class="text-xs text-gray-500">Lista con viñetas</div>
+                </button>
+                <button
+                  class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
+                  data-component="\n1. Primer paso\n2. Segundo paso\n3. Tercer paso\n\n"
+                >
+                  <div class="font-medium text-sm">Lista Numerada</div>
+                  <div class="text-xs text-gray-500">Lista ordenada</div>
+                </button>
+                <button
+                  class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
+                  data-component="> Esta es una cita importante que quiero destacar en mi artículo.\n\n"
+                >
+                  <div class="font-medium text-sm">Cita</div>
+                  <div class="text-xs text-gray-500">Texto destacado</div>
+                </button>
+                <button
+                  class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
+                  data-component="---\n\n"
+                >
+                  <div class="font-medium text-sm">Separador</div>
+                  <div class="text-xs text-gray-500">Línea divisoria</div>
+                </button>
+                <button
+                  class="component-btn p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left"
+                  data-component="\n\n \n\n"
+                >
+                  <div class="font-medium text-sm">Espacio</div>
+                  <div class="text-xs text-gray-500">Espacio en blanco</div>
+                </button>
+              </div>
+              <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                <h4 class="font-medium text-blue-900 mb-2">
+                  Insertar Imagen por URL
+                </h4>
+                <button
+                  id="insertImageBtn"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+                  >Insertar Imagen por URL</button
+                >
               </div>
             </div>
-          </div>
-
-          <!-- Panel: Vista Previa -->
-          <div id="preview-panel" class="tab-panel hidden p-6">
-            <div class="border border-gray-200 rounded-lg p-6 bg-gray-50">
+            <div>
               <h3 class="text-lg font-medium text-gray-900 mb-4">
-                Vista Previa del Blog
+                Vista Previa
               </h3>
               <div
-                id="preview-content"
-                class="bg-white p-6 rounded-lg min-h-96"
+                class="border border-gray-200 rounded-lg p-4 bg-white min-h-96"
               >
-                <!-- La vista previa se genera aquí -->
+                <div id="component-preview" class="prose prose-sm max-w-none">
+                  <p class="text-gray-500 italic">
+                    Selecciona un componente de la izquierda para ver cómo se
+                    verá en tu blog.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <!-- Panel: Imágenes -->
+        <div id="images-panel" class="tab-panel hidden p-6">
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-2">
+              Subir Nueva Imagen
+            </h3>
+            <div class="flex items-center space-x-4">
+              <input
+                type="file"
+                id="imageUpload"
+                accept="image/*"
+                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Imágenes Disponibles
+            </h3>
+            <div
+              id="assets-grid"
+              class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            >
+              <!-- Las imágenes se cargan aquí dinámicamente -->
+            </div>
+          </div>
+        </div>
+        <!-- Panel: Vista Previa -->
+        <div id="preview-panel" class="tab-panel hidden p-6">
+          <div class="border border-gray-200 rounded-lg p-6 bg-gray-50">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Vista Previa del Blog
+            </h3>
+            <div id="preview-content" class="bg-white p-6 rounded-lg min-h-96">
+              <!-- La vista previa se genera aquí -->
+            </div>
+          </div>
+        </div>
       </div>
-  <script>
+    </div>
+  </div>
+
+  <script type="module">
     import "/src/scripts/admin/blogs.ts";
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const blogsListView = document.getElementById("blogsListView");
+      const blogFormView = document.getElementById("blogFormView");
+      const cancelFormBtn = document.getElementById("cancelFormBtn");
+
+      // Usa window directamente (sin tipos TS)
+      document.querySelectorAll("#btn-nuevo-blog").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          if (window.openForm) {
+            window.openForm(null);
+          } else {
+            // Fallback mínimo
+            if (blogsListView && blogFormView) {
+              blogsListView.classList.add("hidden");
+              blogFormView.classList.remove("hidden");
+            }
+            if (window.clearBlogForm) window.clearBlogForm();
+          }
+        });
+      });
+
+      if (cancelFormBtn && blogsListView && blogFormView) {
+        cancelFormBtn.addEventListener("click", function () {
+          blogFormView.classList.add("hidden");
+          blogsListView.classList.remove("hidden");
+          if (window.clearBlogForm) window.clearBlogForm();
+        });
+      }
+
+      // Escape para cerrar formulario y volver a la lista (JS puro)
+      document.addEventListener("keydown", (e) => {
+        const formView = document.getElementById("blogFormView");
+        const listView = document.getElementById("blogsListView");
+        if (
+          e.key === "Escape" &&
+          formView &&
+          !formView.classList.contains("hidden")
+        ) {
+          formView.classList.add("hidden");
+          if (listView) listView.classList.remove("hidden");
+          if (window.clearBlogForm) window.clearBlogForm();
+        }
+      });
+
+      // Botón para volver a la lista
+      const backToListBtn = document.getElementById("backToListBtn");
+      if (backToListBtn) {
+        backToListBtn.addEventListener("click", () => {
+          const blogsListView = document.getElementById("blogsListView");
+          const blogFormView = document.getElementById("blogFormView");
+          if (blogsListView && blogFormView) {
+            blogFormView.classList.add("hidden");
+            blogsListView.classList.remove("hidden");
+          }
+          clearBlogForm();
+
+          const listTab = document.getElementById('list-main-tab');
+          if (listTab) listTab.click();
+        });
+      }
+
+      // Tabs internas
+      const tabButtons = [
+        document.getElementById("editor-tab"),
+        document.getElementById("components-tab"),
+        document.getElementById("images-tab"),
+        document.getElementById("preview-tab"),
+      ];
+      const tabPanels = [
+        document.getElementById("editor-panel"),
+        document.getElementById("components-panel"),
+        document.getElementById("images-panel"),
+        document.getElementById("preview-panel"),
+      ];
+
+      tabButtons.forEach((btn, idx) => {
+        if (btn) {
+          btn.addEventListener("click", function () {
+            tabButtons.forEach((b) => {
+              if (b) {
+                b.classList.remove("border-blue-500", "text-blue-600");
+                b.classList.add("border-transparent", "text-gray-500");
+              }
+            });
+            btn.classList.add("border-blue-500", "text-blue-600");
+            btn.classList.remove("border-transparent", "text-gray-500");
+
+            tabPanels.forEach((panel) => {
+              if (panel) panel.classList.add("hidden");
+            });
+            if (tabPanels[idx]) tabPanels[idx].classList.remove("hidden");
+          });
+        }
+      });
+      tabPanels.forEach((panel, idx) => {
+        if (panel) panel.classList.toggle("hidden", idx !== 0);
+      });
+    });
   </script>
 </AdminSidebarLayout>

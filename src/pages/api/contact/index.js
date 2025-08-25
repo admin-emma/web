@@ -44,7 +44,7 @@ export async function GET({ request }) {
 
 export async function POST({ request }) {
   try {
-    const { name, email, company, subject, message } = await request.json();
+    const { name, email, phone, company, subject, message } = await request.json();
     
     if (!name || !email || !message) {
       return new Response(JSON.stringify({
@@ -71,6 +71,7 @@ export async function POST({ request }) {
     const result = contactQueries.create.run(
       name,
       email,
+      phone || '',
       company || '',
       subject || '',
       message
@@ -111,12 +112,24 @@ export async function PUT({ request }) {
       });
     }
 
-    const { id, status } = await request.json();
-    
+    // Solo se permite actualizar el status, nunca otros datos
+    const { id, status, ...rest } = await request.json();
+
     if (!id || !status) {
       return new Response(JSON.stringify({
         success: false,
         message: 'ID y status son requeridos'
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Si se envían otros datos, ignorarlos y no permitir su actualización
+    if (Object.keys(rest).length > 0) {
+      return new Response(JSON.stringify({
+        success: false,
+        message: 'Solo se permite actualizar el estado del contacto.'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }

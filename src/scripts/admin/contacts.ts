@@ -4,6 +4,7 @@ interface Contact {
   id: number;
   name: string;
   email: string;
+  phone?: string;
   message: string;
   status: 'new' | 'read' | 'replied';
   created_at: string;
@@ -82,8 +83,10 @@ function renderContactMessages(contactsToRender: Contact[]): void {
   if (contactsToRender.length === 0) {
     const filterValue = getContactPageElement<HTMLSelectElement>('statusFilter').value;
     container.innerHTML = `
-      <div class="p-6 text-center text-gray-500">
-        <p>No hay mensajes ${filterValue === 'all' ? '' : 'con este estado'}.</p>
+      <div class="flex flex-col items-center justify-center py-16">
+          <i class="fas fa-envelope text-4xl text-blue-500 mb-4"></i>
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">No hay mensajes de contacto</h2>
+          <p class="text-gray-600 mb-6">Comienza agregando el primer mensaje de contacto recibido</p>
       </div>
     `;
     return;
@@ -149,21 +152,24 @@ function viewContactMessage(id: number): void {
   
   currentContactMessage = contact;
   
-  // Llenar modal con datos del contacto
-  const messageContent = getContactPageElement('messageContent');
-  messageContent.innerHTML = `
-    <div class="space-y-3">
-      <div><strong>Nombre:</strong> ${contact.name}</div>
-      <div><strong>Email:</strong> <a href="mailto:${contact.email}" class="text-indigo-600 hover:text-indigo-500">${contact.email}</a></div>
-      ${contact.company ? `<div><strong>Empresa:</strong> ${contact.company}</div>` : ''}
-      ${contact.subject ? `<div><strong>Asunto:</strong> ${contact.subject}</div>` : ''}
-      <div><strong>Fecha:</strong> ${new Date(contact.created_at).toLocaleString()}</div>
-      <div class="pt-3 border-t">
-        <strong>Mensaje:</strong>
-        <div class="mt-2 p-3 bg-gray-50 rounded-md whitespace-pre-wrap">${contact.message}</div>
-      </div>
-    </div>
-  `;
+  // Llenar los campos visuales del modal
+  const setField = (id: string, value: string) => {
+    const el = getContactPageElementSafe(id);
+    if (el) el.textContent = value || '';
+  };
+  setField('contactName', contact.name);
+  setField('contactEmail', contact.email);
+  setField('contactPhone', contact.phone || '');
+  setField('contactCompany', contact.company || '');
+  setField('contactSubject', contact.subject || '');
+  setField('contactDate', new Date(contact.created_at).toLocaleString());
+  setField('contactMessage', contact.message);
+  // Email como enlace
+  const emailEl = getContactPageElementSafe('contactEmail');
+  if (emailEl) {
+    emailEl.setAttribute('href', `mailto:${contact.email}`);
+    emailEl.textContent = contact.email;
+  }
   
   // Establecer estado actual
   const statusSelect = getContactPageElement<HTMLSelectElement>('newStatus');
@@ -201,9 +207,9 @@ async function updateContactMessageStatus(id: number, status: Contact['status'])
       },
       body: JSON.stringify({ status })
     });
-    
+
     const data: ContactApiResponse = await response.json();
-    
+
     if (data.success) {
       // Actualizar contacto en la lista local
       const contactIndex = contactsList.findIndex(c => c.id === id);
@@ -211,16 +217,30 @@ async function updateContactMessageStatus(id: number, status: Contact['status'])
         contactsList[contactIndex].status = status;
         filterAndRenderContactMessages();
       }
-      
+
       if (currentContactMessage && currentContactMessage.id === id) {
         currentContactMessage.status = status;
       }
+      // Ocultar error visual si todo salió bien
+      const modalError = getContactPageElementSafe('modalError');
+      if (modalError) modalError.classList.add('hidden');
     } else {
-      alert(data.message || 'Error actualizando estado');
+      showModalError(data.message || 'Error actualizando estado');
     }
   } catch (error) {
     console.error('Error:', error);
-    alert('Error actualizando estado');
+    showModalError('Error actualizando estado');
+  }
+}
+
+// Mostrar error visual en el modal con colores y estilos del patrón
+function showModalError(msg: string) {
+  const modalError = getContactPageElementSafe('modalError');
+  const modalErrorText = getContactPageElementSafe('modalErrorText');
+  if (modalError && modalErrorText) {
+    modalErrorText.textContent = msg;
+    modalError.classList.remove('hidden');
+    modalError.classList.add('flex');
   }
 }
 

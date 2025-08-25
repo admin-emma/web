@@ -34,8 +34,8 @@ export const contactQueries = {
   getAll: db.prepare('SELECT * FROM contacts ORDER BY created_at DESC'),
   getById: db.prepare('SELECT * FROM contacts WHERE id = ?'),
   create: db.prepare(`
-    INSERT INTO contacts (name, email, company, subject, message)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO contacts (name, email, phone, company, subject, message)
+    VALUES (?, ?, ?, ?, ?, ?)
   `),
   updateStatus: db.prepare('UPDATE contacts SET status = ? WHERE id = ?'),
   delete: db.prepare('DELETE FROM contacts WHERE id = ?')
@@ -171,7 +171,19 @@ export const notificationBannersQueries = {
     WHERE id = ?
   `),
   toggleActive: db.prepare('UPDATE notification_banners SET is_active = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'),
-  delete: db.prepare('DELETE FROM notification_banners WHERE id = ?')
+  delete: db.prepare('DELETE FROM notification_banners WHERE id = ?'),
+
+  // NUEVO: helpers para garantizar exclusividad
+  deactivateAll: db.prepare('UPDATE notification_banners SET is_active = 0, updated_at = CURRENT_TIMESTAMP'),
+  activateOnlyTx: (id) => {
+    const tx = db.transaction(() => {
+      // Primero desactiva todos
+      db.prepare('UPDATE notification_banners SET is_active = 0, updated_at = CURRENT_TIMESTAMP').run();
+      // Activa solo el solicitado
+      db.prepare('UPDATE notification_banners SET is_active = 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(id);
+    });
+    return tx();
+  },
 };
 
 // Newsletter

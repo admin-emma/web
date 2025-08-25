@@ -1,78 +1,291 @@
 ---
-import AdminSidebarLayout from '../../layouts/AdminSidebarLayout.astro';
+import AdminSidebarLayout from "../../layouts/AdminLayout.astro";
+
+// Variables para alertas y datos
+let message = "";
+let error = "";
+let contacts = [];
 ---
 
 <AdminSidebarLayout title="Contactos - Administración EMMA">
   <div id="loadingScreen" class="min-h-screen flex items-center justify-center">
     <div class="text-center">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-      <p class="mt-4 text-gray-600">Cargando mensajes...</p>
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"
+      >
+      </div>
+      <p class="mt-4 text-blue-700">Cargando mensajes...</p>
     </div>
   </div>
 
-  <div id="adminContent" class="hidden min-h-screen bg-gray-50">
-    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Mensajes de Contacto</h1>
+  <!-- Header unificado -->
+  <div class="p-8">
+    <div
+      class="flex flex-col lg:flex-row lg:justify-between lg:items-center pb-4 border-b border-blue-200"
+    >
+      <div class="mb-4 lg:mb-0">
+        <h1 class="text-2xl lg:text-3xl font-bold text-blue-800 mb-2">
+          Mensajes de contacto
+        </h1>
+        <p class="text-blue-600">
+          Administra los mensajes de contacto de los usuarios
+        </p>
       </div>
-      
-      <!-- Filtros -->
-      <div class="bg-white shadow rounded-lg p-4 mb-6">
-        <div class="flex space-x-4">
-          <select id="statusFilter" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            <option value="all">Todos los estados</option>
-            <option value="new">Nuevos</option>
-            <option value="read">Leídos</option>
-            <option value="replied">Respondidos</option>
-          </select>
+          <!-- Formulario de nuevo contacto -->
+          <form id="newContactForm" class="space-y-4 bg-white rounded-xl shadow-lg p-6 mb-8 border border-blue-100 max-w-lg mx-auto">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-user text-blue-500"></i>
+              <input type="text" id="contactNameInput" name="name" placeholder="Nombre" required class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-blue-50 text-blue-900" />
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-envelope text-blue-500"></i>
+              <input type="email" id="contactEmailInput" name="email" placeholder="Email" required class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-blue-50 text-blue-900" />
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-phone text-blue-500"></i>
+              <input type="text" id="contactPhoneInput" name="phone" placeholder="Teléfono" class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-blue-50 text-blue-900" />
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-building text-blue-500"></i>
+              <input type="text" id="contactCompanyInput" name="company" placeholder="Empresa" class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-blue-50 text-blue-900" />
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-tag text-blue-500"></i>
+              <input type="text" id="contactSubjectInput" name="subject" placeholder="Asunto" class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-blue-50 text-blue-900" />
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-comment-dots text-blue-500"></i>
+              <textarea id="contactMessageInput" name="message" placeholder="Mensaje" required class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-blue-50 text-blue-900"></textarea>
+            </div>
+            <button type="submit" class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Enviar Mensaje
+            </button>
+          </form>
+    </div>
+    <!-- Alertas de éxito/error -->
+    {
+      message && (
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+          <i class="fas fa-check-circle" />
+          <span>{message}</span>
         </div>
-      </div>
+      )
+    }
+    {
+      error && (
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+          <i class="fas fa-exclamation-circle" />
+          <span>{error}</span>
+        </div>
+      )
+    }
+  </div>
 
-      <!-- Lista de Contactos -->
-      <div class="bg-white shadow rounded-lg">
-        <div class="px-6 py-4 border-b border-gray-200">
-          <h2 class="text-lg font-medium text-gray-900">Mensajes Recibidos</h2>
+  <div id="adminContent" class="hidden min-h-screen">
+    <div class="border-b border-blue-200 mb-4">
+      <!-- Lista de Contactos con filtro a la derecha -->
+      <div class="bg-white shadow-lg rounded-xl border border-blue-100">
+        <div
+          class="px-8 py-6 border-b border-blue-200 flex flex-col md:flex-row md:items-center md:justify-between"
+        >
+          <h2 class="text-xl font-semibold text-blue-700 mb-4 md:mb-0">
+            Mensajes Recibidos
+          </h2>
+          <div>
+            <select
+              id="statusFilter"
+              class="px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-blue-50 text-blue-900"
+            >
+              <option value="all">Todos los estados</option>
+              <option value="new">Nuevos</option>
+              <option value="read">Leídos</option>
+              <option value="replied">Respondidos</option>
+            </select>
+          </div>
         </div>
-        <div id="contactsList" class="divide-y divide-gray-200">
+        <div id="contactsList" class="divide-y divide-blue-100">
           <!-- Se llenará con JavaScript -->
+          <!-- Ejemplo de estructura visual mejorada, el JS debe llenar estos datos -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-user text-blue-500"></i>
+              <span class="font-semibold text-blue-800">Nombre:</span>
+              <span id="contactName" class="text-gray-800"></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-envelope text-blue-500"></i>
+              <span class="font-semibold text-blue-800">Email:</span>
+              <a id="contactEmail" href="#" class="text-indigo-600 hover:text-indigo-500"></a>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-phone text-blue-500"></i>
+              <span class="font-semibold text-blue-800">Teléfono:</span>
+              <span id="contactPhone" class="text-gray-800"></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-building text-blue-500"></i>
+              <span class="font-semibold text-blue-800">Empresa:</span>
+              <span id="contactCompany" class="text-gray-800"></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-tag text-blue-500"></i>
+              <span class="font-semibold text-blue-800">Asunto:</span>
+              <span id="contactSubject" class="text-gray-800"></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-calendar-alt text-blue-500"></i>
+              <span class="font-semibold text-blue-800">Fecha:</span>
+              <span id="contactDate" class="text-gray-800"></span>
+            </div>
+            <div class="pt-3 border-t">
+              <div class="flex items-center gap-2 mb-2">
+                <i class="fas fa-comment-dots text-blue-500"></i>
+                <span class="font-semibold text-blue-800">Mensaje:</span>
+              </div>
+              <div id="contactMessage" class="mt-2 p-3 bg-blue-50 rounded-md whitespace-pre-wrap text-gray-700"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Modal para ver mensaje completo -->
-  <div id="messageModal" class="hidden fixed inset-0 bg-black bg-opacity-25 overflow-y-auto h-full w-full z-50">
-    <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-medium text-gray-900">Mensaje de Contacto</h3>
-        <button id="closeModal" class="text-gray-400 hover:text-gray-600">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-      
-      <div id="messageContent" class="mb-6">
-        <!-- Se llenará con JavaScript -->
-      </div>
-      
-      <div class="flex items-center space-x-2 mb-4">
-        <label for="newStatus" class="text-sm font-medium text-gray-700">Estado:</label>
-        <select id="newStatus" class="px-3 py-1 border border-gray-300 rounded-md text-sm">
-          <option value="new">Nuevo</option>
-          <option value="read">Leído</option>
-          <option value="replied">Respondido</option>
-        </select>
-      </div>
-      
-      <div class="flex justify-between">
-        <button id="deleteMessageBtn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
-          Eliminar
-        </button>
-        <div class="space-x-2">
-          <button id="updateStatusBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-            Actualizar Estado
-          </button>
+  <div
+    id="messageModal"
+    class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm overflow-y-auto"
+    aria-hidden="true"
+  >
+    <div class="relative mx-auto my-10 w-[92%] max-w-3xl">
+      <div
+        class="rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5 bg-white"
+      >
+        <!-- Header -->
+        <div
+          class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-5 text-white"
+        >
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div
+                class="h-10 w-10 grid place-items-center rounded-xl bg-white/15 ring-1 ring-white/20"
+              >
+                <i class="fa-solid fa-envelope text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold leading-tight">
+                  Mensaje de Contacto
+                </h3>
+                <p class="text-xs text-white/85">
+                  Revisa, clasifica y actúa sin perder el flow.
+                </p>
+              </div>
+            </div>
+
+            <button
+              id="closeModal"
+              class="p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50"
+              aria-label="Cerrar modal"
+              title="Cerrar"
+            >
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+
+          <!-- Meta opcional (si no usas, puedes quitar) -->
+          <div class="mt-4 grid grid-cols-1 gap-2 text-[13px] sm:grid-cols-3">
+            <div class="flex items-center gap-2">
+              <span
+                class="px-2 py-0.5 rounded-md bg-white/15 ring-1 ring-white/20"
+                >De</span
+              >
+              <span class="truncate opacity-90">—</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span
+                class="px-2 py-0.5 rounded-md bg-white/15 ring-1 ring-white/20"
+                >Correo</span
+              >
+              <span class="truncate opacity-90">—</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span
+                class="px-2 py-0.5 rounded-md bg-white/15 ring-1 ring-white/20"
+                >Fecha</span
+              >
+              <span class="truncate opacity-90">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="p-5 space-y-5">
+          <!-- Área para errores (mismo ID) -->
+          <div
+            id="modalError"
+            class="hidden items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-3 text-red-800"
+            role="alert"
+          >
+            <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+            <p id="modalErrorText" class="text-sm"></p>
+          </div>
+
+          <!-- Contenido (mismo ID) -->
+          <div
+            id="messageContent"
+            class="prose prose-sm max-w-none text-gray-800 leading-relaxed"
+          >
+            <!-- Se llenará con JavaScript -->
+          </div>
+
+          <!-- Estado -->
+          <div class="flex flex-wrap items-center gap-2">
+            <label for="newStatus" class="text-sm font-medium text-gray-700">
+              <i class="fa-solid fa-tag mr-1 text-gray-500"></i> Estado
+            </label>
+            <select
+              id="newStatus"
+              class="text-sm rounded-lg border-gray-300 bg-white px-3 py-2 shadow-sm
+                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="new">Nuevo</option>
+              <option value="read">Leído</option>
+              <option value="replied">Respondido</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="px-5 pb-5">
+          <div class="flex flex-wrap gap-2 justify-between">
+            <button
+              id="deleteMessageBtn"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white
+                   bg-red-600 shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+              title="Eliminar mensaje"
+            >
+              <i class="fa-solid fa-trash"></i> Eliminar
+            </button>
+
+            <div class="flex flex-wrap gap-2">
+              <button
+                id="updateStatusBtn"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white
+                     bg-blue-600 shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                title="Actualizar estado"
+              >
+                <i class="fa-solid fa-rotate"></i> Actualizar Estado
+              </button>
+            </div>
+          </div>
+
+          <!-- Hint -->
+          <p class="mt-3 text-[12px] text-gray-500">
+            <i class="fa-regular fa-lightbulb mr-1"></i>
+            Consejo: mantiene la calma, el modal ya viste de gala.
+          </p>
         </div>
       </div>
     </div>
@@ -80,5 +293,5 @@ import AdminSidebarLayout from '../../layouts/AdminSidebarLayout.astro';
 </AdminSidebarLayout>
 
 <script>
-  import '/src/scripts/admin/contacts.ts';
+  import "/src/scripts/admin/contacts.ts";
 </script>
